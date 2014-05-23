@@ -1,0 +1,40 @@
+{
+  "name": "davinci.js",
+  "version": "0.0.1",
+  "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
+  "description": "Javascript CalDAV client library (rfc 4791, rfc 5545)",
+  "license": "MPL-2.0",
+  "main": "davinci.js",
+
+  "keywords": [
+    "calendar",
+    "caldav",
+    "webdav",
+    "dav",
+    "sync",
+    "rfc 4791",
+    "rfc 6578"
+  ],
+
+  "dependencies": {
+    "debug": "0.8.1",
+    "handlebars": "2.0.x",
+    "ical.js": "0.0.1",
+    "sax": "0.6.0",
+    "xmlhttprequest": "1.6.0"
+  },
+
+  "devDependencies": {
+    "browserify": "4.1.5",
+    "chai": "1.9.1",
+    "mocha": "1.19.0"
+  },
+
+  "engines": {
+    "node": "0.11.x"
+  },
+
+  "scripts": {
+    "test": "make test"
+  }
+}
