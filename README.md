@@ -3,6 +3,9 @@ davinci.js
 
 Javascript CalDAV client library (rfc 4791, rfc 5545)
 
+
+[![Build Status](https://travis-ci.org/gaye/davinci.js.png?branch=master)](https://travis-ci.org/gaye/davinci.js)
+
 ### Design Goals
 
 1. Abstract ical.js and caldav behind a unified backend API.

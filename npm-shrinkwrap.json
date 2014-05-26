@@ -775,6 +775,35 @@
       "from": "sax@0.6.0",
       "resolved": "https://registry.npmjs.org/sax/-/sax-0.6.0.tgz"
     },
+    "sinon": {
+      "version": "1.10.0",
+      "from": "sinon@*",
+      "resolved": "https://registry.npmjs.org/sinon/-/sinon-1.10.0.tgz",
+      "dependencies": {
+        "formatio": {
+          "version": "1.0.2",
+          "from": "formatio@~1.0",
+          "resolved": "https://registry.npmjs.org/formatio/-/formatio-1.0.2.tgz",
+          "dependencies": {
+            "samsam": {
+              "version": "1.1.1",
+              "from": "samsam@~1.1",
+              "resolved": "https://registry.npmjs.org/samsam/-/samsam-1.1.1.tgz"
+            }
+          }
+        },
+        "util": {
+          "version": "0.10.3",
+          "from": "util@>=0.10.3 <1",
+          "dependencies": {
+            "inherits": {
+              "version": "2.0.1",
+              "from": "inherits@2.0.1"
+            }
+          }
+        }
+      }
+    },
     "xmlhttprequest": {
       "version": "1.6.0",
       "from": "xmlhttprequest@1.6.0",
