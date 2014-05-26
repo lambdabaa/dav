@@ -2,6 +2,7 @@
 /README.md
 /.git
 /.gitignore
+/.travis.yml
 /lib
 /node_modules
 /test
