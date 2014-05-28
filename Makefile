@@ -2,6 +2,9 @@ SABRE_DAV_VERSION=2.0.1
 SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
+.PHONY: default
+default: davinci.js
+
 .PHONY: clean
 clean:
 	rm -rf *.zip \
@@ -9,19 +12,6 @@ clean:
 		davinci.js \
 		node_modules/ \
 		test/integration/server/SabreDAV/
-
-.PHONY: default
-default: davinci.js
-
-davinci.js:
-	./node_modules/.bin/browserify -e ./lib/index.js -o ./davinci.js
-
-node_modules:
-	npm install
-
-SabreDAV:
-	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
-	unzip $(SABRE_DAV_ZIPBALL)
 
 .PHONY: test
 test: test-unit test-integration
@@ -33,6 +23,16 @@ test-unit: node_modules
 .PHONY: test-integration
 test-integration: node_modules test/integration/server/SabreDAV
 	./node_modules/.bin/mocha test/integration
+
+SabreDAV:
+	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
+	unzip $(SABRE_DAV_ZIPBALL)
+
+davinci.js: node_modules
+	./node_modules/.bin/browserify -e ./lib/index.js -o ./davinci.js
+
+node_modules:
+	npm install
 
 test/integration/server/SabreDAV: SabreDAV
 	cp -r SabreDAV test/integration/server/SabreDAV
