@@ -18,7 +18,7 @@
             },
             "through": {
               "version": "2.3.4",
-              "from": "through@>=2.2.7 <3"
+              "from": "through@~2.3.4"
             }
           }
         },
@@ -96,8 +96,9 @@
           }
         },
         "buffer": {
-          "version": "2.3.0",
+          "version": "2.3.1",
           "from": "buffer@^2.3.0",
+          "resolved": "https://registry.npmjs.org/buffer/-/buffer-2.3.1.tgz",
           "dependencies": {
             "base64-js": {
               "version": "0.0.6",
@@ -192,7 +193,7 @@
             },
             "minimist": {
               "version": "0.0.10",
-              "from": "minimist@~0.0.1"
+              "from": "minimist@~0.0.7"
             }
           }
         },
@@ -277,7 +278,7 @@
         },
         "inherits": {
           "version": "2.0.1",
-          "from": "inherits@2"
+          "from": "inherits@~2.0.1"
         },
         "insert-module-globals": {
           "version": "6.0.0",
@@ -293,7 +294,7 @@
                   "dependencies": {
                     "esprima-fb": {
                       "version": "3001.1.0-dev-harmony-fb",
-                      "from": "esprima-fb@^3001.1.0-dev-harmony-fb",
+                      "from": "esprima-fb@3001.1.0-dev-harmony-fb",
                       "resolved": "https://registry.npmjs.org/esprima-fb/-/esprima-fb-3001.0001.0000-dev-harmony-fb.tgz"
                     }
                   }
@@ -313,6 +314,7 @@
         "module-deps": {
           "version": "2.0.6",
           "from": "module-deps@~2.0.6",
+          "resolved": "https://registry.npmjs.org/module-deps/-/module-deps-2.0.6.tgz",
           "dependencies": {
             "detective": {
               "version": "3.1.0",
@@ -336,7 +338,7 @@
                     },
                     "source-map": {
                       "version": "0.1.33",
-                      "from": "source-map@~0.1.30",
+                      "from": "source-map@~0.1.7",
                       "dependencies": {
                         "amdefine": {
                           "version": "0.1.0",
@@ -476,7 +478,7 @@
           "dependencies": {
             "esprima-fb": {
               "version": "3001.1.0-dev-harmony-fb",
-              "from": "esprima-fb@^3001.1.0-dev-harmony-fb",
+              "from": "esprima-fb@3001.1.0-dev-harmony-fb",
               "resolved": "https://registry.npmjs.org/esprima-fb/-/esprima-fb-3001.0001.0000-dev-harmony-fb.tgz"
             }
           }
@@ -484,6 +486,7 @@
         "through2": {
           "version": "0.4.2",
           "from": "through2@~0.4.1",
+          "resolved": "https://registry.npmjs.org/through2/-/through2-0.4.2.tgz",
           "dependencies": {
             "xtend": {
               "version": "2.1.2",
@@ -571,11 +574,12 @@
               "dependencies": {
                 "async": {
                   "version": "0.2.10",
-                  "from": "async@~0.2.6"
+                  "from": "async@~0.2.6",
+                  "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
                 },
                 "source-map": {
                   "version": "0.1.33",
-                  "from": "source-map@~0.1.7",
+                  "from": "source-map@~0.1.33",
                   "dependencies": {
                     "amdefine": {
                       "version": "0.1.0",
@@ -607,7 +611,7 @@
         },
         "util": {
           "version": "0.10.3",
-          "from": "util@~0.10.1"
+          "from": "util@>=0.10.3 <1"
         },
         "vm-browserify": {
           "version": "0.0.4",
@@ -680,7 +684,8 @@
           "dependencies": {
             "async": {
               "version": "0.2.10",
-              "from": "async@~0.2.6"
+              "from": "async@~0.2.6",
+              "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
             },
             "source-map": {
               "version": "0.1.33",
@@ -722,11 +727,13 @@
           "dependencies": {
             "commander": {
               "version": "0.6.1",
-              "from": "commander@0.6.1"
+              "from": "commander@0.6.1",
+              "resolved": "https://registry.npmjs.org/commander/-/commander-0.6.1.tgz"
             },
             "mkdirp": {
               "version": "0.3.0",
-              "from": "mkdirp@0.3.0"
+              "from": "mkdirp@0.3.0",
+              "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.3.0.tgz"
             }
           }
         },
@@ -777,7 +784,7 @@
     },
     "sinon": {
       "version": "1.10.0",
-      "from": "sinon@*",
+      "from": "sinon@1.10.0",
       "resolved": "https://registry.npmjs.org/sinon/-/sinon-1.10.0.tgz",
       "dependencies": {
         "formatio": {
@@ -801,6 +808,35 @@
               "from": "inherits@2.0.1"
             }
           }
+        }
+      }
+    },
+    "tcp-port-used": {
+      "version": "0.1.2",
+      "from": "tcp-port-used@0.1.2",
+      "resolved": "https://registry.npmjs.org/tcp-port-used/-/tcp-port-used-0.1.2.tgz",
+      "dependencies": {
+        "debug": {
+          "version": "0.7.4",
+          "from": "debug@0.7.4",
+          "resolved": "https://registry.npmjs.org/debug/-/debug-0.7.4.tgz"
+        },
+        "is2": {
+          "version": "0.0.9",
+          "from": "is2@0.0.9",
+          "resolved": "https://registry.npmjs.org/is2/-/is2-0.0.9.tgz",
+          "dependencies": {
+            "deep-is": {
+              "version": "0.1.2",
+              "from": "deep-is@0.1.2",
+              "resolved": "https://registry.npmjs.org/deep-is/-/deep-is-0.1.2.tgz"
+            }
+          }
+        },
+        "q": {
+          "version": "0.9.7",
+          "from": "q@0.9.7",
+          "resolved": "https://registry.npmjs.org/q/-/q-0.9.7.tgz"
         }
       }
     },

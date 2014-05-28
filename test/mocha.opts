@@ -1,2 +1,3 @@
---timeout 20s
+--recursive
+--timeout 10s
 --ui tdd

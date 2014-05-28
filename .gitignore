@@ -1,2 +1,5 @@
+SabreDAV/
+
+/*.zip
 /davinci.js
-/node_modules
+/node_modules/
