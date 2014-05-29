@@ -1,7 +1,7 @@
 var createSandbox = require('../../../lib/sandbox'),
-    propfind = require('../../../lib/request/propfind');
+    propfind = require('../../../lib/request').propfind;
 
-suite('propfind', function() {
+suite('request.propfind', function() {
   test.skip('should sandbox request if sandbox provided', function() {
     // TODO(gareth)
   });

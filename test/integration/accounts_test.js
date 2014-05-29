@@ -17,8 +17,35 @@ suite('accounts', function() {
       });
     });
 
+    /**
+     * {
+     *   href: '/',
+     *   propstats: [
+     *     {
+     *       prop: [
+     *         {
+     *           current-user-principal: [
+     *             { href: '/principals/admin/' }
+     *           ]
+     *         }
+     *       ],
+     *       status: '200 OK'
+     *     }
+     *   ]
+     * }
+     */
     test('current-user-principal', function() {
-      assert.include(result, '/principals/admin');
+      assert.strictEqual(result.href, '/');
+      var propstats = result.propstats;
+      assert.lengthOf(propstats, 1);
+      var propstat = propstats[0];
+      var prop = propstat.prop;
+      assert.lengthOf(prop, 1);
+      var data = prop[0];
+      assert.deepEqual(data, {
+        'current-user-principal': [ { href: '/principals/admin/' } ]
+      });
+      assert.include(propstat.status, '200');
     });
   });
-})
+});
