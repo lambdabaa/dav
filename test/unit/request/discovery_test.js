@@ -2,10 +2,6 @@ var createSandbox = require('../../../lib/sandbox'),
     discovery = require('../../../lib/request').discovery;
 
 suite('request.discovery', function() {
-  test.skip('should sandbox request if sandbox provided', function() {
-    // TODO(gareth)
-  });
-
   test.skip('should read "Location" response header if 301', function() {
     // TODO(gareth)
   });
