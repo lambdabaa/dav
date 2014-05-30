@@ -1,6 +1,7 @@
 var XMLHttpRequest = require('../../../lib/request/xmlhttprequest'),
     assert = require('chai').assert,
     createSandbox = require('../../../lib/sandbox'),
+    nock = require('nock'),
     sinon = require('sinon');
 
 suite('XMLHttpRequest#send', function() {
@@ -10,8 +11,14 @@ suite('XMLHttpRequest#send', function() {
     subject = new XMLHttpRequest();
   });
 
+  teardown(function() {
+    nock.cleanAll();
+  });
+
   test('should sandbox request if provided', function() {
-    subject.open('GET', 'http://127.0.0.1:9999', true);
+    nock('http://127.0.0.1:1337').get('/');
+
+    subject.open('GET', 'http://127.0.0.1:1337', true);
     var sandbox = createSandbox();
     subject.sandbox = sandbox;
     var spy = sinon.spy(subject, 'abort');
@@ -21,16 +28,23 @@ suite('XMLHttpRequest#send', function() {
   });
 
   test('should send data if provided', function() {
-    subject.open('POST', 'http://127.0.0.1:9999/echo', true);
-    return subject
-      .send('zippity-doo-dah')
+    nock('http://127.0.0.1:1337')
+      .post('/', 'zippity-doo-dah')
+      .reply(200, 'zip-a-dee-a');
+
+    subject.open('POST', 'http://127.0.0.1:1337', true);
+    return subject.send('zippity-doo-dah')
       .then(function(responseText) {
-        assert.strictEqual(responseText, 'zippity-doo-dah');
+        assert.strictEqual(responseText, 'zip-a-dee-a');
       });
   });
 
   test('should reject with statusText if status >=400', function() {
-    subject.open('GET', 'http://127.0.0.1:9999/error', true);
+    nock('http://127.0.0.1:1337')
+      .get('/')
+      .reply(500, '500 Internal Server Error');
+
+    subject.open('GET', 'http://127.0.0.1:1337', true);
     return subject
       .send()
       .then(function() {
@@ -42,8 +56,13 @@ suite('XMLHttpRequest#send', function() {
   });
 
   test('should reject with timeout error on timeout', function() {
+    nock('http://127.0.0.1:1337')
+      .get('/')
+      .delay(100)
+      .reply(200, '200 OK');
+
     subject.timeout = 1;
-    subject.open('GET', 'http://127.0.0.1:9999/timeout', true);
+    subject.open('GET', 'http://127.0.0.1:1337', true);
     return subject
       .send()
       .then(function() {
@@ -55,7 +74,11 @@ suite('XMLHttpRequest#send', function() {
   });
 
   test('should resolve with responseText if everything ok', function() {
-    subject.open('GET', 'http://127.0.0.1:9999', true);
+    nock('http://127.0.0.1:1337')
+      .get('/')
+      .reply(200, '200 OK');
+
+    subject.open('GET', 'http://127.0.0.1:1337', true);
     return subject
       .send()
       .then(function(responseText) {
