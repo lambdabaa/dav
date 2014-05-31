@@ -33,7 +33,8 @@ suite('XMLHttpRequest#send', function() {
       .reply(200, 'zip-a-dee-a');
 
     subject.open('POST', 'http://127.0.0.1:1337', true);
-    return subject.send('zippity-doo-dah')
+    return subject
+      .send('zippity-doo-dah')
       .then(function(responseText) {
         assert.strictEqual(responseText, 'zip-a-dee-a');
       });
@@ -58,7 +59,7 @@ suite('XMLHttpRequest#send', function() {
   test('should reject with timeout error on timeout', function() {
     nock('http://127.0.0.1:1337')
       .get('/')
-      .delay(100)
+      .delay(2)
       .reply(200, '200 OK');
 
     subject.timeout = 1;

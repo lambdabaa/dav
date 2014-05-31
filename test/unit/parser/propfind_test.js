@@ -1,14 +1,11 @@
 var assert = require('chai').assert,
-    fs = require('fs'),
+    data = require('../data'),
     propfind = require('../../../lib/parser').propfind;
 
 suite('parser.propfind', function() {
   test('current-user-principal', function() {
-    var data = fs
-      .readFileSync(__dirname + '/../data/current_user_principal.xml', 'utf-8')
-      .replace(/>\s+</g, '><');
-
-    assert.deepEqual(propfind(data), {
+    var currentUserPrincipal = data.currentUserPrincipal;
+    assert.deepEqual(propfind(currentUserPrincipal), {
       href: '/',
       propstats: [
         {

@@ -4,6 +4,10 @@ var assert = require('chai').assert,
     nock = require('nock');
 
 suite('request.discovery', function() {
+  teardown(function() {
+    nock.cleanAll();
+  });
+
   test('should read "Location" response header if redirect', function() {
     nock('http://127.0.0.1:1337')
       .get('/.well-known/caldav')
@@ -17,8 +21,8 @@ suite('request.discovery', function() {
       user: 'ernie',
       password: 'bert'
     })
-    .then(function(href) {
-      assert.strictEqual(href, 'http://127.0.0.1:1337/servlet/caldav');
+    .then(function(contextPath) {
+      assert.strictEqual(contextPath, 'http://127.0.0.1:1337/servlet/caldav');
     });
   });
 
@@ -27,6 +31,7 @@ suite('request.discovery', function() {
       .get('/.well-known/caldav')
       .reply(500, '500 Internal Server Error');
 
+    // If we don't swallow the error, this will throw it.
     return discovery({
       bootstrap: 'caldav',
       server: 'http://127.0.0.1:1337',
@@ -38,7 +43,7 @@ suite('request.discovery', function() {
   test('should fall back to provided url if not redirect', function() {
     nock('http://127.0.0.1:1337')
       .get('/.well-known/caldav')
-      .reply(200, '200 OK');
+      .reply(200, '200 OK');  // 200 is not a redirect.
 
     return discovery({
       bootstrap: 'caldav',
@@ -46,8 +51,8 @@ suite('request.discovery', function() {
       user: 'ernie',
       password: 'bert'
     })
-    .then(function(href) {
-      assert.strictEqual(href, 'http://127.0.0.1:1337/');
+    .then(function(contextPath) {
+      assert.strictEqual(contextPath, 'http://127.0.0.1:1337/');
     });
   });
 });
