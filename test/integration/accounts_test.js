@@ -1,4 +1,5 @@
-var assert = require('chai').assert;
+var Calendar = require('../../lib/model').Calendar,
+    assert = require('chai').assert;
 
 suite('accounts', function() {
   var subject = require('../../lib/accounts');
@@ -17,22 +18,16 @@ suite('accounts', function() {
       });
     });
 
-    test('current-user-principal', function() {
-      assert.deepEqual(result, {
-        href: '/',
-        propstats: [
-          {
-            prop: [
-              {
-                'current-user-principal': [
-                  { href: '/principals/admin/' }
-                ]
-              }
-            ],
-            status: 'HTTP/1.1 200 OK'
-          }
-        ]
-      });
+    test('should get existing calendar', function() {
+      assert.isArray(result);
+      assert.lengthOf(result, 1, 'should have one calendar');
+      var calendar = result[0];
+      assert.instanceOf(calendar, Calendar);
+      assert.strictEqual(
+        calendar.principalUrl,
+        'http://127.0.0.1:8888/principals/admin/'
+      );
+      assert.strictEqual(calendar.displayName, 'Administrator');
     });
   });
 });

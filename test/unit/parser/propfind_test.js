@@ -9,13 +9,9 @@ suite('parser.propfind', function() {
       href: '/',
       propstats: [
         {
-          prop: [
-            {
-              'current-user-principal': [
-                { href: '/principals/admin/' }
-              ]
-            }
-          ],
+          prop: {
+            'current-user-principal': { href: '/principals/admin/' }
+          },
           status: 'HTTP/1.1 200 OK'
         }
       ]
