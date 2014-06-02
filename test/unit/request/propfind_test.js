@@ -1,6 +1,7 @@
 var createSandbox = require('../../../lib/sandbox'),
     nock = require('nock'),
-    propfind = require('../../../lib/request').propfind;
+    nockUtils = require('./nock_utils'),
+    request = require('../../../lib/request');
 
 suite('request.propfind', function() {
   teardown(function() {
@@ -13,52 +14,31 @@ suite('request.propfind', function() {
       .intercept('/', 'PROPFIND')
       .reply(200);
 
-    return propfind({
+    var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
       username: 'abc',
       password: '123',
-      props: ['catdog'],
+      props: [ { name: 'catdog', namespace: 'DAV' } ],
       depth: '0'
-    })
-    // Whether or not an error is thrown, the mock should have intercepted
-    // the PROPFIND request. Should replace with Promise.prototype.finally.
-    .then(function() {
-      mock.done();
-    })
-    .catch(function() {
-      mock.done();
     });
+
+    return nockUtils.verifyNock(req, mock);
   });
 
   test('should add specified properties to propfind body', function() {
-    var mock = nock('http://127.0.0.1:1337');
-    // This is a hack suggested here https://github.com/pgte/nock#protip
-    // to intercept the request conditional on the request body.
-    mock.matchRequestBody = function(path, method, match) {
-      return mock.filteringRequestBody(function(body) {
-        return match(body) ? '*' : '';
-      })
-      .intercept(path, method, '*');
-    };
-
-    mock.matchRequestBody('/', 'PROPFIND', function(path) {
-      return path.indexOf('<D:catdog />') !== -1;
+    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
+    mock.matchRequestBody('/', 'PROPFIND', function(body) {
+      return body.indexOf('<D:catdog />') !== -1;
     });
 
-    return propfind({
+    var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
       username: 'abc',
       password: '123',
-      props: ['catdog'],
+      props: [ { name: 'catdog', namespace: 'DAV' } ],
       depth: '0'
-    })
-    // Whether or not an error is thrown, the mock should have intercepted
-    // the PROPFIND request. Should replace with Promise.prototype.finally.
-    .then(function() {
-      mock.done();
-    })
-    .catch(function() {
-      mock.done();
     });
+
+    return nockUtils.verifyNock(req, mock);
   });
 });

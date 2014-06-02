@@ -1,11 +1,11 @@
 var assert = require('chai').assert,
     data = require('../data'),
-    propfind = require('../../../lib/parser').propfind;
+    parser = require('../../../lib/parser');
 
-suite('parser.propfind', function() {
-  test('current-user-principal', function() {
+suite('parser.multistatus', function() {
+  test('propfind (current-user-principal)', function() {
     var currentUserPrincipal = data.currentUserPrincipal;
-    assert.deepEqual(propfind(currentUserPrincipal), {
+    assert.deepEqual(parser.multistatus(currentUserPrincipal), {
       href: '/',
       propstats: [
         {
@@ -16,5 +16,9 @@ suite('parser.propfind', function() {
         }
       ]
     });
+  });
+
+  test.skip('report (calendar-query)', function() {
+    // TODO(gareth)
   });
 });

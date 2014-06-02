@@ -4,31 +4,31 @@ var XMLHttpRequest = require('../../lib/request/xmlhttprequest'),
     sinon = require('sinon');
 
 describe('sandbox', function() {
-  var subject;
+  var sandbox;
 
   setup(function() {
-    subject = createSandbox();
+    sandbox = createSandbox();
   });
 
   test('#add', function() {
-    assert.lengthOf(subject.requestList, 0);
+    assert.lengthOf(sandbox.requestList, 0);
     var one = new XMLHttpRequest(),
         two = new XMLHttpRequest();
-    subject.add(one);
-    subject.add(two);
-    assert.lengthOf(subject.requestList, 2);
-    assert.include(subject.requestList, one);
-    assert.include(subject.requestList, two);
+    sandbox.add(one);
+    sandbox.add(two);
+    assert.lengthOf(sandbox.requestList, 2);
+    assert.include(sandbox.requestList, one);
+    assert.include(sandbox.requestList, two);
   });
 
   test('#abort', function() {
     var one = new XMLHttpRequest(),
         two = new XMLHttpRequest();
-    subject.add(one);
-    subject.add(two);
+    sandbox.add(one);
+    sandbox.add(two);
     var stubOne = sinon.stub(one, 'abort'),
         stubTwo = sinon.stub(two, 'abort');
-    subject.abort();
+    sandbox.abort();
     sinon.assert.calledOnce(stubOne);
     sinon.assert.calledOnce(stubTwo);
   });

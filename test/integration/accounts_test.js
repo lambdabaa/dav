@@ -2,13 +2,13 @@ var Calendar = require('../../lib/model').Calendar,
     assert = require('chai').assert;
 
 suite('accounts', function() {
-  var subject = require('../../lib/accounts');
+  var accounts = require('../../lib/accounts');
 
   suite('#create', function() {
     var result;
 
     setup(function() {
-      return subject.create({
+      return accounts.create({
         username: 'admin',
         password: 'admin',
         server: 'http://127.0.0.1:8888'

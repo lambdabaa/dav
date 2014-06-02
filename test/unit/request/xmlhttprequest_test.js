@@ -5,10 +5,10 @@ var XMLHttpRequest = require('../../../lib/request/xmlhttprequest'),
     sinon = require('sinon');
 
 suite('XMLHttpRequest#send', function() {
-  var subject;
+  var request;
 
   setup(function() {
-    subject = new XMLHttpRequest();
+    request = new XMLHttpRequest();
   });
 
   teardown(function() {
@@ -18,11 +18,11 @@ suite('XMLHttpRequest#send', function() {
   test('should sandbox request if provided', function() {
     nock('http://127.0.0.1:1337').get('/');
 
-    subject.open('GET', 'http://127.0.0.1:1337', true);
+    request.open('GET', 'http://127.0.0.1:1337', true);
     var sandbox = createSandbox();
-    subject.sandbox = sandbox;
-    var spy = sinon.spy(subject, 'abort');
-    subject.send();
+    request.sandbox = sandbox;
+    var spy = sinon.spy(request, 'abort');
+    request.send();
     sandbox.abort();
     sinon.assert.calledOnce(spy);
   });
@@ -32,8 +32,8 @@ suite('XMLHttpRequest#send', function() {
       .post('/', 'zippity-doo-dah')
       .reply(200, 'zip-a-dee-a');
 
-    subject.open('POST', 'http://127.0.0.1:1337', true);
-    return subject
+    request.open('POST', 'http://127.0.0.1:1337', true);
+    return request
       .send('zippity-doo-dah')
       .then(function(responseText) {
         assert.strictEqual(responseText, 'zip-a-dee-a');
@@ -45,8 +45,8 @@ suite('XMLHttpRequest#send', function() {
       .get('/')
       .reply(500, '500 Internal Server Error');
 
-    subject.open('GET', 'http://127.0.0.1:1337', true);
-    return subject
+    request.open('GET', 'http://127.0.0.1:1337', true);
+    return request
       .send()
       .then(function() {
         assert.fail('Did not reject promise on xhr error.');
@@ -62,9 +62,9 @@ suite('XMLHttpRequest#send', function() {
       .delay(2)
       .reply(200, '200 OK');
 
-    subject.timeout = 1;
-    subject.open('GET', 'http://127.0.0.1:1337', true);
-    return subject
+    request.timeout = 1;
+    request.open('GET', 'http://127.0.0.1:1337', true);
+    return request
       .send()
       .then(function() {
         assert.fail('Did not reject promise on timeout.');
@@ -79,8 +79,8 @@ suite('XMLHttpRequest#send', function() {
       .get('/')
       .reply(200, '200 OK');
 
-    subject.open('GET', 'http://127.0.0.1:1337', true);
-    return subject
+    request.open('GET', 'http://127.0.0.1:1337', true);
+    return request
       .send()
       .then(function(responseText) {
         assert.strictEqual(responseText.trim(), '200 OK');

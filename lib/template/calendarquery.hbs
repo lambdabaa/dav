@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<c:calendar-query xmlns:D="DAV:" xmlns:c="urn:ietf:params:xml:ns:caldav">
+  <D:prop>
+    {{#each props}}{{prop this 'D'}}{{/each}}
+  </D:prop>
+  <c:filter>
+    {{#each filter}}{{filter this}}{{/each}}
+  </c:filter>
+</c:calendar-query>
