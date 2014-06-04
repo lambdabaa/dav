@@ -13,13 +13,22 @@ clean:
 		node_modules/ \
 		test/integration/server/SabreDAV/
 
+.PHONY: ci
+ci: lint test-unit test-integration coverage
+
+.PHONY: coverage
+coverage: node_modules
+	./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly
+	cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+	rm -rf ./coverage
+
 .PHONY: lint
-lint:
+lint: node_modules
 	./node_modules/.bin/jshint --verbose lib/ test/
 
 # IMPORTANT: Only run |make shrinkwrap| when making changes to dependencies.
 .PHONY: shrinkwrap
-shrinkwrap:
+shrinkwrap: node_modules
 	rm -f ./npm-shrinkwrap.json
 	npm shrinkwrap --dev
 

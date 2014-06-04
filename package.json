@@ -29,6 +29,8 @@
     "brfs": "1.1.1",
     "browserify": "4.1.5",
     "chai": "1.9.1",
+    "coveralls": "2.10.0",
+    "istanbul": "0.2.10",
     "jshint": "2.5.1",
     "mocha": "1.19.0",
     "nock": "0.32.3",
@@ -41,6 +43,6 @@
   },
 
   "scripts": {
-    "test": "DEBUG=* make test"
+    "test": "DEBUG=* make ci"
   }
 }

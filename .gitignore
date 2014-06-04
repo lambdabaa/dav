@@ -1,5 +1,6 @@
 SabreDAV/
 
 /*.zip
+/coverage/
 /davinci.js
 /node_modules/

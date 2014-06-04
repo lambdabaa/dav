@@ -5,6 +5,7 @@ Javascript CalDAV client library for node.js and the browser.
 
 
 [![Build Status](https://travis-ci.org/gaye/davinci.js.png?branch=master)](https://travis-ci.org/gaye/davinci.js)
+[![Coverage Status](https://img.shields.io/coveralls/gaye/davinci.js.svg)](https://coveralls.io/r/gaye/davinci.js)
 
 ### Directory Structure
 

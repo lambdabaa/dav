@@ -25,6 +25,23 @@ suite('request.report', function() {
     return nockUtils.verifyNock(req, mock);
   });
 
+  test('should set prefer header', function() {
+    var mock = nock('http://127.0.0.1:1337')
+      .matchHeader('Prefer', 'return-minimal')
+      .intercept('/principals/admin/', 'REPORT')
+      .reply(200);
+
+    var req = request.report({
+      url: 'http://127.0.0.1:1337/principals/admin/',
+      username: 'abc',
+      password: '123',
+      props: [ { name: 'calendar-data', namespace: 'c' } ],
+      prefer: 'return-minimal'
+    });
+
+    return nockUtils.verifyNock(req, mock);
+  });
+
   test('should add specified props to report body', function() {
     var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
