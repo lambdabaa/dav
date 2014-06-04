@@ -13,8 +13,18 @@ clean:
 		node_modules/ \
 		test/integration/server/SabreDAV/
 
+.PHONY: lint
+lint:
+	./node_modules/.bin/jshint --verbose lib/ test/
+
+# IMPORTANT: Only run |make shrinkwrap| when making changes to dependencies.
+.PHONY: shrinkwrap
+shrinkwrap:
+	rm -f ./npm-shrinkwrap.json
+	npm shrinkwrap --dev
+
 .PHONY: test
-test: test-unit test-integration
+test: lint test-unit test-integration
 
 .PHONY: test-unit
 test-unit: node_modules

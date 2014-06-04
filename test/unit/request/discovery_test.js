@@ -1,5 +1,5 @@
+'use strict';
 var assert = require('chai').assert,
-    createSandbox = require('../../../lib/sandbox'),
     discovery = require('../../../lib/request').discovery,
     nock = require('nock');
 

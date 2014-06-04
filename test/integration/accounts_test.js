@@ -1,3 +1,4 @@
+'use strict';
 var Calendar = require('../../lib/model').Calendar,
     assert = require('chai').assert;
 

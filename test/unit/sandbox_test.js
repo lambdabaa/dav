@@ -1,9 +1,10 @@
+'use strict';
 var XMLHttpRequest = require('../../lib/request/xmlhttprequest'),
     assert = require('chai').assert,
     createSandbox = require('../../lib/sandbox'),
     sinon = require('sinon');
 
-describe('sandbox', function() {
+suite('sandbox', function() {
   var sandbox;
 
   setup(function() {

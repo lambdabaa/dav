@@ -943,6 +943,119 @@
       "from": "ical.js@0.0.1",
       "resolved": "https://registry.npmjs.org/ical.js/-/ical.js-0.0.1.tgz"
     },
+    "jshint": {
+      "version": "2.5.1",
+      "from": "jshint@*",
+      "resolved": "https://registry.npmjs.org/jshint/-/jshint-2.5.1.tgz",
+      "dependencies": {
+        "shelljs": {
+          "version": "0.3.0",
+          "from": "shelljs@0.3.x",
+          "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.3.0.tgz"
+        },
+        "cli": {
+          "version": "0.6.3",
+          "from": "cli@0.6.x",
+          "resolved": "https://registry.npmjs.org/cli/-/cli-0.6.3.tgz",
+          "dependencies": {
+            "glob": {
+              "version": "3.2.11",
+              "from": "glob@~ 3.2.1",
+              "dependencies": {
+                "inherits": {
+                  "version": "2.0.1",
+                  "from": "inherits@2"
+                }
+              }
+            }
+          }
+        },
+        "minimatch": {
+          "version": "0.3.0",
+          "from": "minimatch@0.x.x",
+          "dependencies": {
+            "lru-cache": {
+              "version": "2.5.0",
+              "from": "lru-cache@2"
+            },
+            "sigmund": {
+              "version": "1.0.0",
+              "from": "sigmund@~1.0.0"
+            }
+          }
+        },
+        "htmlparser2": {
+          "version": "3.7.2",
+          "from": "htmlparser2@3.7.x",
+          "resolved": "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.7.2.tgz",
+          "dependencies": {
+            "domhandler": {
+              "version": "2.2.0",
+              "from": "domhandler@2.2",
+              "resolved": "https://registry.npmjs.org/domhandler/-/domhandler-2.2.0.tgz"
+            },
+            "domutils": {
+              "version": "1.5.0",
+              "from": "domutils@1.5",
+              "resolved": "https://registry.npmjs.org/domutils/-/domutils-1.5.0.tgz"
+            },
+            "domelementtype": {
+              "version": "1.1.1",
+              "from": "domelementtype@1"
+            },
+            "readable-stream": {
+              "version": "1.1.13-1",
+              "from": "readable-stream@1.1",
+              "dependencies": {
+                "core-util-is": {
+                  "version": "1.0.1",
+                  "from": "core-util-is@~1.0.0"
+                },
+                "isarray": {
+                  "version": "0.0.1",
+                  "from": "isarray@0.0.1",
+                  "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                },
+                "string_decoder": {
+                  "version": "0.10.25-1",
+                  "from": "string_decoder@~0.10.x"
+                },
+                "inherits": {
+                  "version": "2.0.1",
+                  "from": "inherits@~2.0.1"
+                }
+              }
+            },
+            "entities": {
+              "version": "1.0.0",
+              "from": "entities@1.0",
+              "resolved": "https://registry.npmjs.org/entities/-/entities-1.0.0.tgz"
+            }
+          }
+        },
+        "console-browserify": {
+          "version": "1.1.0",
+          "from": "console-browserify@1.1.x",
+          "resolved": "https://registry.npmjs.org/console-browserify/-/console-browserify-1.1.0.tgz",
+          "dependencies": {
+            "date-now": {
+              "version": "0.1.4",
+              "from": "date-now@^0.1.4",
+              "resolved": "https://registry.npmjs.org/date-now/-/date-now-0.1.4.tgz"
+            }
+          }
+        },
+        "exit": {
+          "version": "0.1.2",
+          "from": "exit@0.1.x"
+        },
+        "strip-json-comments": {
+          "version": "0.1.3",
+          "from": "strip-json-comments@0.1.x",
+          "resolved": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-0.1.3.tgz"
+        }
+      }
+    },
     "mocha": {
       "version": "1.19.0",
       "from": "mocha@1.19.0",

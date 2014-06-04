@@ -1,3 +1,4 @@
+'use strict';
 var debug = require('debug')('davinci:server'),
     spawn = require('child_process').spawn,
     tcpPortUsed = require('tcp-port-used');
@@ -28,7 +29,7 @@ setup(function() {
 
 teardown(function() {
   debug('Wait for server to die.');
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     server.on('exit', function() {
       debug('Server died.');
       resolve();

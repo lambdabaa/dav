@@ -1,3 +1,4 @@
+'use strict';
 var assert = require('chai').assert,
     data = require('../data'),
     parser = require('../../../lib/parser');

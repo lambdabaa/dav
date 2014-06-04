@@ -1,3 +1,4 @@
+'use strict';
 var nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request');
@@ -19,7 +20,7 @@ suite('request.report', function() {
       password: '123',
       props: [ { name: 'calendar-data', namespace: 'c' } ],
       depth: 1
-    })
+    });
 
     return nockUtils.verifyNock(req, mock);
   });
