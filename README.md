@@ -1,15 +1,30 @@
 davinci.js
 ==========
 
-Javascript CalDAV client library (rfc 4791, rfc 5545)
+Javascript CalDAV client library for node.js and the browser.
 
 
 [![Build Status](https://travis-ci.org/gaye/davinci.js.png?branch=master)](https://travis-ci.org/gaye/davinci.js)
 
-### Design Goals
+### Directory Structure
 
-1. Abstract ical.js and caldav behind a unified backend API.
-2. Use abstraction (in the programming sense) very sparsely [if at all].
-3. Expose async operations via promises.
-4. Should run in node.js and the browser.
-5. Make it very easy to extend with webdav sync (rfc 6578) and scheduling.
+```
+lib/                         # Source code
+lib/model/                   # Semantic data structures hydrated from dav data
+lib/parser/                  # Abstractions for parsing server dav responses
+lib/request/                 # Abstractions for issuing dav client requests
+lib/template/                # Facilities for generating xml request bodies
+test/                        # Test code
+test/integration/            # End-to-end tests run against a dav server
+test/integration/server/     # Code to bootstrap dav server
+test/unit/                   # Unit tests
+test/unit/data/              # Fixture data for unit tests
+test/unit/parser/            # Test cases for parsing server dav responses
+test/unit/request/           # Test cases for issuing dav client requests
+test/unit/template/          # Test cases for xml templating helpers
+```
+
+### Related Material
+
++ [RFC 4791](http://tools.ietf.org/html/rfc4791)
++ [RFC 5545](http://tools.ietf.org/html/rfc5545)
