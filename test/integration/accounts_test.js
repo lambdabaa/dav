@@ -1,4 +1,5 @@
 'use strict';
+
 var Calendar = require('../../lib/model').Calendar,
     assert = require('chai').assert;
 
@@ -12,7 +13,7 @@ suite('accounts', function() {
       return accounts.create({
         username: 'admin',
         password: 'admin',
-        server: 'http://127.0.0.1:8888'
+        server: 'http://127.0.0.1:8888/'
       })
       .then(function(response) {
         result = response;
@@ -20,15 +21,18 @@ suite('accounts', function() {
     });
 
     test('should get existing calendar', function() {
-      assert.isArray(result);
-      assert.lengthOf(result, 1, 'should have one calendar');
+      assert.lengthOf(result, 1);
       var calendar = result[0];
       assert.instanceOf(calendar, Calendar);
+      assert.strictEqual(calendar.username, 'admin');
+      assert.strictEqual(calendar.password, 'admin');
+      assert.strictEqual(calendar.displayName, 'default calendar');
       assert.strictEqual(
-        calendar.principalUrl,
-        'http://127.0.0.1:8888/principals/admin/'
+        calendar.url,
+        'http://127.0.0.1:8888/calendars/admin/default/'
       );
-      assert.strictEqual(calendar.displayName, 'Administrator');
+      assert.include(calendar.components, 'VEVENT');
+      assert.typeOf(calendar.ctag, 'string');
     });
   });
 });

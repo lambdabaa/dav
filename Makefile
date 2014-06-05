@@ -9,6 +9,7 @@ default: davinci.js
 clean:
 	rm -rf *.zip \
 		SabreDAV/ \
+		coverage/ \
 		davinci.js \
 		node_modules/ \
 		test/integration/server/SabreDAV/
@@ -45,7 +46,7 @@ test-integration: node_modules test/integration/server/SabreDAV
 
 SabreDAV:
 	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
-	unzip $(SABRE_DAV_ZIPBALL)
+	unzip -q $(SABRE_DAV_ZIPBALL)
 
 davinci.js: node_modules
 	./node_modules/.bin/browserify \

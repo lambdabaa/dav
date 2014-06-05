@@ -25,50 +25,24 @@ suite('request.propfind', function() {
     return nockUtils.verifyNock(req, mock);
   });
 
-  test('should set prefer header', function() {
-    var mock = nock('http://127.0.0.1:1337')
-      // Will only intercept if Prefer header set to return-minimal.
-      .matchHeader('Prefer', 'return-minimal')
-      .intercept('/', 'PROPFIND')
-      .reply(200);
-
-    var req = request.propfind({
-      url: 'http://127.0.0.1:1337/',
-      username: 'abc',
-      password: '123',
-      props: [ { name: 'catdog', namespace: 'DAV' } ],
-      prefer: 'return-minimal'
-    });
-
-    return nockUtils.verifyNock(req, mock);
-  });
-
   test('should add specified properties to propfind body', function() {
     var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody('/', 'PROPFIND', function(body) {
-      return body.indexOf('<D:catdog />') !== -1;
+      return body.indexOf('<d:catdog />') !== -1;
     });
 
     var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
       username: 'abc',
       password: '123',
-      props: [ { name: 'catdog', namespace: 'DAV' } ],
+      props: [ { name: 'catdog', namespace: 'd' } ],
       depth: '0'
     });
 
     return nockUtils.verifyNock(req, mock);
   });
 
-  test.skip('should ignore props that were not found', function() {
-    // TODO(gareth)
-  });
-
-  test.skip('should throw appropriate error if no propstats', function() {
-    // TODO(gareth)
-  });
-
-  test.skip('should throw appropriate error if bad status', function() {
+  test.skip('should resolve with appropriate data structure', function() {
     // TODO(gareth)
   });
 });

@@ -3,30 +3,26 @@ var assert = require('assert'),
     helpers = require('../../../lib/template/helpers');
 
 suite('Handlebars helpers', function() {
-  test.skip('filter', function() {
+  test('comp-filter', function() {
+    var filter = helpers
+      .filterHelper({
+        type: 'comp',
+        name: 'VCALENDAR',
+        namespace: 'c'
+      })
+      .string;
+
+    assert.strictEqual(filter, '<c:comp-filter name="VCALENDAR" />');
   });
 
-  suite('prop', function() {
-    test('DAV', function() {
-      var prop = helpers
-        .propHelper({
-          name: 'catdog',
-          namespace: 'DAV'
-        }, 'D')
-        .string;
+  test('prop', function() {
+    var prop = helpers
+      .propHelper({
+        name: 'spongebob',
+        namespace: 'c'
+      }, 'D')
+      .string;
 
-      assert.strictEqual(prop, '<D:catdog />');
-    });
-
-    test('arbitrary ns', function() {
-      var prop = helpers
-        .propHelper({
-          name: 'spongebob',
-          namespace: 'c'
-        }, 'D')
-        .string;
-
-      assert.strictEqual(prop, '<c:spongebob />');
-    });
+    assert.strictEqual(prop, '<c:spongebob />');
   });
 });
