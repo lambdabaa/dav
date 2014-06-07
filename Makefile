@@ -59,9 +59,4 @@ node_modules:
 
 test/integration/server/SabreDAV: SabreDAV
 	cp -r SabreDAV test/integration/server/SabreDAV
-	cd test/integration/server/SabreDAV && \
-		cp ../calendarserver.php calendarserver.php && \
-		mkdir data && \
-		cat examples/sql/sqlite.* | sqlite3 data/db.sqlite && \
-		chmod -R a+w data/ && \
-		echo "INSERT INTO calendars (principaluri,displayname,uri,description,components,transparent) VALUES ('principals/admin','default calendar','default','','VEVENT,VTODO', '0');" | sqlite3 data/db.sqlite
+	cd test/integration/server/SabreDAV && cp ../calendarserver.php calendarserver.php

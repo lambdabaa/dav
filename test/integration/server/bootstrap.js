@@ -1,10 +1,48 @@
 'use strict';
+
 var debug = require('debug')('davinci:server'),
+    format = require('util').format,
+    exec = require('child_process').exec,
     spawn = require('child_process').spawn,
     tcpPortUsed = require('tcp-port-used');
 
-var server;
+var data = {
+  principaluri: 'principals/admin',
+  displayname: 'default calendar',
+  uri: 'default',
+  description: 'administrator calendar',
+  components: 'VEVENT,VTODO',
+  transparent: '0'
+};
 
+var columns = [],
+    values = [];
+for (var column in data) {
+  var value = data[column];
+  columns.push(column);
+  values.push('\'' + value + '\'');
+}
+
+var insert = format(
+  'echo "INSERT INTO calendars (%s) VALUES (%s);" | sqlite3 data/db.sqlite',
+  columns.join(','),
+  values.join(',')
+);
+
+[
+  'rm -rf data/',
+  'mkdir data/',
+  'chmod -R a+rw data/',
+  'cat examples/sql/sqlite.* | sqlite3 data/db.sqlite',
+  insert
+].forEach(function(command) {
+  debug('exec: ' + command);
+  setup(function(done) {
+    exec(command, { cwd: __dirname + '/SabreDAV' }, function() { done(); });
+  });
+});
+
+var server;
 setup(function() {
   debug('Start dav server.');
   server = spawn('php', [
@@ -36,5 +74,13 @@ teardown(function() {
     });
 
     server.kill();
+  });
+});
+
+[
+  'rm -rf data/'
+].forEach(function(command) {
+  teardown(function(done) {
+    exec(command, { cwd: __dirname }, function() { done(); });
   });
 });

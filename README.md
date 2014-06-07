@@ -21,6 +21,16 @@ Options:
   (Object) sandbox - optional request sandbox.
 ```
 
+#### davinci.createCalendarObject = function(calendar, options) {};
+
+Create a calendar object on the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been created.
+
+```
+Options:
+  (String) filename - name for the calendar ics file.
+  (String) data - rfc 5545 VCALENDAR object.
+```
+
 #### davinci.createSandbox = function(options) {};
 
 Create a request sandbox. Add requests to the sandbox like so:
