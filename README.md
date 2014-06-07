@@ -7,6 +7,38 @@ Javascript CalDAV client library for node.js and the browser.
 [![Build Status](https://travis-ci.org/gaye/davinci.js.png?branch=master)](https://travis-ci.org/gaye/davinci.js)
 [![Coverage Status](https://img.shields.io/coveralls/gaye/davinci.js.svg)](https://coveralls.io/r/gaye/davinci.js)
 
+### API
+
+#### davinci.createAccount = function(options) {};
+
+Perform an initial download of a caldav account's data. Returns a [Promise](developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an array of [davinci.Calendar](github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) objects.
+
+```
+Options:
+  (String) username - username (perhaps email) for calendar user.
+  (String) password - plaintext password for calendar user.
+  (String) server - some url for server (needn't be base url).
+  (Object) sandbox - optional request sandbox.
+```
+
+#### davinci.createSandbox = function(options) {};
+
+Create a request sandbox. Add requests to the sandbox like so:
+
+```js
+var sandbox = davinci.createSandbox();
+davinci.createAccount({
+  username: 'Yoshi',
+  password: 'babybowsersoscaryomg',
+  server: 'https://caldav.yoshisstory.com',
+  sandbox: sandbox  // <- Insert sandbox here!
+}).then(function(calendars) {
+  // etc, etc.
+});
+```
+And abort sandboxed requests as a group with `sandbox.abort()`.
+
+
 ### Directory Structure
 
 ```

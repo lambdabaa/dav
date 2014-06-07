@@ -1,7 +1,13 @@
+SabreDAV/
+
+/*.zip
+/coverage/
+/HISTORY.md
 /Makefile
 /README.md
 /.git
 /.gitignore
+/.jshintrc
 /.travis.yml
 /lib
 /node_modules
