@@ -11,7 +11,7 @@ Javascript CalDAV client library for node.js and the browser.
 
 #### davinci.createAccount = function(options) {};
 
-Perform an initial download of a caldav account's data. Returns a [Promise](developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an array of [davinci.Calendar](github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) objects.
+Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an array of [davinci.Calendar](https://github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) objects.
 
 ```
 Options:
