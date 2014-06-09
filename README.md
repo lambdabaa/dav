@@ -26,6 +26,8 @@ Options:
 Create a calendar object on the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been created.
 
 ```
+@param {davinci.Calendar} calendar the calendar to put the object on.
+
 Options:
   (String) filename - name for the calendar ics file.
   (String) data - rfc 5545 VCALENDAR object.
