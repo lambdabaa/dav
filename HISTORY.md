@@ -1,3 +1,7 @@
+### 0.3.0
+
++ #createCalendarObject modified to support sandboxing.
+
 ### 0.2.0
 
 + #createCalendarObject added to public api
