@@ -1,4 +1,5 @@
 'use strict';
+
 var assert = require('chai').assert,
     discovery = require('../../../lib/request').discovery,
     nock = require('nock');

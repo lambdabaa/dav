@@ -1,4 +1,5 @@
 'use strict';
+
 var nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request');

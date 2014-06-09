@@ -1,4 +1,5 @@
 'use strict';
+
 var assert = require('assert'),
     helpers = require('../../../lib/template/helpers');
 

@@ -1,4 +1,5 @@
 'use strict';
+
 var XMLHttpRequest = require('../../lib/request/xmlhttprequest'),
     assert = require('chai').assert,
     createSandbox = require('../../lib/sandbox'),
