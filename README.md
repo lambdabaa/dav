@@ -33,7 +33,7 @@ Options:
   (String) data - rfc 5545 VCALENDAR object.
 ```
 
-#### davinci.createSandbox = function(options) {};
+#### davinci.createSandbox = function() {};
 
 Create a request sandbox. Add requests to the sandbox like so:
 
