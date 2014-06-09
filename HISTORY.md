@@ -1,3 +1,7 @@
+### 0.3.1
+
++ Patch bug in build due to bug in brfs.
+
 ### 0.3.0
 
 + #createCalendarObject modified to support sandboxing.
