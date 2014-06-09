@@ -49,10 +49,7 @@ SabreDAV:
 	unzip -q $(SABRE_DAV_ZIPBALL)
 
 davinci.js: node_modules
-	./node_modules/.bin/browserify \
-		-e ./lib/index.js \
-		-t brfs \
-		-o ./davinci.js
+	./node_modules/.bin/browserify -t brfs ./lib/index.js > ./davinci.js
 
 node_modules:
 	npm install
