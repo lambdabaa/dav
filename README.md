@@ -31,6 +31,7 @@ Create a calendar object on the parameter calendar. Returns a [Promise](https://
 Options:
   (String) filename - name for the calendar ics file.
   (String) data - rfc 5545 VCALENDAR object.
+  (Object) sandbox - optional request sandbox.
 ```
 
 #### davinci.createSandbox = function() {};
