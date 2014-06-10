@@ -11,7 +11,7 @@ Javascript CalDAV client library for node.js and the browser.
 
 #### davinci.createAccount = function(options) {};
 
-Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an array of [davinci.Calendar](https://github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) objects.
+Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [davinci.Account](https://github.com/gaye/davinci.js/blob/master/lib/model/account.js) object.
 
 ```
 Options:
@@ -51,6 +51,17 @@ Delete the parameter calendar object on the server. Returns a [Promise](https://
 
 ```
 @param {davinci.CalendarObject} calendarObject target calendar object.
+
+Options:
+  (Object) sandbox - optional request sandbox.
+```
+
+### davinci.syncCalendar = function(calendar) {};
+
+Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) object once sync is complete.
+
+```
+@param {davinci.Calendar} calendar the calendar to fetch changes for.
 
 Options:
   (Object) sandbox - optional request sandbox.

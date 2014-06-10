@@ -48,14 +48,12 @@ suite('XMLHttpRequest#send', function() {
       .reply(500, '500 Internal Server Error');
 
     request.open('GET', 'http://127.0.0.1:1337', true);
-    return request
-      .send()
-      .then(function() {
-        assert.fail('Did not reject promise on xhr error.');
-      })
-      .catch(function(error) {
-        assert.instanceOf(error, Error);
-      });
+    return request.send().then(function() {
+      assert.fail('Did not reject promise on xhr error.');
+    })
+    .catch(function(error) {
+      assert.instanceOf(error, Error);
+    });
   });
 
   test('should reject with timeout error on timeout', function() {
@@ -82,10 +80,8 @@ suite('XMLHttpRequest#send', function() {
       .reply(200, '200 OK');
 
     request.open('GET', 'http://127.0.0.1:1337', true);
-    return request
-      .send()
-      .then(function(responseText) {
-        assert.strictEqual(responseText.trim(), '200 OK');
-      });
+    return request.send().then(function(responseText) {
+      assert.strictEqual(responseText.trim(), '200 OK');
+    });
   });
 });

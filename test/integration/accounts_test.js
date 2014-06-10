@@ -5,26 +5,38 @@ var assert = require('chai').assert,
 
 suite('accounts', function() {
   suite('#create', function() {
-    var result;
+    var account;
 
     setup(function() {
-      return davinci
-        .createAccount({
-          username: 'admin',
-          password: 'admin',
-          server: 'http://127.0.0.1:8888/'
-        })
-        .then(function(response) {
-          result = response;
-        });
+      return davinci.createAccount({
+        username: 'admin',
+        password: 'admin',
+        server: 'http://127.0.0.1:8888/'
+      })
+      .then(function(response) {
+        account = response;
+      });
     });
 
-    test('should get existing calendar', function() {
-      assert.lengthOf(result, 1);
-      var calendar = result[0];
+    test('should get existing account', function() {
+      assert.instanceOf(account, davinci.Account);
+      assert.strictEqual(account.username, 'admin');
+      assert.strictEqual(account.password, 'admin');
+      assert.strictEqual(account.server, 'http://127.0.0.1:8888/');
+      assert.strictEqual(account.caldavUrl, 'http://127.0.0.1:8888/');
+      assert.strictEqual(
+        account.principalUrl,
+        'http://127.0.0.1:8888/principals/admin/'
+      );
+      assert.strictEqual(
+        account.homeUrl,
+        'http://127.0.0.1:8888/calendars/admin/'
+      );
+
+      var calendars = account.calendars;
+      assert.lengthOf(calendars, 1);
+      var calendar = calendars[0];
       assert.instanceOf(calendar, davinci.Calendar);
-      assert.strictEqual(calendar.username, 'admin');
-      assert.strictEqual(calendar.password, 'admin');
       assert.strictEqual(calendar.displayName, 'default calendar');
       assert.strictEqual(
         calendar.url,
@@ -32,6 +44,8 @@ suite('accounts', function() {
       );
       assert.include(calendar.components, 'VEVENT');
       assert.typeOf(calendar.ctag, 'string');
+      assert.isArray(calendar.objects);
+      assert.lengthOf(calendar.objects, 0);
     });
   });
 });

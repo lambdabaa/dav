@@ -25,12 +25,10 @@ exports.extend = function(nockObj) {
  * the mock should have intercepted the request.
  */
 exports.verifyNock = function(promise, nockObj) {
-  return promise
-    .then(function() {
-      nockObj.done();
-    })
-    .catch(function(error) {
-      assert.notInclude(error.toString(), 'ECONNREFUSED');
-      nockObj.done();
-    });
+  return promise.then(function() {
+    nockObj.done();
+  }).catch(function(error) {
+    assert.notInclude(error.toString(), 'ECONNREFUSED');
+    nockObj.done();
+  });
 };

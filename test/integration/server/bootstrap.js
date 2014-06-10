@@ -62,7 +62,7 @@ setup(function() {
   });
 
   debug('Wait for dav server to start.');
-  return tcpPortUsed.waitUntilUsed(8888, 100);
+  return tcpPortUsed.waitUntilUsed(8888, 100, 20000);
 });
 
 teardown(function() {
