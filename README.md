@@ -45,6 +45,17 @@ Options:
   (Object) sandbox - optional request sandbox.
 ```
 
+#### davinci.deleteCalendarObject = function(calendarObject) {};
+
+Delete the parameter calendar object on the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been deleted.
+
+```
+@param {davinci.CalendarObject} calendarObject target calendar object.
+
+Options:
+  (Object) sandbox - optional request sandbox.
+```
+
 #### davinci.createSandbox = function() {};
 
 Create a request sandbox. Add requests to the sandbox like so:

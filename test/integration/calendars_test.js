@@ -103,4 +103,29 @@ suite('calendars', function() {
         );
       });
   });
+
+  test('#deleteCalendarObject', function() {
+    var calendar = calendars[0];
+    var objects = calendar.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 1);
+    var object = objects[0];
+    return davinci
+      .deleteCalendarObject(object)
+      .then(function() {
+        // TODO(gareth): Once we implement incremental/webdav sync,
+        //     do that here.
+        return davinci.createAccount({
+          username: 'admin',
+          password: 'admin',
+          server: 'http://127.0.0.1:8888/'
+        });
+      })
+      .then(function(calendars) {
+        var calendar = calendars[0];
+        var objects = calendar.objects;
+        assert.isArray(objects);
+        assert.lengthOf(objects, 0, 'should be deleted');
+      });
+  });
 });
