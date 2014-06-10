@@ -1,3 +1,7 @@
+### 0.5.0
+
++ #deleteCalendarObject added to public api
+
 ### 0.4.0
 
 + #updateCalendarObject added to public api
