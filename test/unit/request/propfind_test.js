@@ -1,12 +1,26 @@
 'use strict';
 
-var nock = require('nock'),
+var assert = require('chai').assert,
+    nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request');
 
 suite('request.propfind', function() {
   teardown(function() {
     nock.cleanAll();
+  });
+
+  test('should return request.Request', function() {
+    assert.instanceOf(
+      request.propfind({
+        url: 'http://127.0.0.1:1337/',
+        username: 'abc',
+        password: '123',
+        props: [ { name: 'catdog', namespace: 'DAV' } ],
+        depth: '0'
+      }),
+      request.Request
+    );
   });
 
   test('should set depth header', function() {
@@ -23,7 +37,7 @@ suite('request.propfind', function() {
       depth: '0'
     });
 
-    return nockUtils.verifyNock(req, mock);
+    return nockUtils.verifyNock(req.send(), mock);
   });
 
   test('should add specified properties to propfind body', function() {
@@ -40,7 +54,7 @@ suite('request.propfind', function() {
       depth: '0'
     });
 
-    return nockUtils.verifyNock(req, mock);
+    return nockUtils.verifyNock(req.send(), mock);
   });
 
   test.skip('should resolve with appropriate data structure', function() {

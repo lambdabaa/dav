@@ -10,6 +10,18 @@ suite('put', function() {
     nock.cleanAll();
   });
 
+  test('should return request.Request', function() {
+    assert.instanceOf(
+      request.put({
+        url: 'http://127.0.0.1:1337/',
+        username: 'abc',
+        password: '123',
+        data: 'yoyoma'
+      }),
+      request.Request
+    );
+  });
+
   test('should send options data as request body', function() {
     var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody('/', 'PUT', function(body) {
@@ -23,7 +35,7 @@ suite('put', function() {
       data: 'Bad hair day!'
     });
 
-    return nockUtils.verifyNock(req, mock);
+    return nockUtils.verifyNock(req.send(), mock);
   });
 
   test('should throw error on bad response', function() {
@@ -37,6 +49,7 @@ suite('put', function() {
       username: 'doug',
       password: 'funny'
     })
+    .send()
     .then(function() {
       assert.fail('request.put should have thrown an error');
     })
