@@ -1,3 +1,8 @@
+### 0.4.0
+
++ #updateCalendarObject added to public api
++ Internal api refactoring to expose Request objects
+
 ### 0.3.1
 
 + Patch bug in build due to bug in brfs.
