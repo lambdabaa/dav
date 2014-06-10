@@ -22,6 +22,22 @@ suite('put', function() {
     );
   });
 
+  test('should set If-Match header', function() {
+    var mock = nock('http://127.0.0.1:1337')
+      .matchHeader('If-Match', '1337')
+      .intercept('/', 'PUT')
+      .reply(200);
+
+    var req = request.put({
+      url: 'http://127.0.0.1:1337',
+      username: 'abc',
+      password: '123',
+      etag: '1337'
+    });
+
+    return nockUtils.verifyNock(req.send(), mock);
+  });
+
   test('should send options data as request body', function() {
     var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody('/', 'PUT', function(body) {

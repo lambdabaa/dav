@@ -34,6 +34,17 @@ Options:
   (Object) sandbox - optional request sandbox.
 ```
 
+#### davinci.updateCalendarObject = function(calendarObject) {};
+
+Persist updates to the parameter calendar object to the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been updated.
+
+```
+@param {davinci.CalendarObject} calendarObject updated calendar object.
+
+Options:
+  (Object) sandbox - optional request sandbox.
+```
+
 #### davinci.createSandbox = function() {};
 
 Create a request sandbox. Add requests to the sandbox like so:
