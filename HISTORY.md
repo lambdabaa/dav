@@ -1,3 +1,7 @@
+### 0.7.0
+
++ Support providing timezone option to #createAccount and #syncCalendar
+
 ### 0.6.0
 
 + #syncCalendar added to public api

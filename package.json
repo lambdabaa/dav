@@ -1,6 +1,6 @@
 {
   "name": "davinci.js",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "Javascript CalDAV client library (rfc 4791, rfc 5545)",
   "license": "MPL-2.0",
