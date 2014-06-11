@@ -42,6 +42,7 @@ suite('accounts', function() {
         calendar.url,
         'http://127.0.0.1:8888/calendars/admin/default/'
       );
+      assert.strictEqual(calendar.description, 'administrator calendar');
       assert.include(calendar.components, 'VEVENT');
       assert.typeOf(calendar.ctag, 'string');
       assert.isArray(calendar.objects);
