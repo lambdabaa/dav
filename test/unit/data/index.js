@@ -6,7 +6,8 @@ var camelize = require('../../../lib/camelize'),
 
 [
   'current_user_principal',
-  'calendar_query'
+  'calendar_query',
+  'propfind'
 ].forEach(function(responseType) {
   var camelCase = camelize(responseType);
   exports[camelCase] = fs
