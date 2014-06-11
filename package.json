@@ -43,6 +43,6 @@
   },
 
   "scripts": {
-    "test": "DEBUG=* make ci"
+    "test": "make ci"
   }
 }
