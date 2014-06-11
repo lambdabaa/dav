@@ -7,4 +7,5 @@
   <c:filter>
     {{#each filters}}{{filter this}}{{/each}}
   </c:filter>
+  {{#if timezone}}<c:timezone>{{timezone}}</c:timezone>{{/if}}
 </c:calendar-query>

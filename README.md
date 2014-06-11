@@ -19,6 +19,7 @@ Options:
   (String) password - plaintext password for calendar user.
   (String) server - some url for server (needn't be base url).
   (Object) sandbox - optional request sandbox.
+  (String) timezone - VTIMEZONE calendar object.
 ```
 
 #### davinci.createCalendarObject = function(calendar, options) {};
@@ -65,6 +66,7 @@ Fetch changes from the remote server to the parameter calendar. Returns a [Promi
 
 Options:
   (Object) sandbox - optional request sandbox.
+  (String) timezone - VTIMEZONE calendar object.
 ```
 
 #### davinci.createSandbox = function() {};

@@ -73,6 +73,23 @@ suite('request.calendarQuery', function() {
     return nockUtils.verifyNock(req.send(), mock);
   });
 
+  test('should add timezone to report body', function() {
+    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
+    mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
+      var data = '<c:timezone>BEGIN:VTIMEZONE\nEND:VTIMEZONE</c:timezone>';
+      return body.indexOf(data) !== -1;
+    });
+
+    var req = request.calendarQuery({
+      url: 'http://127.0.0.1:1337/principals/admin/',
+      username: 'abc',
+      password: '123',
+      timezone: 'BEGIN:VTIMEZONE\nEND:VTIMEZONE'
+    });
+
+    return nockUtils.verifyNock(req.send(), mock);
+  });
+
   test('should resolve with appropriate data structure', function() {
     nock('http://127.0.0.1:1337')
       .intercept('/', 'REPORT')
