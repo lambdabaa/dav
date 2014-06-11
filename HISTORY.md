@@ -1,3 +1,8 @@
+### 0.6.0
+
++ #syncCalendar added to public api
++ The promise returned from #createAccount now resolves with a davinci.Account object instead of an array of davinci.Calendar objects.
+
 ### 0.5.0
 
 + #deleteCalendarObject added to public api
