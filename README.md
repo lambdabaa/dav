@@ -86,6 +86,14 @@ davinci.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
+### Advanced Usage
+
+If you would like access to either
+
++ the lower-level request api or
++ xhr response objects without the added semantics of the parse and model layers
+
+davinci exposes `calendarQuery`, `delete`, `discovery`, `propfind`, and `put` on `davinci.request`. Each of these methods accepts (as an option) a `transformResponse` function which will be called with an xhr object once its readyState is 4. `Request.send()` will resolve with whatever `transformResponse` returns.
 
 ### Directory Structure
 
