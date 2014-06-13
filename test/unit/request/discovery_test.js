@@ -2,9 +2,16 @@
 
 var assert = require('chai').assert,
     nock = require('nock'),
-    request = require('../../../lib/request');
+    request = require('../../../lib/request'),
+    transport = require('../../../lib/transport');
 
 suite('request.discovery', function() {
+  var xhr;
+
+  setup(function() {
+    xhr = new transport.Basic({ user: 'admin', password: 'admin' });
+  });
+
   teardown(function() {
     nock.cleanAll();
   });
@@ -13,9 +20,7 @@ suite('request.discovery', function() {
     assert.instanceOf(
       request.discovery({
         bootstrap: 'caldav',
-        server: 'http://127.0.0.1:1337',
-        username: 'abc',
-        password: '123'
+        server: 'http://127.0.0.1:1337'
       }),
       request.Request
     );
@@ -28,14 +33,12 @@ suite('request.discovery', function() {
         'Location': '/servlet/caldav'
       });
 
-    return request.discovery({
+    var req = request.discovery({
       bootstrap: 'caldav',
-      server: 'http://127.0.0.1:1337',
-      user: 'ernie',
-      password: 'bert'
-    })
-    .send()
-    .then(function(contextPath) {
+      server: 'http://127.0.0.1:1337'
+    });
+
+    return xhr.send(req).then(function(contextPath) {
       assert.strictEqual(contextPath, 'http://127.0.0.1:1337/servlet/caldav');
     });
   });
@@ -46,12 +49,12 @@ suite('request.discovery', function() {
       .reply(500, '500 Internal Server Error');
 
     // If we don't swallow the error, this will throw it.
-    return request.discovery({
+    var req = request.discovery({
       bootstrap: 'caldav',
-      server: 'http://127.0.0.1:1337',
-      user: 'ernie',
-      password: 'bert'
+      server: 'http://127.0.0.1:1337'
     });
+
+    return xhr.send(req);
   });
 
   test('should fall back to provided url if not redirect', function() {
@@ -59,14 +62,12 @@ suite('request.discovery', function() {
       .get('/.well-known/caldav')
       .reply(200, '200 OK');  // 200 is not a redirect.
 
-    return request.discovery({
+    var req = request.discovery({
       bootstrap: 'caldav',
-      server: 'http://127.0.0.1:1337',
-      user: 'ernie',
-      password: 'bert'
-    })
-    .send()
-    .then(function(contextPath) {
+      server: 'http://127.0.0.1:1337'
+    });
+
+    return xhr.send(req).then(function(contextPath) {
       assert.strictEqual(contextPath, 'http://127.0.0.1:1337/');
     });
   });

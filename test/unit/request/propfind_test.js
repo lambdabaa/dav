@@ -4,9 +4,16 @@ var assert = require('chai').assert,
     data = require('../data'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
-    request = require('../../../lib/request');
+    request = require('../../../lib/request'),
+    transport = require('../../../lib/transport');
 
 suite('request.propfind', function() {
+  var xhr;
+
+  setup(function() {
+    xhr = new transport.Basic({ user: 'admin', password: 'admin' });
+  });
+
   teardown(function() {
     nock.cleanAll();
   });
@@ -15,8 +22,6 @@ suite('request.propfind', function() {
     assert.instanceOf(
       request.propfind({
         url: 'http://127.0.0.1:1337/',
-        username: 'abc',
-        password: '123',
         props: [ { name: 'catdog', namespace: 'DAV' } ],
         depth: '0'
       }),
@@ -32,13 +37,11 @@ suite('request.propfind', function() {
 
     var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
-      username: 'abc',
-      password: '123',
       props: [ { name: 'catdog', namespace: 'DAV' } ],
       depth: '0'
     });
 
-    return nockUtils.verifyNock(req.send(), mock);
+    return nockUtils.verifyNock(xhr.send(req), mock);
   });
 
   test('should add specified properties to propfind body', function() {
@@ -49,13 +52,11 @@ suite('request.propfind', function() {
 
     var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
-      username: 'abc',
-      password: '123',
       props: [ { name: 'catdog', namespace: 'd' } ],
       depth: '0'
     });
 
-    return nockUtils.verifyNock(req.send(), mock);
+    return nockUtils.verifyNock(xhr.send(req), mock);
   });
 
   test('should resolve with appropriate data structure', function() {
@@ -63,19 +64,17 @@ suite('request.propfind', function() {
       .intercept('/', 'PROPFIND')
       .reply(200, data.propfind);
 
-    return request.propfind({
+    var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
-      username: 'abc',
-      password: '123',
       props: [
         { name: 'displayname', namespace: 'd' },
         { name: 'getctag', namespace: 'cs' },
         { name: 'supported-calendar-component-set', namespace: 'c' }
       ],
       depth: 1
-    })
-    .send()
-    .then(function(responses) {
+    });
+
+    return xhr.send(req).then(function(responses) {
       assert.isArray(responses);
       responses.forEach(function(response) {
         assert.typeOf(response.href, 'string');

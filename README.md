@@ -15,11 +15,13 @@ Perform an initial download of a caldav account's data. Returns a [Promise](http
 
 ```
 Options:
-  (String) username - username (perhaps email) for calendar user.
+
   (String) password - plaintext password for calendar user.
-  (String) server - some url for server (needn't be base url).
   (Object) sandbox - optional request sandbox.
+  (String) server - some url for server (needn't be base url).
   (String) timezone - VTIMEZONE calendar object.
+  (String) username - username (perhaps email) for calendar user.
+  (davinci.Transport) xhr - optional request sender.
 ```
 
 #### davinci.createCalendarObject = function(calendar, options) {};
@@ -30,9 +32,11 @@ Create a calendar object on the parameter calendar. Returns a [Promise](https://
 @param {davinci.Calendar} calendar the calendar to put the object on.
 
 Options:
-  (String) filename - name for the calendar ics file.
+
   (String) data - rfc 5545 VCALENDAR object.
+  (String) filename - name for the calendar ics file.
   (Object) sandbox - optional request sandbox.
+  (davinci.Transport) xhr - optional request sender.
 ```
 
 #### davinci.updateCalendarObject = function(calendarObject) {};
@@ -43,7 +47,9 @@ Persist updates to the parameter calendar object to the server. Returns a [Promi
 @param {davinci.CalendarObject} calendarObject updated calendar object.
 
 Options:
+
   (Object) sandbox - optional request sandbox.
+  (davinci.Transport) xhr - optional request sender.
 ```
 
 #### davinci.deleteCalendarObject = function(calendarObject) {};
@@ -54,7 +60,9 @@ Delete the parameter calendar object on the server. Returns a [Promise](https://
 @param {davinci.CalendarObject} calendarObject target calendar object.
 
 Options:
+
   (Object) sandbox - optional request sandbox.
+  (davinci.Transport) xhr - optional request sender.
 ```
 
 ### davinci.syncCalendar = function(calendar) {};
@@ -65,8 +73,10 @@ Fetch changes from the remote server to the parameter calendar. Returns a [Promi
 @param {davinci.Calendar} calendar the calendar to fetch changes for.
 
 Options:
+
   (Object) sandbox - optional request sandbox.
   (String) timezone - VTIMEZONE calendar object.
+  (davinci.Transport) xhr - optional request sender.
 ```
 
 #### davinci.createSandbox = function() {};
@@ -85,15 +95,6 @@ davinci.createAccount({
 });
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
-
-### Advanced Usage
-
-If you would like access to either
-
-+ the lower-level request api or
-+ xhr response objects without the added semantics of the parse and model layers
-
-davinci exposes `calendarQuery`, `delete`, `discovery`, `propfind`, and `put` on `davinci.request`. Each of these methods accepts (as an option) a `transformResponse` function which will be called with an xhr object once its readyState is 4. `Request.send()` will resolve with whatever `transformResponse` returns.
 
 ### Directory Structure
 

@@ -4,9 +4,16 @@ var assert = require('chai').assert,
     data = require('../data'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
-    request = require('../../../lib/request');
+    request = require('../../../lib/request'),
+    transport = require('../../../lib/transport');
 
 suite('request.calendarQuery', function() {
+  var xhr;
+
+  setup(function() {
+    xhr = new transport.Basic({ username: 'admin', password: 'admin' });
+  });
+
   teardown(function() {
     nock.cleanAll();
   });
@@ -15,8 +22,6 @@ suite('request.calendarQuery', function() {
     assert.instanceOf(
       request.calendarQuery({
         url: 'http://127.0.0.1:1337/principals/admin',
-        username: 'abc',
-        password: '123',
         props: [],
         depth: 1
       }),
@@ -32,13 +37,11 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      username: 'abc',
-      password: '123',
       props: [ { name: 'calendar-data', namespace: 'c' } ],
       depth: 1
     });
 
-    return nockUtils.verifyNock(req.send(), mock);
+    return nockUtils.verifyNock(xhr.send(req), mock);
   });
 
   test('should add specified props to report body', function() {
@@ -49,12 +52,10 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      username: 'abc',
-      password: '123',
       props: [ { name: 'catdog', namespace: 'd' } ]
     });
 
-    return nockUtils.verifyNock(req.send(), mock);
+    return nockUtils.verifyNock(xhr.send(req), mock);
   });
 
   test('should add specified filters to report body', function() {
@@ -65,12 +66,10 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      username: 'abc',
-      password: '123',
       filters: [ { type: 'comp', name: 'VCALENDAR', namespace: 'c' } ]
     });
 
-    return nockUtils.verifyNock(req.send(), mock);
+    return nockUtils.verifyNock(xhr.send(req), mock);
   });
 
   test('should add timezone to report body', function() {
@@ -82,12 +81,10 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      username: 'abc',
-      password: '123',
       timezone: 'BEGIN:VTIMEZONE\nEND:VTIMEZONE'
     });
 
-    return nockUtils.verifyNock(req.send(), mock);
+    return nockUtils.verifyNock(xhr.send(req), mock);
   });
 
   test('should resolve with appropriate data structure', function() {
@@ -95,18 +92,16 @@ suite('request.calendarQuery', function() {
       .intercept('/', 'REPORT')
       .reply(200, data.calendarQuery);
 
-    request.calendarQuery({
+    var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/',
-      username: 'abc',
-      password: '123',
       props: [
         { name: 'getetag', namespace: 'd' },
         { name: 'calendar-data', namespace: 'c' }
       ],
       filters: [ { type: 'comp', name: 'VCALENDAR', namespace: 'c' } ]
-    })
-    .send()
-    .then(function(calendars) {
+    });
+
+    return xhr.send(req).then(function(calendars) {
       assert.lengthOf(calendars, 2);
       calendars.forEach(function(calendar) {
         assert.typeOf(calendar.href, 'string');

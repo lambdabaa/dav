@@ -20,8 +20,9 @@ suite('accounts', function() {
 
     test('should get existing account', function() {
       assert.instanceOf(account, davinci.Account);
-      assert.strictEqual(account.username, 'admin');
-      assert.strictEqual(account.password, 'admin');
+      assert.instanceOf(account.credentials, davinci.Credentials);
+      assert.strictEqual(account.credentials.username, 'admin');
+      assert.strictEqual(account.credentials.password, 'admin');
       assert.strictEqual(account.server, 'http://127.0.0.1:8888/');
       assert.strictEqual(account.caldavUrl, 'http://127.0.0.1:8888/');
       assert.strictEqual(
