@@ -1,3 +1,7 @@
+### 0.7.1
+
++ Expose the underlying, xml parsed dav responses on davinci.Calendar and davinci.CalendarObject models.
+
 ### 0.7.0
 
 + Support providing timezone option to #createAccount and #syncCalendar
