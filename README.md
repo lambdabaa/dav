@@ -96,6 +96,7 @@ lib/parser/                  # Abstractions for parsing server dav responses
 lib/request/                 # Abstractions for issuing dav client requests
 lib/template/                # Facilities for generating xml request bodies
 test/                        # Test code
+test/integration/data/       # Fixture data for integration tests
 test/integration/            # End-to-end tests run against a dav server
 test/integration/server/     # Code to bootstrap dav server
 test/unit/                   # Unit tests
