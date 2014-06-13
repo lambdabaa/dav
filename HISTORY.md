@@ -1,3 +1,8 @@
+### 0.8.0
+
++ Expose low-level request methods through davinci.request
++ Add hook to requests to override transformResponse
+
 ### 0.7.1
 
 + Expose the underlying, xml parsed dav responses on davinci.Calendar and davinci.CalendarObject models.
