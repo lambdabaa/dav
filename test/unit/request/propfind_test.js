@@ -2,7 +2,6 @@
 
 var assert = require('chai').assert,
     data = require('../data'),
-    namespace = require('../../../lib/namespace'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request'),
@@ -23,7 +22,7 @@ suite('request.propfind', function() {
     assert.instanceOf(
       request.propfind({
         url: 'http://127.0.0.1:1337/',
-        props: [ { name: 'catdog', namespace: namespace.DAV } ],
+        props: [ { name: 'catdog', namespace: 'DAV' } ],
         depth: '0'
       }),
       request.Request
@@ -38,7 +37,7 @@ suite('request.propfind', function() {
 
     var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
-      props: [ { name: 'catdog', namespace: namespace.DAV } ],
+      props: [ { name: 'catdog', namespace: 'DAV' } ],
       depth: '0'
     });
 
@@ -53,7 +52,7 @@ suite('request.propfind', function() {
 
     var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
-      props: [ { name: 'catdog', namespace: namespace.DAV } ],
+      props: [ { name: 'catdog', namespace: 'd' } ],
       depth: '0'
     });
 
@@ -68,12 +67,9 @@ suite('request.propfind', function() {
     var req = request.propfind({
       url: 'http://127.0.0.1:1337/',
       props: [
-        { name: 'displayname', namespace: namespace.DAV },
-        { name: 'getctag', namespace: namespace.CALENDAR_SERVER },
-        {
-          name: 'supported-calendar-component-set',
-          namespace: namespace.CALDAV
-        }
+        { name: 'displayname', namespace: 'd' },
+        { name: 'getctag', namespace: 'cs' },
+        { name: 'supported-calendar-component-set', namespace: 'c' }
       ],
       depth: 1
     });
