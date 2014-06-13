@@ -4,3 +4,6 @@ SabreDAV/
 /coverage/
 /davinci.js
 /node_modules/
+
+# vim
+.*.swp
