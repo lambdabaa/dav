@@ -35,7 +35,7 @@ Options:
   (Object) sandbox - optional request sandbox.
 ```
 
-#### davinci.updateCalendarObject = function(calendarObject) {};
+#### davinci.updateCalendarObject = function(calendarObject, options) {};
 
 Persist updates to the parameter calendar object to the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been updated.
 
@@ -46,7 +46,7 @@ Options:
   (Object) sandbox - optional request sandbox.
 ```
 
-#### davinci.deleteCalendarObject = function(calendarObject) {};
+#### davinci.deleteCalendarObject = function(calendarObject, options) {};
 
 Delete the parameter calendar object on the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been deleted.
 
@@ -57,7 +57,7 @@ Options:
   (Object) sandbox - optional request sandbox.
 ```
 
-### davinci.syncCalendar = function(calendar) {};
+### davinci.syncCalendar = function(calendar, options) {};
 
 Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) object once sync is complete.
 
