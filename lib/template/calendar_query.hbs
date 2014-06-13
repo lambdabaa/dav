@@ -1,11 +1,11 @@
-<c:calendar-query xmlns:c="urn:ietf:params:xml:ns:caldav"
+<cal:calendar-query xmlns:cal="urn:ietf:params:xml:ns:caldav"
                   xmlns:cs="http://calendarserver.org/ns/"
                   xmlns:d="DAV:">
   <d:prop>
     {{#each props}}{{prop this}}{{/each}}
   </d:prop>
-  <c:filter>
+  <cal:filter>
     {{#each filters}}{{filter this}}{{/each}}
-  </c:filter>
-  {{#if timezone}}<c:timezone>{{timezone}}</c:timezone>{{/if}}
-</c:calendar-query>
+  </cal:filter>
+  {{#if timezone}}<cal:timezone>{{timezone}}</cal:timezone>{{/if}}
+</cal:calendar-query>
