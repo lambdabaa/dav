@@ -22,7 +22,8 @@
     "ical.js": "0.0.1",
     "xmldom": "0.1.19",
     "xmlhttprequest": "1.6.0",
-    "underscore": "1.6.0"
+    "underscore": "1.6.0",
+    "es6-promise" : "~1.0.0"
   },
 
   "devDependencies": {
