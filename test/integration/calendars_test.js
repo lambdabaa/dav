@@ -49,7 +49,7 @@ suite('calendars', function() {
     var object = objects[0];
     assert.instanceOf(object, davinci.CalendarObject);
     assert.instanceOf(object.calendar, davinci.Calendar);
-    assert.strictEqual(object.data, data.bastilleDayParty);
+    assert.strictEqual(object.calendarData, data.bastilleDayParty);
     assert.strictEqual(
       object.url,
       'http://127.0.0.1:8888/calendars/admin/default/test.ics'
@@ -60,7 +60,7 @@ suite('calendars', function() {
   test('#updateCalendarObject, #sync', function() {
     var calendar = calendars[0];
     var object = calendar.objects[0];
-    object.data = object.data.replace(
+    object.calendarData = object.calendarData.replace(
       'SUMMARY:Bastille Day Party',
       'SUMMARY:Happy Hour'
     );
@@ -76,17 +76,17 @@ suite('calendars', function() {
       assert.instanceOf(object, davinci.CalendarObject);
       assert.instanceOf(object.calendar, davinci.Calendar);
       assert.notStrictEqual(
-        object.data,
+        object.calendarData,
         data.bastilleDayParty,
         'data should have changed on server'
       );
       assert.include(
-        object.data,
+        object.calendarData,
         'SUMMARY:Happy Hour',
         'data should reflect update'
       );
       assert.notInclude(
-        object.data,
+        object.calendardata,
         'SUMMARY:Bastille Day Party',
         'data should reflect update'
       );
