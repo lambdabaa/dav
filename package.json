@@ -1,10 +1,10 @@
 {
-  "name": "davinci.js",
-  "version": "0.9.1",
+  "name": "davincijs",
+  "version": "0.9.2",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "Javascript CalDAV client library (rfc 4791, rfc 5545)",
   "license": "MPL-2.0",
-  "main": "davinci.js",
+  "main": "./lib/index",
 
   "keywords": [
     "calendar",
