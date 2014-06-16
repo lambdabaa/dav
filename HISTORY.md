@@ -1,3 +1,7 @@
+### 0.9.3
+
++ Remove dependencies on ical.js and underscore
+
 ### 0.9.2
 
 + Fix npm package
