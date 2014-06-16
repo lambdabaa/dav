@@ -11,6 +11,8 @@ clean:
 		SabreDAV/ \
 		coverage/ \
 		davinci.js \
+		davinci.js.map \
+		davinci.min.js \
 		node_modules/ \
 		test/integration/server/SabreDAV/
 

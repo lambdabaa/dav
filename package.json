@@ -19,10 +19,8 @@
   "dependencies": {
     "debug": "0.8.1",
     "handlebars": "2.0.x",
-    "ical.js": "0.0.1",
     "xmldom": "0.1.19",
-    "xmlhttprequest": "1.6.0",
-    "underscore": "1.6.0"
+    "xmlhttprequest": "1.6.0"
   },
 
   "devDependencies": {
