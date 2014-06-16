@@ -1,6 +1,6 @@
 {
   "name": "davinci.js",
-  "version": "0.1.0",
+  "version": "0.9.1",
   "dependencies": {
     "brfs": {
       "version": "1.1.1",
@@ -118,9 +118,9 @@
                   "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.1.1.tgz"
                 },
                 "source-map": {
-                  "version": "0.1.33",
+                  "version": "0.1.34",
                   "from": "source-map@~0.1.33",
-                  "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+                  "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
                   "dependencies": {
                     "amdefine": {
                       "version": "0.1.0",
@@ -181,9 +181,9 @@
               "resolved": "https://registry.npmjs.org/shallow-copy/-/shallow-copy-0.0.1.tgz"
             },
             "static-eval": {
-              "version": "0.2.2",
+              "version": "0.2.3",
               "from": "static-eval@~0.2.0",
-              "resolved": "https://registry.npmjs.org/static-eval/-/static-eval-0.2.2.tgz",
+              "resolved": "https://registry.npmjs.org/static-eval/-/static-eval-0.2.3.tgz",
               "dependencies": {
                 "escodegen": {
                   "version": "0.0.28",
@@ -192,7 +192,7 @@
                   "dependencies": {
                     "esprima": {
                       "version": "1.0.4",
-                      "from": "esprima@~ 1.0.2",
+                      "from": "esprima@~1.0.2",
                       "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz"
                     },
                     "estraverse": {
@@ -201,9 +201,9 @@
                       "resolved": "https://registry.npmjs.org/estraverse/-/estraverse-1.3.2.tgz"
                     },
                     "source-map": {
-                      "version": "0.1.33",
-                      "from": "source-map@>= 0.1.2",
-                      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+                      "version": "0.1.34",
+                      "from": "source-map@~0.1.33",
+                      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
                       "dependencies": {
                         "amdefine": {
                           "version": "0.1.0",
@@ -283,7 +283,7 @@
             },
             "through": {
               "version": "2.3.4",
-              "from": "through@~2.3.4",
+              "from": "through@>=2.2.7 <3",
               "resolved": "https://registry.npmjs.org/through/-/through-2.3.4.tgz"
             }
           }
@@ -343,9 +343,9 @@
                   "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-0.3.4.tgz"
                 },
                 "source-map": {
-                  "version": "0.1.33",
+                  "version": "0.1.34",
                   "from": "source-map@~0.1.31",
-                  "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+                  "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
                   "dependencies": {
                     "amdefine": {
                       "version": "0.1.0",
@@ -662,9 +662,9 @@
                       "resolved": "https://registry.npmjs.org/esutils/-/esutils-1.0.0.tgz"
                     },
                     "source-map": {
-                      "version": "0.1.33",
+                      "version": "0.1.34",
                       "from": "source-map@~0.1.30",
-                      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+                      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
                       "dependencies": {
                         "amdefine": {
                           "version": "0.1.0",
@@ -900,9 +900,9 @@
                   "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-2.2.5.tgz",
                   "dependencies": {
                     "source-map": {
-                      "version": "0.1.33",
+                      "version": "0.1.34",
                       "from": "source-map@~0.1.7",
-                      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+                      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
                       "dependencies": {
                         "amdefine": {
                           "version": "0.1.0",
@@ -931,47 +931,6 @@
               "version": "2.3.4",
               "from": "through@~2.3.4",
               "resolved": "https://registry.npmjs.org/through/-/through-2.3.4.tgz"
-            },
-            "uglify-js": {
-              "version": "2.4.13",
-              "from": "uglify-js@~2.4.0",
-              "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-2.4.13.tgz",
-              "dependencies": {
-                "async": {
-                  "version": "0.2.10",
-                  "from": "async@~0.2.6",
-                  "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
-                },
-                "source-map": {
-                  "version": "0.1.33",
-                  "from": "source-map@~0.1.33",
-                  "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
-                  "dependencies": {
-                    "amdefine": {
-                      "version": "0.1.0",
-                      "from": "amdefine@>=0.0.4",
-                      "resolved": "https://registry.npmjs.org/amdefine/-/amdefine-0.1.0.tgz"
-                    }
-                  }
-                },
-                "optimist": {
-                  "version": "0.3.7",
-                  "from": "optimist@~0.3.5",
-                  "resolved": "https://registry.npmjs.org/optimist/-/optimist-0.3.7.tgz",
-                  "dependencies": {
-                    "wordwrap": {
-                      "version": "0.0.2",
-                      "from": "wordwrap@~0.0.2",
-                      "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz"
-                    }
-                  }
-                },
-                "uglify-to-browserify": {
-                  "version": "1.0.2",
-                  "from": "uglify-to-browserify@~1.0.0",
-                  "resolved": "https://registry.npmjs.org/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz"
-                }
-              }
             }
           }
         },
@@ -1069,6 +1028,7 @@
         "request": {
           "version": "2.16.2",
           "from": "request@2.16.2",
+          "resolved": "https://registry.npmjs.org/request/-/request-2.16.2.tgz",
           "dependencies": {
             "form-data": {
               "version": "0.0.10",
@@ -1213,9 +1173,9 @@
               "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
             },
             "source-map": {
-              "version": "0.1.33",
+              "version": "0.1.34",
               "from": "source-map@~0.1.7",
-              "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+              "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
               "dependencies": {
                 "amdefine": {
                   "version": "0.1.0",
@@ -1264,9 +1224,9 @@
               "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.1.1.tgz"
             },
             "source-map": {
-              "version": "0.1.33",
-              "from": "source-map@>= 0.1.2",
-              "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+              "version": "0.1.34",
+              "from": "source-map@~0.1.33",
+              "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
               "dependencies": {
                 "amdefine": {
                   "version": "0.1.0",
@@ -1298,9 +1258,9 @@
                   "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
                 },
                 "source-map": {
-                  "version": "0.1.33",
+                  "version": "0.1.34",
                   "from": "source-map@~0.1.7",
-                  "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.33.tgz",
+                  "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
                   "dependencies": {
                     "amdefine": {
                       "version": "0.1.0",
@@ -1564,6 +1524,7 @@
         "jade": {
           "version": "0.26.3",
           "from": "jade@0.26.3",
+          "resolved": "https://registry.npmjs.org/jade/-/jade-0.26.3.tgz",
           "dependencies": {
             "commander": {
               "version": "0.6.1",
@@ -1616,7 +1577,7 @@
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@~2.0.1",
+              "from": "inherits@2",
               "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
             }
           }
@@ -1635,7 +1596,8 @@
         },
         "lodash": {
           "version": "2.4.1",
-          "from": "lodash@2.4.1"
+          "from": "lodash@2.4.1",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz"
         }
       }
     },
@@ -1696,6 +1658,47 @@
           "version": "0.9.7",
           "from": "q@0.9.7",
           "resolved": "https://registry.npmjs.org/q/-/q-0.9.7.tgz"
+        }
+      }
+    },
+    "uglify-js": {
+      "version": "2.4.14",
+      "from": "uglify-js@2.4.14",
+      "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-2.4.14.tgz",
+      "dependencies": {
+        "async": {
+          "version": "0.2.10",
+          "from": "async@~0.2.6",
+          "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
+        },
+        "source-map": {
+          "version": "0.1.34",
+          "from": "source-map@~0.1.33",
+          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.34.tgz",
+          "dependencies": {
+            "amdefine": {
+              "version": "0.1.0",
+              "from": "amdefine@>=0.0.4",
+              "resolved": "https://registry.npmjs.org/amdefine/-/amdefine-0.1.0.tgz"
+            }
+          }
+        },
+        "optimist": {
+          "version": "0.3.7",
+          "from": "optimist@~0.3.5",
+          "resolved": "https://registry.npmjs.org/optimist/-/optimist-0.3.7.tgz",
+          "dependencies": {
+            "wordwrap": {
+              "version": "0.0.2",
+              "from": "wordwrap@~0.0.2",
+              "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz"
+            }
+          }
+        },
+        "uglify-to-browserify": {
+          "version": "1.0.2",
+          "from": "uglify-to-browserify@~1.0.0",
+          "resolved": "https://registry.npmjs.org/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz"
         }
       }
     },

@@ -3,7 +3,7 @@ SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
 .PHONY: default
-default: davinci.js
+default: davinci.js davinci.min.js
 
 .PHONY: clean
 clean:
@@ -48,8 +48,18 @@ SabreDAV:
 	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
 	unzip -q $(SABRE_DAV_ZIPBALL)
 
+# TODO(gareth): Is there a better way to not bundle the DOMParser and XMLHttpRequest polyfills?
 davinci.js: node_modules
-	./node_modules/.bin/browserify -t brfs ./lib/index.js > ./davinci.js
+	npm uninstall xmlhttprequest
+	npm uninstall xmldom
+	./node_modules/.bin/browserify --im -t brfs ./lib/index.js > ./davinci.js
+
+davinci.min.js: davinci.js
+	./node_modules/.bin/uglifyjs davinci.js \
+		--lint \
+		--screw-ie8 \
+		--output ./davinci.min.js \
+		--source-map ./davinci.js.map \
 
 node_modules:
 	npm install

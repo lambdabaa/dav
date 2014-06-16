@@ -3,4 +3,6 @@ SabreDAV/
 /*.zip
 /coverage/
 /davinci.js
+/davinci.js.map
+/davinci.min.js
 /node_modules/
