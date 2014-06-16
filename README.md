@@ -1,17 +1,17 @@
-davinci.js
-==========
+davincijs
+=========
 
 Javascript CalDAV client library for node.js and the browser.
 
 
-[![Build Status](https://travis-ci.org/gaye/davinci.js.png?branch=master)](https://travis-ci.org/gaye/davinci.js)
-[![Coverage Status](https://img.shields.io/coveralls/gaye/davinci.js.svg)](https://coveralls.io/r/gaye/davinci.js)
+[![Build Status](https://travis-ci.org/gaye/davincijs.png?branch=master)](https://travis-ci.org/gaye/davincijs)
+[![Coverage Status](https://img.shields.io/coveralls/gaye/davincijs.svg)](https://coveralls.io/r/gaye/davincijs)
 
 ### API
 
 #### davinci.createAccount = function(options) {};
 
-Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [davinci.Account](https://github.com/gaye/davinci.js/blob/master/lib/model/account.js) object.
+Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [davinci.Account](https://github.com/gaye/davincijs/blob/master/lib/model/account.js) object.
 
 ```
 Options:
@@ -67,7 +67,7 @@ Options:
 
 ### davinci.syncCalendar = function(calendar, options) {};
 
-Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) object once sync is complete.
+Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davincijs/blob/master/lib/model/calendar.js) object once sync is complete.
 
 ```
 @param {davinci.Calendar} calendar the calendar to fetch changes for.
