@@ -1,3 +1,13 @@
+### 0.9.2
+
++ Fix npm package
++ Change npm name to davincijs
+
+### 0.9.1
+
++ remove nodejs polyfills for DOMParser and XMLHttpRequest from build output
++ generate minified binaries
+
 ### 0.9.0
 
 + Implement davinci.Client interface
