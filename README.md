@@ -96,6 +96,18 @@ davinci.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
+#### davinci.Client = function(options) {};
+
+Create a new `davinci.Client` object. The client interface allows consumers to set their credentials once and then make authorized requests without passing their credentials to each request. Each of the other, public API methods should be available on `davinci.Client` objects.
+
+```
+Options:
+
+  (String) password - plaintext password for calendar user.
+  (String) server - some url for server (needn't be base url).
+  (String) username - username (perhaps email) for calendar user.
+```
+
 ### Directory Structure
 
 ```
