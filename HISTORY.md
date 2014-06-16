@@ -1,3 +1,8 @@
+### 0.9.0
+
++ Implement davinci.Client interface
++ Add transport layer to decouple request details and sending
+
 ### 0.8.0
 
 + Expose low-level request methods through davinci.request
