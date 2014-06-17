@@ -63,6 +63,12 @@ $server->addPlugin(
 );
 
 
+/* WebDAV Sync */
+$server->addPlugin(
+    new Sabre\DAV\Sync\Plugin()
+);
+
+
 // Support for html frontend
 $browser = new Sabre\DAV\Browser\Plugin();
 $server->addPlugin($browser);
