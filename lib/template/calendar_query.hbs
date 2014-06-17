@@ -2,10 +2,16 @@
                   xmlns:cs="http://calendarserver.org/ns/"
                   xmlns:d="DAV:">
   <d:prop>
-    {{#each props}}{{prop this}}{{/each}}
+    {{#each props}}
+      {{prop this}}
+    {{/each}}
   </d:prop>
   <c:filter>
-    {{#each filters}}{{filter this}}{{/each}}
+    {{#each filters}}
+      {{filter this}}
+    {{/each}}
   </c:filter>
-  {{#if timezone}}<c:timezone>{{timezone}}</c:timezone>{{/if}}
+  {{#if timezone}}
+    <c:timezone>{{timezone}}</c:timezone>
+  {{/if}}
 </c:calendar-query>

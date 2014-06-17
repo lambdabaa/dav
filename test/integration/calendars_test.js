@@ -121,4 +121,50 @@ suite('calendars', function() {
       assert.lengthOf(objects, 0, 'should be deleted');
     });
   });
+
+  test('time-range filtering', function() {
+    var inrange = davinci.createAccount({
+      username: 'admin',
+      password: 'admin',
+      server: 'http://127.0.0.1:8888/',
+      filters: [{
+        type: 'comp-filter',
+        attrs: { name: 'VCALENDAR' },
+        children: [{
+          type: 'comp-filter',
+          attrs: { name: 'VEVENT' },
+          children: [{
+            type: 'time-range',
+            attrs: { start: '19970714T170000Z' }
+          }]
+        }]
+      }]
+    })
+    .then(function(account) {
+      assert.lengthOf(account.calendars[0].objects, 1, 'in range');
+    });
+
+    var outofrange = davinci.createAccount({
+      username: 'admin',
+      password: 'admin',
+      server: 'http://127.0.0.1:8888/',
+      filters: [{
+        type: 'comp-filter',
+        attrs: { name: 'VCALENDAR' },
+        children: [{
+          type: 'comp-filter',
+          attrs: { name: 'VEVENT' },
+          children: [{
+            type: 'time-range',
+            attrs: { start: '19980714T170000Z' }
+          }]
+        }]
+      }]
+    })
+    .then(function(account) {
+      assert.lengthOf(account.calendars[0].objects, 0, 'out of range');
+    });
+
+    return Promise.all([inrange, outofrange]);
+  });
 });

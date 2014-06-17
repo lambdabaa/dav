@@ -61,12 +61,15 @@ suite('request.calendarQuery', function() {
   test('should add specified filters to report body', function() {
     var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
-      return body.indexOf('<c:comp-filter name="VCALENDAR" />') !== -1;
+      return body.indexOf('<c:comp-filter name="VCALENDAR"/>') !== -1;
     });
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      filters: [ { type: 'comp', name: 'VCALENDAR', namespace: 'c' } ]
+      filters: [{
+        type: 'comp-filter',
+        attrs: { name: 'VCALENDAR' },
+      }]
     });
 
     return nockUtils.verifyNock(xhr.send(req), mock);

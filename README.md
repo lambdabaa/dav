@@ -16,6 +16,7 @@ Perform an initial download of a caldav account's data. Returns a [Promise](http
 ```
 Options:
 
+  (Array.<Object>) filters - list of caldav filters to send with request.
   (String) password - plaintext password for calendar user.
   (Object) sandbox - optional request sandbox.
   (String) server - some url for server (needn't be base url).
@@ -74,6 +75,7 @@ Fetch changes from the remote server to the parameter calendar. Returns a [Promi
 
 Options:
 
+  (Array.<Object>) filters - list of caldav filters to send with request.
   (Object) sandbox - optional request sandbox.
   (String) timezone - VTIMEZONE calendar object.
   (davinci.Transport) xhr - optional request sender.
