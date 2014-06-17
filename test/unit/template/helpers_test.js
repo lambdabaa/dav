@@ -65,8 +65,8 @@ suite('Handlebars helpers', function() {
   test('prop', function() {
     var prop = helpers.propHelper({
       name: 'spongebob',
-      namespace: 'c'
-    }, 'D')
+      namespace: 'urn:ietf:params:xml:ns:caldav'
+    })
     .string;
 
     assert.strictEqual(prop, '<c:spongebob />');

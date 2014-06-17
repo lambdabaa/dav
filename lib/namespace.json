@@ -1,0 +1,5 @@
+{
+  "CALENDAR_SERVER": "http://calendarserver.org/ns/",
+  "CALDAV": "urn:ietf:params:xml:ns:caldav",
+  "DAV": "DAV:"
+}
