@@ -54,7 +54,6 @@ suite('calendars', function() {
       object.url,
       'http://127.0.0.1:8888/calendars/admin/default/test.ics'
     );
-    assert.strictEqual(object.filename, 'test.ics');
   });
 
   test('#updateCalendarObject, #sync', function() {
@@ -66,7 +65,48 @@ suite('calendars', function() {
     );
 
     return davinci.updateCalendarObject(object).then(function() {
-      return davinci.syncCalendar(calendar);
+      return davinci.syncCalendar(calendar, { syncMethod: 'basic' });
+    })
+    .then(function(calendar) {
+      var objects = calendar.objects;
+      assert.isArray(objects);
+      assert.lengthOf(objects, 1, 'update should not create new object');
+      var object = objects[0];
+      assert.instanceOf(object, davinci.CalendarObject);
+      assert.instanceOf(object.calendar, davinci.Calendar);
+      assert.notStrictEqual(
+        object.calendarData,
+        data.bastilleDayParty,
+        'data should have changed on server'
+      );
+      assert.include(
+        object.calendarData,
+        'SUMMARY:Happy Hour',
+        'data should reflect update'
+      );
+      assert.notInclude(
+        object.calendardata,
+        'SUMMARY:Bastille Day Party',
+        'data should reflect update'
+      );
+      assert.strictEqual(
+        object.url,
+        'http://127.0.0.1:8888/calendars/admin/default/test.ics',
+        'update should not change object url'
+      );
+    });
+  });
+
+  test('webdav sync', function() {
+    var calendar = calendars[0];
+    var object = calendar.objects[0];
+    object.calendarData = object.calendarData.replace(
+      'SUMMARY:Bastille Day Party',
+      'SUMMARY:Happy Hour'
+    );
+
+    return davinci.updateCalendarObject(object).then(function() {
+      return davinci.syncCalendar(calendar, { syncMethod: 'webdav' });
     })
     .then(function(calendar) {
       var objects = calendar.objects;

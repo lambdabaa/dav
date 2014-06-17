@@ -48,6 +48,10 @@ suite('accounts', function() {
       assert.typeOf(calendar.ctag, 'string');
       assert.isArray(calendar.objects);
       assert.lengthOf(calendar.objects, 0);
+      assert.isArray(calendar.reports);
+      assert.include(calendar.reports, 'calendar-query');
+      assert.typeOf(calendar.syncToken, 'string');
+      assert.operator(calendar.syncToken.length, '>', 0);
     });
   });
 });
