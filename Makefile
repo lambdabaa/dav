@@ -29,6 +29,11 @@ coverage: node_modules
 lint: node_modules
 	./node_modules/.bin/jshint --verbose lib/ test/
 
+# PHONY since there can be an outdated node_modules directory.
+.PHONY: node_modules
+node_modules:
+	npm install
+
 # IMPORTANT: Only run |make shrinkwrap| when making changes to dependencies.
 .PHONY: shrinkwrap
 shrinkwrap: node_modules
@@ -62,9 +67,6 @@ davinci.min.js: davinci.js
 		--screw-ie8 \
 		--output ./davinci.min.js \
 		--source-map ./davinci.js.map \
-
-node_modules:
-	npm install
 
 test/integration/server/SabreDAV: SabreDAV
 	cp -r SabreDAV test/integration/server/SabreDAV
