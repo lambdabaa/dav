@@ -1,3 +1,7 @@
+### 0.10.1
+
++ Set request depth to 0 in the "getctag" propfind issued during sync
+
 ### 0.10.0
 
 + Implement time-range filters for calendar queries
