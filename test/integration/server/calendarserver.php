@@ -62,12 +62,10 @@ $server->addPlugin(
     new Sabre\CalDAV\Subscriptions\Plugin()
 );
 
-
 /* WebDAV Sync */
 $server->addPlugin(
     new Sabre\DAV\Sync\Plugin()
 );
-
 
 // Support for html frontend
 $browser = new Sabre\DAV\Browser\Plugin();
