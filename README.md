@@ -135,7 +135,7 @@ test/unit/template/          # Test cases for xml templating helpers
 2. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset.
 3. Push the `package.json` and `HISTORY.md` updates to GitHub.
 4. Run `make` to generate the build outputs.
-5. Create a new GitHub release named the new version number with a description of the changeset. Upload the freshly generated build outpus.
+5. Create a new GitHub release named the new version number with a description of the changeset. Upload the freshly generated build outputs.
 6. Run `npm publish`.
 
 ### Related Material
