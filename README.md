@@ -132,11 +132,12 @@ test/unit/template/          # Test cases for xml templating helpers
 ### Publishing a release
 
 1. Update `package.json` to reflect the new version.
-2. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset.
-3. Push the `package.json` and `HISTORY.md` updates to GitHub.
-4. Run `make` to generate the build outputs.
-5. Create a new GitHub release named the new version number with a description of the changeset. Upload the freshly generated build outputs.
-6. Run `npm publish`.
+2. Run `make shrinkwrap` to write changes to `package.json` through npm shrinkwrap.
+3. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset.
+4. Commit the changes to `package.json`, `npm-shrinkwrap.json`, and `HISTORY.md`. Push to GitHub.
+5. Run `make clean && make` to generate the build outputs.
+6. Create a new GitHub release named the new version number with a description of the changeset. Upload the freshly generated build outputs.
+7. Run `npm publish`.
 
 ### Related Material
 
