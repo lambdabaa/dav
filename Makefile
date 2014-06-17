@@ -51,6 +51,10 @@ test-unit: node_modules
 test-integration: node_modules test/integration/server/SabreDAV
 	./node_modules/.bin/mocha test/integration
 
+.PHONY: toc
+toc: node_modules
+	./node_modules/.bin/doctoc README.md
+
 SabreDAV:
 	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
 	unzip -q $(SABRE_DAV_ZIPBALL)

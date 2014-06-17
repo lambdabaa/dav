@@ -1,15 +1,29 @@
-davincijs
+davincijs [![Build Status](https://travis-ci.org/gaye/davincijs.png?branch=master)](https://travis-ci.org/gaye/davincijs) [![Coverage Status](https://img.shields.io/coveralls/gaye/davincijs.svg)](https://coveralls.io/r/gaye/davincijs)
 =========
 
 Javascript CalDAV client library for node.js and the browser.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-[![Build Status](https://travis-ci.org/gaye/davincijs.png?branch=master)](https://travis-ci.org/gaye/davincijs)
-[![Coverage Status](https://img.shields.io/coveralls/gaye/davincijs.svg)](https://coveralls.io/r/gaye/davincijs)
+- [API](#api)
+  - [davinci.createAccount(options)](#davincicreateaccountoptions)
+  - [davinci.createCalendarObject(calendar, options)](#davincicreatecalendarobjectcalendar-options)
+  - [davinci.updateCalendarObject(calendarObject, options)](#davinciupdatecalendarobjectcalendarobject-options)
+  - [davinci.deleteCalendarObject(calendarObject, options)](#davincideletecalendarobjectcalendarobject-options)
+- [davinci.syncCalendar(calendar, options)](#davincisynccalendarcalendar-options)
+  - [davinci.createSandbox()](#davincicreatesandbox)
+  - [davinci.Client(options)](#davinciclientoptions)
+- [Directory Structure](#directory-structure)
+- [Publishing a release](#publishing-a-release)
+- [Related Material](#related-material)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### API
 
-#### davinci.createAccount = function(options) {};
+#### davinci.createAccount(options)
 
 Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [davinci.Account](https://github.com/gaye/davincijs/blob/master/lib/model/account.js) object.
 
@@ -25,7 +39,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.createCalendarObject = function(calendar, options) {};
+#### davinci.createCalendarObject(calendar, options)
 
 Create a calendar object on the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been created.
 
@@ -40,7 +54,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.updateCalendarObject = function(calendarObject, options) {};
+#### davinci.updateCalendarObject(calendarObject, options)
 
 Persist updates to the parameter calendar object to the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been updated.
 
@@ -53,7 +67,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.deleteCalendarObject = function(calendarObject, options) {};
+#### davinci.deleteCalendarObject(calendarObject, options)
 
 Delete the parameter calendar object on the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been deleted.
 
@@ -66,7 +80,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-### davinci.syncCalendar = function(calendar, options) {};
+### davinci.syncCalendar(calendar, options)
 
 Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davincijs/blob/master/lib/model/calendar.js) object once sync is complete.
 
@@ -81,7 +95,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.createSandbox = function() {};
+#### davinci.createSandbox()
 
 Create a request sandbox. Add requests to the sandbox like so:
 
@@ -98,7 +112,7 @@ davinci.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
-#### davinci.Client = function(options) {};
+#### davinci.Client(options)
 
 Create a new `davinci.Client` object. The client interface allows consumers to set their credentials once and then make authorized requests without passing their credentials to each request. Each of the other, public API methods should be available on `davinci.Client` objects.
 
