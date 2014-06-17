@@ -12,7 +12,8 @@ var data = {
   uri: 'default',
   description: 'administrator calendar',
   components: 'VEVENT,VTODO',
-  transparent: '0'
+  transparent: '0',
+  synctoken: '1'
 };
 
 var columns = [],
