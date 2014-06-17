@@ -1,36 +1,21 @@
-davincijs [![Build Status](https://travis-ci.org/gaye/davincijs.png?branch=master)](https://travis-ci.org/gaye/davincijs) [![Coverage Status](https://img.shields.io/coveralls/gaye/davincijs.svg)](https://coveralls.io/r/gaye/davincijs)
-=========
+davinci.js
+==========
 
 Javascript CalDAV client library for node.js and the browser.
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [API](#api)
-  - [davinci.createAccount(options)](#davincicreateaccountoptions)
-  - [davinci.createCalendarObject(calendar, options)](#davincicreatecalendarobjectcalendar-options)
-  - [davinci.updateCalendarObject(calendarObject, options)](#davinciupdatecalendarobjectcalendarobject-options)
-  - [davinci.deleteCalendarObject(calendarObject, options)](#davincideletecalendarobjectcalendarobject-options)
-- [davinci.syncCalendar(calendar, options)](#davincisynccalendarcalendar-options)
-  - [davinci.createSandbox()](#davincicreatesandbox)
-  - [davinci.Client(options)](#davinciclientoptions)
-- [Directory Structure](#directory-structure)
-- [Publishing a release](#publishing-a-release)
-- [Related Material](#related-material)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+[![Build Status](https://travis-ci.org/gaye/davinci.js.png?branch=master)](https://travis-ci.org/gaye/davinci.js)
+[![Coverage Status](https://img.shields.io/coveralls/gaye/davinci.js.svg)](https://coveralls.io/r/gaye/davinci.js)
 
 ### API
 
-#### davinci.createAccount(options)
+#### davinci.createAccount = function(options) {};
 
-Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [davinci.Account](https://github.com/gaye/davincijs/blob/master/lib/model/account.js) object.
+Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [davinci.Account](https://github.com/gaye/davinci.js/blob/master/lib/model/account.js) object.
 
 ```
 Options:
 
-  (Array.<Object>) filters - list of caldav filters to send with request.
   (String) password - plaintext password for calendar user.
   (Object) sandbox - optional request sandbox.
   (String) server - some url for server (needn't be base url).
@@ -39,7 +24,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.createCalendarObject(calendar, options)
+#### davinci.createCalendarObject = function(calendar, options) {};
 
 Create a calendar object on the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been created.
 
@@ -54,7 +39,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.updateCalendarObject(calendarObject, options)
+#### davinci.updateCalendarObject = function(calendarObject, options) {};
 
 Persist updates to the parameter calendar object to the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been updated.
 
@@ -67,7 +52,7 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.deleteCalendarObject(calendarObject, options)
+#### davinci.deleteCalendarObject = function(calendarObject, options) {};
 
 Delete the parameter calendar object on the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been deleted.
 
@@ -80,22 +65,21 @@ Options:
   (davinci.Transport) xhr - optional request sender.
 ```
 
-### davinci.syncCalendar(calendar, options)
+### davinci.syncCalendar = function(calendar, options) {};
 
-Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davincijs/blob/master/lib/model/calendar.js) object once sync is complete.
+Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davinci.js/blob/master/lib/model/calendar.js) object once sync is complete.
 
 ```
 @param {davinci.Calendar} calendar the calendar to fetch changes for.
 
 Options:
 
-  (Array.<Object>) filters - list of caldav filters to send with request.
   (Object) sandbox - optional request sandbox.
   (String) timezone - VTIMEZONE calendar object.
   (davinci.Transport) xhr - optional request sender.
 ```
 
-#### davinci.createSandbox()
+#### davinci.createSandbox = function() {};
 
 Create a request sandbox. Add requests to the sandbox like so:
 
@@ -112,7 +96,7 @@ davinci.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
-#### davinci.Client(options)
+#### davinci.Client = function(options) {};
 
 Create a new `davinci.Client` object. The client interface allows consumers to set their credentials once and then make authorized requests without passing their credentials to each request. Each of the other, public API methods should be available on `davinci.Client` objects.
 
@@ -142,16 +126,6 @@ test/unit/parser/            # Test cases for parsing server dav responses
 test/unit/request/           # Test cases for issuing dav client requests
 test/unit/template/          # Test cases for xml templating helpers
 ```
-
-### Publishing a release
-
-1. Update `package.json` to reflect the new version.
-2. Run `make shrinkwrap` to write changes to `package.json` through npm shrinkwrap.
-3. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset.
-4. Commit the changes to `package.json`, `npm-shrinkwrap.json`, and `HISTORY.md`. Push to GitHub.
-5. Run `make clean && make` to generate the build outputs.
-6. Create a new GitHub release named the new version number with a description of the changeset. Upload the freshly generated build outputs.
-7. Run `npm publish`.
 
 ### Related Material
 

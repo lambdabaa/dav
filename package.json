@@ -1,10 +1,10 @@
 {
-  "name": "davincijs",
-  "version": "0.10.1",
+  "name": "davinci.js",
+  "version": "0.9.0",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
-  "description": "Javascript CalDAV client library",
+  "description": "Javascript CalDAV client library (rfc 4791, rfc 5545)",
   "license": "MPL-2.0",
-  "main": "./lib/index",
+  "main": "davinci.js",
 
   "keywords": [
     "calendar",
@@ -19,8 +19,11 @@
   "dependencies": {
     "debug": "0.8.1",
     "handlebars": "2.0.x",
+    "ical.js": "0.0.1",
     "xmldom": "0.1.19",
-    "xmlhttprequest": "1.6.0"
+    "xmlhttprequest": "1.6.0",
+    "underscore": "1.6.0",
+    "es6-promise" : "~1.0.0"
   },
 
   "devDependencies": {
@@ -28,14 +31,12 @@
     "browserify": "4.1.5",
     "chai": "1.9.1",
     "coveralls": "2.10.0",
-    "doctoc": "0.7.1",
     "istanbul": "0.2.10",
     "jshint": "2.5.1",
     "mocha": "1.19.0",
     "nock": "0.32.3",
     "sinon": "1.10.0",
-    "tcp-port-used": "0.1.2",
-    "uglify-js": "2.4.14"
+    "tcp-port-used": "0.1.2"
   },
 
   "engines": {

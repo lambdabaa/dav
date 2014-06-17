@@ -2,7 +2,6 @@
 
 var assert = require('chai').assert,
     data = require('../data'),
-    namespace = require('../../../lib/namespace'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request'),
@@ -38,7 +37,7 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      props: [ { name: 'calendar-data', namespace: namespace.CALDAV } ],
+      props: [ { name: 'calendar-data', namespace: 'c' } ],
       depth: 1
     });
 
@@ -53,7 +52,7 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      props: [ { name: 'catdog', namespace: namespace.DAV } ]
+      props: [ { name: 'catdog', namespace: 'd' } ]
     });
 
     return nockUtils.verifyNock(xhr.send(req), mock);
@@ -62,15 +61,12 @@ suite('request.calendarQuery', function() {
   test('should add specified filters to report body', function() {
     var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
-      return body.indexOf('<c:comp-filter name="VCALENDAR"/>') !== -1;
+      return body.indexOf('<c:comp-filter name="VCALENDAR" />') !== -1;
     });
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      filters: [{
-        type: 'comp-filter',
-        attrs: { name: 'VCALENDAR' },
-      }]
+      filters: [ { type: 'comp', name: 'VCALENDAR', namespace: 'c' } ]
     });
 
     return nockUtils.verifyNock(xhr.send(req), mock);
@@ -99,10 +95,10 @@ suite('request.calendarQuery', function() {
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/',
       props: [
-        { name: 'getetag', namespace: namespace.DAV },
-        { name: 'calendar-data', namespace: namespace.CALDAV }
+        { name: 'getetag', namespace: 'd' },
+        { name: 'calendar-data', namespace: 'c' }
       ],
-      filters: [ { type: 'comp', attrs: { name: 'VCALENDAR' } } ]
+      filters: [ { type: 'comp', name: 'VCALENDAR', namespace: 'c' } ]
     });
 
     return xhr.send(req).then(function(calendars) {
