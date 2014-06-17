@@ -1,6 +1,6 @@
 {
   "name": "davincijs",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "Javascript CalDAV client library",
   "license": "MPL-2.0",

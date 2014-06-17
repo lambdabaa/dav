@@ -1,3 +1,7 @@
+### 0.10.0
+
++ Implement time-range filters for calendar queries
+
 ### 0.9.3
 
 + Remove dependencies on ical.js and underscore
