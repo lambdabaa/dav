@@ -129,6 +129,15 @@ test/unit/request/           # Test cases for issuing dav client requests
 test/unit/template/          # Test cases for xml templating helpers
 ```
 
+### Publishing a release
+
+1. Update `package.json` to reflect the new version.
+2. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset.
+3. Push the `package.json` and `HISTORY.md` updates to GitHub.
+4. Run `make` to generate the build outputs.
+5. Create a new GitHub release named the new version number with a description of the changeset. Upload the freshly generated build outpus.
+6. Run `npm publish`.
+
 ### Related Material
 
 + [RFC 4791](http://tools.ietf.org/html/rfc4791)
