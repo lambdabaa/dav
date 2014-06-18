@@ -114,8 +114,8 @@ suite('request.calendarQuery', function() {
         assert.typeOf(calendar.props, 'object');
         assert.typeOf(calendar.props.getetag, 'string');
         assert.operator(calendar.props.getetag.length, '>', 0);
-        assert.typeOf(calendar.props['calendar-data'], 'string');
-        assert.operator(calendar.props['calendar-data'].length, '>', 0);
+        assert.typeOf(calendar.props.calendarData, 'string');
+        assert.operator(calendar.props.calendarData.length, '>', 0);
       });
     });
   });
