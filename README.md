@@ -91,6 +91,9 @@ Options:
 
   (Array.<Object>) filters - list of caldav filters to send with request.
   (Object) sandbox - optional request sandbox.
+  (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
+      try to do webdav sync and failover to basic sync if rfc 6578 is not
+      supported by the server.
   (String) timezone - VTIMEZONE calendar object.
   (davinci.Transport) xhr - optional request sender.
 ```
