@@ -3,6 +3,7 @@
 var XMLHttpRequest = require('../../../lib/transport/xmlhttprequest'),
     assert = require('chai').assert,
     createSandbox = require('../../../lib/sandbox'),
+    model = require('../../../lib/model'),
     nock = require('nock'),
     sinon = require('sinon'),
     transport = require('../../../lib/transport');
@@ -11,7 +12,9 @@ suite('Basic#send', function() {
   var xhr, req;
 
   setup(function() {
-    xhr = new transport.Basic({ user: 'admin', password: 'admin' });
+    xhr = new transport.Basic(
+      new model.Credentials({ username: 'admin', password: 'admin' })
+    );
 
     req = {
       method: 'GET',
