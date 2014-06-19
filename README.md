@@ -14,9 +14,9 @@ Javascript CalDAV client library for node.js and the browser.
   - [davinci.deleteCalendarObject(calendarObject, options)](#davincideletecalendarobjectcalendarobject-options)
   - [davinci.syncCalendar(calendar, options)](#davincisynccalendarcalendar-options)
   - [davinci.createSandbox()](#davincicreatesandbox)
-  - [davinci.Credentials](#davincicredentials)
-  - [davinci.transport.Basic](#davincitransportbasic)
-  - [davinci.transport.OAuth2](#davincitransportoauth2)
+  - [davinci.Credentials(options)](#davincicredentialsoptions)
+  - [davinci.transport.Basic(credentials)](#davincitransportbasiccredentials)
+  - [davinci.transport.OAuth2(credentials)](#davincitransportoauth2credentials)
   - [davinci.Client(xhr)](#davinciclientxhr)
 - [Example Usage](#example-usage)
 - [Directory Structure](#directory-structure)
@@ -117,7 +117,7 @@ davinci.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
-#### davinci.Credentials
+#### davinci.Credentials(options)
 
 Create a new `davinci.Credentials` object. This is a union of various authentication details needed to sign requests.
 
@@ -135,7 +135,7 @@ Options:
   (Number) expiration - unix time for access token expiration.
 ```
 
-#### davinci.transport.Basic
+#### davinci.transport.Basic(credentials)
 
 Create a new `davinci.transport.Basic` object. This sends dav requests using http basic authentication.
 
@@ -143,7 +143,7 @@ Create a new `davinci.transport.Basic` object. This sends dav requests using htt
 @param {davinci.Credentials} credentials user authorization.
 ```
 
-#### davinci.transport.OAuth2
+#### davinci.transport.OAuth2(credentials)
 
 Create a new `davinci.transport.OAuth2` object. This sends dav requests authorized via rfc 6749 oauth2.
 
