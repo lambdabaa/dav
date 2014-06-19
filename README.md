@@ -1,4 +1,4 @@
-davincijs [![NPM version](https://badge.fury.io/js/davincijs.svg)](https://www.npmjs.org/package/davincijs) [![Build Status](https://travis-ci.org/gaye/davincijs.png?branch=master)](https://travis-ci.org/gaye/davincijs) [![Coverage Status](https://img.shields.io/coveralls/gaye/davincijs.svg)](https://coveralls.io/r/gaye/davincijs)
+davincijs [![Build Status](https://travis-ci.org/gaye/davincijs.png?branch=master)](https://travis-ci.org/gaye/davincijs) [![Coverage Status](https://img.shields.io/coveralls/gaye/davincijs.svg)](https://coveralls.io/r/gaye/davincijs)
 =========
 
 Javascript CalDAV client library for node.js and the browser.
