@@ -1,3 +1,9 @@
+### 1.0.0
+
++ Update interfaces for pluggable transports, expose transport layer
++ Support for oauth2 authentication
++ Clean up internal multistatus parser
+
 ### 0.11.0
 
 + Support for rfc 6578 webdav sync
