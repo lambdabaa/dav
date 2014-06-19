@@ -78,7 +78,7 @@ Options:
   (davinci.Transport) xhr - request sender.
 ```
 
-### davinci.syncCalendar(calendar, options)
+#### davinci.syncCalendar(calendar, options)
 
 Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davincijs/blob/master/lib/model/calendar.js) object once sync is complete.
 
