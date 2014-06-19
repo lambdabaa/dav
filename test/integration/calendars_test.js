@@ -6,14 +6,20 @@ var assert = require('chai').assert,
     debug = require('debug')('davinci:calendars_test');
 
 suite('calendars', function() {
-  var calendars;
+  var calendars, xhr;
 
   setup(function() {
     debug('Create account.');
+    xhr = new davinci.transport.Basic(
+      new davinci.Credentials({
+        username: 'admin',
+        password: 'admin'
+      })
+    );
+
     return davinci.createAccount({
-      username: 'admin',
-      password: 'admin',
-      server: 'http://127.0.0.1:8888/'
+      server: 'http://127.0.0.1:8888/',
+      xhr: xhr
     })
     .then(function(response) {
       var calendar = response.calendars[0];
@@ -23,7 +29,8 @@ suite('calendars', function() {
       debug('Create calendar object');
       return davinci.createCalendarObject(calendar, {
         filename: 'test.ics',
-        data: data.bastilleDayParty
+        data: data.bastilleDayParty,
+        xhr: xhr
       });
     })
     .then(function() {
@@ -31,9 +38,8 @@ suite('calendars', function() {
       //     do that here.
       debug('Fetch account again.');
       return davinci.createAccount({
-        username: 'admin',
-        password: 'admin',
-        server: 'http://127.0.0.1:8888/'
+        server: 'http://127.0.0.1:8888/',
+        xhr: xhr
       });
     })
     .then(function(response) {
@@ -64,8 +70,8 @@ suite('calendars', function() {
       'SUMMARY:Happy Hour'
     );
 
-    return davinci.updateCalendarObject(object).then(function() {
-      return davinci.syncCalendar(calendar, { syncMethod: 'basic' });
+    return davinci.updateCalendarObject(object, { xhr: xhr }).then(function() {
+      return davinci.syncCalendar(calendar, { syncMethod: 'basic', xhr: xhr });
     })
     .then(function(calendar) {
       var objects = calendar.objects;
@@ -113,8 +119,8 @@ suite('calendars', function() {
     assert.typeOf(prevSyncToken, 'string');
     assert.operator(prevSyncToken.length, '>', 0);
 
-    return davinci.updateCalendarObject(object).then(function() {
-      return davinci.syncCalendar(calendar, { syncMethod: 'webdav' });
+    return davinci.updateCalendarObject(object, { xhr: xhr }).then(function() {
+      return davinci.syncCalendar(calendar, { syncMethod: 'webdav', xhr: xhr });
     })
     .then(function(calendar) {
       var objects = calendar.objects;
@@ -165,13 +171,12 @@ suite('calendars', function() {
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
     var object = objects[0];
-    return davinci.deleteCalendarObject(object).then(function() {
+    return davinci.deleteCalendarObject(object, { xhr: xhr }).then(function() {
       // TODO(gareth): Once we implement incremental/webdav sync,
       //     do that here.
       return davinci.createAccount({
-        username: 'admin',
-        password: 'admin',
-        server: 'http://127.0.0.1:8888/'
+        server: 'http://127.0.0.1:8888/',
+        xhr: xhr
       });
     })
     .then(function(response) {
@@ -185,8 +190,6 @@ suite('calendars', function() {
 
   test('time-range filtering', function() {
     var inrange = davinci.createAccount({
-      username: 'admin',
-      password: 'admin',
       server: 'http://127.0.0.1:8888/',
       filters: [{
         type: 'comp-filter',
@@ -199,15 +202,14 @@ suite('calendars', function() {
             attrs: { start: '19970714T170000Z' }
           }]
         }]
-      }]
+      }],
+      xhr: xhr
     })
     .then(function(account) {
       assert.lengthOf(account.calendars[0].objects, 1, 'in range');
     });
 
     var outofrange = davinci.createAccount({
-      username: 'admin',
-      password: 'admin',
       server: 'http://127.0.0.1:8888/',
       filters: [{
         type: 'comp-filter',
@@ -220,7 +222,8 @@ suite('calendars', function() {
             attrs: { start: '19980714T170000Z' }
           }]
         }]
-      }]
+      }],
+      xhr: xhr
     })
     .then(function(account) {
       assert.lengthOf(account.calendars[0].objects, 0, 'out of range');

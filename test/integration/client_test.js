@@ -8,23 +8,25 @@ suite('Client', function() {
   var client, account;
 
   setup(function() {
-    client = new davinci.Client({
-      username: 'admin',
-      password: 'admin',
-      server: 'http://127.0.0.1:8888/'
-    });
+    client = new davinci.Client(
+      new davinci.transport.Basic(
+        new davinci.Credentials({
+          username: 'admin',
+          password: 'admin'
+        })
+      )
+    );
 
-    return client.createAccount().then(function(response) {
+    return client.createAccount({
+      server: 'http://127.0.0.1:8888/'
+    })
+    .then(function(response) {
       account = response;
     });
   });
 
   test('#createAccount', function() {
-    // TODO(gareth): Copied from accounts_test... could be shared?
     assert.instanceOf(account, davinci.Account);
-    assert.instanceOf(account.credentials, davinci.Credentials);
-    assert.strictEqual(account.credentials.username, 'admin');
-    assert.strictEqual(account.credentials.password, 'admin');
     assert.strictEqual(account.server, 'http://127.0.0.1:8888/');
     assert.strictEqual(account.caldavUrl, 'http://127.0.0.1:8888/');
     assert.strictEqual(
@@ -130,11 +132,7 @@ suite('Client', function() {
       return client.deleteCalendarObject(object).then(function() {
         // TODO(gareth): Once we implement incremental/webdav sync,
         //     do that here.
-        return davinci.createAccount({
-          username: 'admin',
-          password: 'admin',
-          server: 'http://127.0.0.1:8888/'
-        });
+        return client.createAccount({ server: 'http://127.0.0.1:8888/' });
       })
       .then(function(response) {
         var calendars = response.calendars;

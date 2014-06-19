@@ -31,12 +31,10 @@ Perform an initial download of a caldav account's data. Returns a [Promise](http
 Options:
 
   (Array.<Object>) filters - list of caldav filters to send with request.
-  (String) password - plaintext password for calendar user.
   (Object) sandbox - optional request sandbox.
   (String) server - some url for server (needn't be base url).
   (String) timezone - VTIMEZONE calendar object.
-  (String) username - username (perhaps email) for calendar user.
-  (davinci.Transport) xhr - optional request sender.
+  (davinci.Transport) xhr - request sender.
 ```
 
 #### davinci.createCalendarObject(calendar, options)
@@ -51,7 +49,7 @@ Options:
   (String) data - rfc 5545 VCALENDAR object.
   (String) filename - name for the calendar ics file.
   (Object) sandbox - optional request sandbox.
-  (davinci.Transport) xhr - optional request sender.
+  (davinci.Transport) xhr - request sender.
 ```
 
 #### davinci.updateCalendarObject(calendarObject, options)
@@ -64,7 +62,7 @@ Persist updates to the parameter calendar object to the server. Returns a [Promi
 Options:
 
   (Object) sandbox - optional request sandbox.
-  (davinci.Transport) xhr - optional request sender.
+  (davinci.Transport) xhr - request sender.
 ```
 
 #### davinci.deleteCalendarObject(calendarObject, options)
@@ -77,7 +75,7 @@ Delete the parameter calendar object on the server. Returns a [Promise](https://
 Options:
 
   (Object) sandbox - optional request sandbox.
-  (davinci.Transport) xhr - optional request sender.
+  (davinci.Transport) xhr - request sender.
 ```
 
 ### davinci.syncCalendar(calendar, options)
@@ -95,7 +93,7 @@ Options:
       try to do webdav sync and failover to basic sync if rfc 6578 is not
       supported by the server.
   (String) timezone - VTIMEZONE calendar object.
-  (davinci.Transport) xhr - optional request sender.
+  (davinci.Transport) xhr - request sender.
 ```
 
 #### davinci.createSandbox()
@@ -115,17 +113,39 @@ davinci.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
-#### davinci.Client(options)
+#### davinci.Client(xhr)
 
-Create a new `davinci.Client` object. The client interface allows consumers to set their credentials once and then make authorized requests without passing their credentials to each request. Each of the other, public API methods should be available on `davinci.Client` objects.
+Create a new `davinci.Client` object. The client interface allows consumers to set their credentials and transport once and then make authorized requests without passing them to each request. Each of the other, public API methods should be available on `davinci.Client` objects.
 
 ```
-Options:
-
-  (String) password - plaintext password for calendar user.
-  (String) server - some url for server (needn't be base url).
-  (String) username - username (perhaps email) for calendar user.
+@param {davinci.Transport} xhr - request sender.
 ```
+
+### Example Usage
+
+```js
+var davinci = require('davincijs');
+
+var xhr = new davinci.transport.Basic(
+  new davinci.Credentials({
+    username: 'xxx',
+    password: 'xxx'
+  })
+);
+
+davinci.createAccount({
+  server: 'http://dav.example.com',
+  xhr: xhr
+})
+.then(function(account) {
+  // account instanceof davinci.Account
+  account.calendars.forEach(function(calendar) {
+    console.log('Found calendar named ' + calendar.displayName);
+  });
+});
+```
+
+For more example usages, check out the [suite of integration tests](https://github.com/gaye/davincijs/tree/master/test/integration).
 
 ### Directory Structure
 
@@ -133,8 +153,9 @@ Options:
 lib/                         # Source code
 lib/model/                   # Semantic data structures hydrated from dav data
 lib/parser/                  # Abstractions for parsing server dav responses
-lib/request/                 # Abstractions for issuing dav client requests
+lib/request/                 # Abstractions for creating dav client requests
 lib/template/                # Facilities for generating xml request bodies
+lib/transport/               # Things that authorize and issue requests
 test/                        # Test code
 test/integration/            # End-to-end tests run against a dav server
 test/integration/data/       # Fixture data for integration tests
@@ -144,6 +165,7 @@ test/unit/data/              # Fixture data for unit tests
 test/unit/parser/            # Test cases for parsing server dav responses
 test/unit/request/           # Test cases for issuing dav client requests
 test/unit/template/          # Test cases for xml templating helpers
+test/unit/transport/         # Test cases for authorizing and issuing requests
 ```
 
 ### Publishing a release

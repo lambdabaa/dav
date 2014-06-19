@@ -8,10 +8,16 @@ suite('accounts', function() {
     var account;
 
     setup(function() {
+      var xhr = new davinci.transport.Basic(
+        new davinci.Credentials({
+          username: 'admin',
+          password: 'admin'
+        })
+      );
+
       return davinci.createAccount({
-        username: 'admin',
-        password: 'admin',
-        server: 'http://127.0.0.1:8888/'
+        server: 'http://127.0.0.1:8888/',
+        xhr: xhr
       })
       .then(function(response) {
         account = response;
