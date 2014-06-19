@@ -127,7 +127,7 @@ suite('Client', function() {
       assert.isArray(objects);
       assert.lengthOf(objects, 1);
       var object = objects[0];
-      return davinci.deleteCalendarObject(object).then(function() {
+      return client.deleteCalendarObject(object).then(function() {
         // TODO(gareth): Once we implement incremental/webdav sync,
         //     do that here.
         return davinci.createAccount({
