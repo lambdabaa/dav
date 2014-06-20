@@ -63,7 +63,11 @@ SabreDAV:
 davinci.js: node_modules
 	npm uninstall xmlhttprequest
 	npm uninstall xmldom
-	./node_modules/.bin/browserify --im -t brfs ./lib/index.js > ./davinci.js
+	./node_modules/.bin/browserify \
+		--ignore-missing \
+		--standalone davinci \
+		--transform brfs \
+		./lib/index.js > ./davinci.js
 
 davinci.min.js: davinci.js
 	./node_modules/.bin/uglifyjs davinci.js \
