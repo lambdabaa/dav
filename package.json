@@ -1,6 +1,6 @@
 {
   "name": "dav",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "Javascript CalDAV client library",
   "license": "MPL-2.0",

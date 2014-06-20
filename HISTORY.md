@@ -1,3 +1,7 @@
+### 1.0.2
+
++ davinci -> dav
+
 ### 1.0.1
 
 + Fix issues with browserify build
