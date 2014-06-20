@@ -183,7 +183,7 @@ dav.createAccount({
 });
 ```
 
-For more example usages, check out the [suite of integration tests](https://github.com/gaye/davjs/tree/master/test/integration).
+For more example usages, check out the [suite of integration tests](https://github.com/gaye/dav/tree/master/test/integration).
 
 ### Directory Structure
 
