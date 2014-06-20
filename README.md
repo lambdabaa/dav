@@ -1,23 +1,23 @@
-davincijs [![Build Status](https://travis-ci.org/gaye/davincijs.png?branch=master)](https://travis-ci.org/gaye/davincijs) [![Coverage Status](https://img.shields.io/coveralls/gaye/davincijs.svg)](https://coveralls.io/r/gaye/davincijs)
+dav [![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://travis-ci.org/gaye/dav) [![Coverage Status](https://img.shields.io/coveralls/gaye/dav.svg)](https://coveralls.io/r/gaye/dav)
 =========
 
-Javascript CalDAV client library for node.js and the browser.
+rfc 4791 caldav client for node.js and the browser.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
 - [API](#api)
-  - [davinci.createAccount(options)](#davincicreateaccountoptions)
-  - [davinci.createCalendarObject(calendar, options)](#davincicreatecalendarobjectcalendar-options)
-  - [davinci.updateCalendarObject(calendarObject, options)](#davinciupdatecalendarobjectcalendarobject-options)
-  - [davinci.deleteCalendarObject(calendarObject, options)](#davincideletecalendarobjectcalendarobject-options)
-  - [davinci.syncCalendar(calendar, options)](#davincisynccalendarcalendar-options)
-  - [davinci.createSandbox()](#davincicreatesandbox)
-  - [davinci.Credentials(options)](#davincicredentialsoptions)
-  - [davinci.transport.Basic(credentials)](#davincitransportbasiccredentials)
-  - [davinci.transport.OAuth2(credentials)](#davincitransportoauth2credentials)
-  - [davinci.Client(xhr)](#davinciclientxhr)
+  - [dav.createAccount(options)](#davcreateaccountoptions)
+  - [dav.createCalendarObject(calendar, options)](#davcreatecalendarobjectcalendar-options)
+  - [dav.updateCalendarObject(calendarObject, options)](#davupdatecalendarobjectcalendarobject-options)
+  - [dav.deleteCalendarObject(calendarObject, options)](#davdeletecalendarobjectcalendarobject-options)
+  - [dav.syncCalendar(calendar, options)](#davsynccalendarcalendar-options)
+  - [dav.createSandbox()](#davcreatesandbox)
+  - [dav.Credentials(options)](#davcredentialsoptions)
+  - [dav.transport.Basic(credentials)](#davtransportbasiccredentials)
+  - [dav.transport.OAuth2(credentials)](#davtransportoauth2credentials)
+  - [dav.Client(xhr)](#davclientxhr)
 - [Example Usage](#example-usage)
 - [Directory Structure](#directory-structure)
 - [Publishing a release](#publishing-a-release)
@@ -27,9 +27,9 @@ Javascript CalDAV client library for node.js and the browser.
 
 ### API
 
-#### davinci.createAccount(options)
+#### dav.createAccount(options)
 
-Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [davinci.Account](https://github.com/gaye/davincijs/blob/master/lib/model/account.js) object.
+Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [dav.Account](https://github.com/gaye/dav/blob/master/lib/model/account.js) object.
 
 ```
 Options:
@@ -38,56 +38,56 @@ Options:
   (Object) sandbox - optional request sandbox.
   (String) server - some url for server (needn't be base url).
   (String) timezone - VTIMEZONE calendar object.
-  (davinci.Transport) xhr - request sender.
+  (dav.Transport) xhr - request sender.
 ```
 
-#### davinci.createCalendarObject(calendar, options)
+#### dav.createCalendarObject(calendar, options)
 
 Create a calendar object on the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been created.
 
 ```
-@param {davinci.Calendar} calendar the calendar to put the object on.
+@param {dav.Calendar} calendar the calendar to put the object on.
 
 Options:
 
   (String) data - rfc 5545 VCALENDAR object.
   (String) filename - name for the calendar ics file.
   (Object) sandbox - optional request sandbox.
-  (davinci.Transport) xhr - request sender.
+  (dav.Transport) xhr - request sender.
 ```
 
-#### davinci.updateCalendarObject(calendarObject, options)
+#### dav.updateCalendarObject(calendarObject, options)
 
 Persist updates to the parameter calendar object to the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been updated.
 
 ```
-@param {davinci.CalendarObject} calendarObject updated calendar object.
+@param {dav.CalendarObject} calendarObject updated calendar object.
 
 Options:
 
   (Object) sandbox - optional request sandbox.
-  (davinci.Transport) xhr - request sender.
+  (dav.Transport) xhr - request sender.
 ```
 
-#### davinci.deleteCalendarObject(calendarObject, options)
+#### dav.deleteCalendarObject(calendarObject, options)
 
 Delete the parameter calendar object on the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the calendar has been deleted.
 
 ```
-@param {davinci.CalendarObject} calendarObject target calendar object.
+@param {dav.CalendarObject} calendarObject target calendar object.
 
 Options:
 
   (Object) sandbox - optional request sandbox.
-  (davinci.Transport) xhr - request sender.
+  (dav.Transport) xhr - request sender.
 ```
 
-#### davinci.syncCalendar(calendar, options)
+#### dav.syncCalendar(calendar, options)
 
-Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [davinci.Calendar](https://github.com/gaye/davincijs/blob/master/lib/model/calendar.js) object once sync is complete.
+Fetch changes from the remote server to the parameter calendar. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [dav.Calendar](https://github.com/gaye/dav/blob/master/lib/model/calendar.js) object once sync is complete.
 
 ```
-@param {davinci.Calendar} calendar the calendar to fetch changes for.
+@param {dav.Calendar} calendar the calendar to fetch changes for.
 
 Options:
 
@@ -97,16 +97,16 @@ Options:
       try to do webdav sync and failover to basic sync if rfc 6578 is not
       supported by the server.
   (String) timezone - VTIMEZONE calendar object.
-  (davinci.Transport) xhr - request sender.
+  (dav.Transport) xhr - request sender.
 ```
 
-#### davinci.createSandbox()
+#### dav.createSandbox()
 
 Create a request sandbox. Add requests to the sandbox like so:
 
 ```js
-var sandbox = davinci.createSandbox();
-davinci.createAccount({
+var sandbox = dav.createSandbox();
+dav.createAccount({
   username: 'Yoshi',
   password: 'babybowsersoscaryomg',
   server: 'https://caldav.yoshisstory.com',
@@ -117,9 +117,9 @@ davinci.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
-#### davinci.Credentials(options)
+#### dav.Credentials(options)
 
-Create a new `davinci.Credentials` object. This is a union of various authentication details needed to sign requests.
+Create a new `dav.Credentials` object. This is a union of various authentication details needed to sign requests.
 
 ```
 Options:
@@ -135,55 +135,55 @@ Options:
   (Number) expiration - unix time for access token expiration.
 ```
 
-#### davinci.transport.Basic(credentials)
+#### dav.transport.Basic(credentials)
 
-Create a new `davinci.transport.Basic` object. This sends dav requests using http basic authentication.
-
-```
-@param {davinci.Credentials} credentials user authorization.
-```
-
-#### davinci.transport.OAuth2(credentials)
-
-Create a new `davinci.transport.OAuth2` object. This sends dav requests authorized via rfc 6749 oauth2.
+Create a new `dav.transport.Basic` object. This sends dav requests using http basic authentication.
 
 ```
-@param {davinci.Credentials} credentials user authorization.
+@param {dav.Credentials} credentials user authorization.
 ```
 
-#### davinci.Client(xhr)
+#### dav.transport.OAuth2(credentials)
 
-Create a new `davinci.Client` object. The client interface allows consumers to set their credentials and transport once and then make authorized requests without passing them to each request. Each of the other, public API methods should be available on `davinci.Client` objects.
+Create a new `dav.transport.OAuth2` object. This sends dav requests authorized via rfc 6749 oauth2.
 
 ```
-@param {davinci.Transport} xhr - request sender.
+@param {dav.Credentials} credentials user authorization.
+```
+
+#### dav.Client(xhr)
+
+Create a new `dav.Client` object. The client interface allows consumers to set their credentials and transport once and then make authorized requests without passing them to each request. Each of the other, public API methods should be available on `dav.Client` objects.
+
+```
+@param {dav.Transport} xhr - request sender.
 ```
 
 ### Example Usage
 
 ```js
-var davinci = require('davincijs');
+var dav = require('dav');
 
-var xhr = new davinci.transport.Basic(
-  new davinci.Credentials({
+var xhr = new dav.transport.Basic(
+  new dav.Credentials({
     username: 'xxx',
     password: 'xxx'
   })
 );
 
-davinci.createAccount({
+dav.createAccount({
   server: 'http://dav.example.com',
   xhr: xhr
 })
 .then(function(account) {
-  // account instanceof davinci.Account
+  // account instanceof dav.Account
   account.calendars.forEach(function(calendar) {
     console.log('Found calendar named ' + calendar.displayName);
   });
 });
 ```
 
-For more example usages, check out the [suite of integration tests](https://github.com/gaye/davincijs/tree/master/test/integration).
+For more example usages, check out the [suite of integration tests](https://github.com/gaye/davjs/tree/master/test/integration).
 
 ### Directory Structure
 

@@ -1,21 +1,21 @@
 'use strict';
 
 var assert = require('chai').assert,
-    davinci = require('../../lib');
+    dav = require('../../lib');
 
 suite('accounts', function() {
   suite('#create', function() {
     var account;
 
     setup(function() {
-      var xhr = new davinci.transport.Basic(
-        new davinci.Credentials({
+      var xhr = new dav.transport.Basic(
+        new dav.Credentials({
           username: 'admin',
           password: 'admin'
         })
       );
 
-      return davinci.createAccount({
+      return dav.createAccount({
         server: 'http://127.0.0.1:8888/',
         xhr: xhr
       })
@@ -25,8 +25,8 @@ suite('accounts', function() {
     });
 
     test('should get existing account', function() {
-      assert.instanceOf(account, davinci.Account);
-      assert.instanceOf(account.credentials, davinci.Credentials);
+      assert.instanceOf(account, dav.Account);
+      assert.instanceOf(account.credentials, dav.Credentials);
       assert.strictEqual(account.credentials.username, 'admin');
       assert.strictEqual(account.credentials.password, 'admin');
       assert.strictEqual(account.server, 'http://127.0.0.1:8888/');
@@ -43,7 +43,7 @@ suite('accounts', function() {
       var calendars = account.calendars;
       assert.lengthOf(calendars, 1);
       var calendar = calendars[0];
-      assert.instanceOf(calendar, davinci.Calendar);
+      assert.instanceOf(calendar, dav.Calendar);
       assert.strictEqual(calendar.displayName, 'default calendar');
       assert.strictEqual(
         calendar.url,

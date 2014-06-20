@@ -1,6 +1,6 @@
 'use strict';
 
-var debug = require('debug')('davinci:server'),
+var debug = require('debug')('dav:server'),
     format = require('util').format,
     exec = require('child_process').exec,
     spawn = require('child_process').spawn,

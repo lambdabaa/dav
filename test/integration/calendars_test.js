@@ -2,22 +2,22 @@
 
 var assert = require('chai').assert,
     data = require('./data'),
-    davinci = require('../../lib'),
-    debug = require('debug')('davinci:calendars_test');
+    dav = require('../../lib'),
+    debug = require('debug')('dav:calendars_test');
 
 suite('calendars', function() {
   var calendars, xhr;
 
   setup(function() {
     debug('Create account.');
-    xhr = new davinci.transport.Basic(
-      new davinci.Credentials({
+    xhr = new dav.transport.Basic(
+      new dav.Credentials({
         username: 'admin',
         password: 'admin'
       })
     );
 
-    return davinci.createAccount({
+    return dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr
     })
@@ -27,7 +27,7 @@ suite('calendars', function() {
       assert.isArray(objects);
       assert.lengthOf(objects, 0, 'initially 0 calendar objects');
       debug('Create calendar object');
-      return davinci.createCalendarObject(calendar, {
+      return dav.createCalendarObject(calendar, {
         filename: 'test.ics',
         data: data.bastilleDayParty,
         xhr: xhr
@@ -37,7 +37,7 @@ suite('calendars', function() {
       // TODO(gareth): Once we implement account sync,
       //     do that here.
       debug('Fetch account again.');
-      return davinci.createAccount({
+      return dav.createAccount({
         server: 'http://127.0.0.1:8888/',
         xhr: xhr
       });
@@ -53,8 +53,8 @@ suite('calendars', function() {
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
     var object = objects[0];
-    assert.instanceOf(object, davinci.CalendarObject);
-    assert.instanceOf(object.calendar, davinci.Calendar);
+    assert.instanceOf(object, dav.CalendarObject);
+    assert.instanceOf(object.calendar, dav.Calendar);
     assert.strictEqual(object.calendarData, data.bastilleDayParty);
     assert.strictEqual(
       object.url,
@@ -70,16 +70,16 @@ suite('calendars', function() {
       'SUMMARY:Happy Hour'
     );
 
-    return davinci.updateCalendarObject(object, { xhr: xhr }).then(function() {
-      return davinci.syncCalendar(calendar, { syncMethod: 'basic', xhr: xhr });
+    return dav.updateCalendarObject(object, { xhr: xhr }).then(function() {
+      return dav.syncCalendar(calendar, { syncMethod: 'basic', xhr: xhr });
     })
     .then(function(calendar) {
       var objects = calendar.objects;
       assert.isArray(objects);
       assert.lengthOf(objects, 1, 'update should not create new object');
       var object = objects[0];
-      assert.instanceOf(object, davinci.CalendarObject);
-      assert.instanceOf(object.calendar, davinci.Calendar);
+      assert.instanceOf(object, dav.CalendarObject);
+      assert.instanceOf(object.calendar, dav.Calendar);
       assert.notStrictEqual(
         object.calendarData,
         data.bastilleDayParty,
@@ -119,8 +119,8 @@ suite('calendars', function() {
     assert.typeOf(prevSyncToken, 'string');
     assert.operator(prevSyncToken.length, '>', 0);
 
-    return davinci.updateCalendarObject(object, { xhr: xhr }).then(function() {
-      return davinci.syncCalendar(calendar, { syncMethod: 'webdav', xhr: xhr });
+    return dav.updateCalendarObject(object, { xhr: xhr }).then(function() {
+      return dav.syncCalendar(calendar, { syncMethod: 'webdav', xhr: xhr });
     })
     .then(function(calendar) {
       var objects = calendar.objects;
@@ -128,8 +128,8 @@ suite('calendars', function() {
       assert.lengthOf(objects, 1, 'update should not create new object');
 
       var object = objects[0];
-      assert.instanceOf(object, davinci.CalendarObject);
-      assert.instanceOf(object.calendar, davinci.Calendar);
+      assert.instanceOf(object, dav.CalendarObject);
+      assert.instanceOf(object.calendar, dav.Calendar);
 
       assert.notStrictEqual(
         object.calendarData,
@@ -171,10 +171,10 @@ suite('calendars', function() {
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
     var object = objects[0];
-    return davinci.deleteCalendarObject(object, { xhr: xhr }).then(function() {
+    return dav.deleteCalendarObject(object, { xhr: xhr }).then(function() {
       // TODO(gareth): Once we implement incremental/webdav sync,
       //     do that here.
-      return davinci.createAccount({
+      return dav.createAccount({
         server: 'http://127.0.0.1:8888/',
         xhr: xhr
       });
@@ -189,7 +189,7 @@ suite('calendars', function() {
   });
 
   test('time-range filtering', function() {
-    var inrange = davinci.createAccount({
+    var inrange = dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       filters: [{
         type: 'comp-filter',
@@ -209,7 +209,7 @@ suite('calendars', function() {
       assert.lengthOf(account.calendars[0].objects, 1, 'in range');
     });
 
-    var outofrange = davinci.createAccount({
+    var outofrange = dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       filters: [{
         type: 'comp-filter',

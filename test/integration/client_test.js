@@ -2,15 +2,15 @@
 
 var assert = require('chai').assert,
     data = require('./data'),
-    davinci = require('../../lib/index');
+    dav = require('../../lib/index');
 
 suite('Client', function() {
   var client, account;
 
   setup(function() {
-    client = new davinci.Client(
-      new davinci.transport.Basic(
-        new davinci.Credentials({
+    client = new dav.Client(
+      new dav.transport.Basic(
+        new dav.Credentials({
           username: 'admin',
           password: 'admin'
         })
@@ -26,7 +26,7 @@ suite('Client', function() {
   });
 
   test('#createAccount', function() {
-    assert.instanceOf(account, davinci.Account);
+    assert.instanceOf(account, dav.Account);
     assert.strictEqual(account.server, 'http://127.0.0.1:8888/');
     assert.strictEqual(account.caldavUrl, 'http://127.0.0.1:8888/');
     assert.strictEqual(
@@ -41,7 +41,7 @@ suite('Client', function() {
     var calendars = account.calendars;
     assert.lengthOf(calendars, 1);
     var calendar = calendars[0];
-    assert.instanceOf(calendar, davinci.Calendar);
+    assert.instanceOf(calendar, dav.Calendar);
     assert.strictEqual(calendar.displayName, 'default calendar');
     assert.strictEqual(
       calendar.url,
@@ -75,8 +75,8 @@ suite('Client', function() {
       assert.isArray(objects);
       assert.lengthOf(objects, 1);
       var object = objects[0];
-      assert.instanceOf(object, davinci.CalendarObject);
-      assert.instanceOf(object.calendar, davinci.Calendar);
+      assert.instanceOf(object, dav.CalendarObject);
+      assert.instanceOf(object.calendar, dav.Calendar);
       assert.strictEqual(object.calendarData, data.bastilleDayParty);
       assert.strictEqual(
         object.url,
@@ -99,8 +99,8 @@ suite('Client', function() {
         assert.isArray(objects);
         assert.lengthOf(objects, 1, 'update should not create new object');
         var object = objects[0];
-        assert.instanceOf(object, davinci.CalendarObject);
-        assert.instanceOf(object.calendar, davinci.Calendar);
+        assert.instanceOf(object, dav.CalendarObject);
+        assert.instanceOf(object.calendar, dav.Calendar);
         assert.notStrictEqual(
           object.calendarData,
           data.bastilleDayParty,
