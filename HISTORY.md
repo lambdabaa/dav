@@ -1,3 +1,7 @@
+### 1.0.3
+
++ Internal DELETE, PUT request refactor
+
 ### 1.0.2
 
 + davinci -> dav
