@@ -6,7 +6,7 @@ var assert = require('chai').assert,
     request = require('../../../lib/request'),
     transport = require('../../../lib/transport');
 
-suite('delete', function() {
+suite('put', function() {
   var xhr;
 
   setup(function() {
@@ -19,8 +19,12 @@ suite('delete', function() {
 
   test('should return request.Request', function() {
     assert.instanceOf(
-      request.delete({
+      request.basic({
+        method: 'PUT',
         url: 'http://127.0.0.1:1337/',
+        username: 'abc',
+        password: '123',
+        data: 'yoyoma'
       }),
       request.Request
     );
@@ -29,10 +33,11 @@ suite('delete', function() {
   test('should set If-Match header', function() {
     var mock = nock('http://127.0.0.1:1337')
       .matchHeader('If-Match', '1337')
-      .intercept('/', 'DELETE')
+      .intercept('/', 'PUT')
       .reply(200);
 
-    var req = request.delete({
+    var req = request.basic({
+      method: 'PUT',
       url: 'http://127.0.0.1:1337',
       etag: '1337'
     });
@@ -40,16 +45,34 @@ suite('delete', function() {
     return nockUtils.verifyNock(xhr.send(req), mock);
   });
 
+  test('should send options data as request body', function() {
+    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
+    mock.matchRequestBody('/', 'PUT', function(body) {
+      return body === 'Bad hair day!';
+    });
+
+    var req = request.basic({
+      method: 'PUT',
+      url: 'http://127.0.0.1:1337/',
+      data: 'Bad hair day!'
+    });
+
+    return nockUtils.verifyNock(xhr.send(req), mock);
+  });
+
   test('should throw error on bad response', function() {
     nock('http://127.0.0.1:1337')
-      .intercept('/', 'DELETE')
+      .intercept('/', 'PUT')
       .delay(1)
       .reply('400', '400 Bad Request');
 
-    var req = request.delete({ url: 'http://127.0.0.1:1337/' });
+    var req = request.basic({
+      method: 'PUT',
+      url: 'http://127.0.0.1:1337/'
+    });
 
     return xhr.send(req).then(function() {
-      assert.fail('request.delete should have thrown an error');
+      assert.fail('request.basic should have thrown an error');
     })
     .catch(function(error) {
       assert.instanceOf(error, Error);
