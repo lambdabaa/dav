@@ -2,7 +2,7 @@ SabreDAV/
 
 /*.zip
 /coverage/
-/davinci.js
-/davinci.js.map
-/davinci.min.js
+/dav.js
+/dav.js.map
+/dav.min.js
 /node_modules/
