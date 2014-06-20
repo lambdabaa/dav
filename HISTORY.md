@@ -1,3 +1,7 @@
+### 1.0.1
+
++ Fix issues with browserify build
+
 ### 1.0.0
 
 + Update interfaces for pluggable transports, expose transport layer
