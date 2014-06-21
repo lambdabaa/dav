@@ -213,7 +213,7 @@ test/unit/transport/         # Test cases for authorizing and issuing requests
 3. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset.
 4. Commit the changes to `package.json`, `npm-shrinkwrap.json`, and `HISTORY.md`. Push to GitHub.
 5. Run `make clean && make` to generate the build outputs.
-6. Create a new GitHub release named the new version number with a description of the changeset. Upload the freshly generated build outputs.
+6. Create a new GitHub release named `v.{x}.{y}.{z}` with a description of the changeset. Upload the freshly generated zipball.
 7. Run `npm publish`.
 
 ### Related Material

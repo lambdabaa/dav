@@ -3,7 +3,7 @@ SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
 .PHONY: default
-default: dav.js dav.min.js
+default: dav.zip
 
 .PHONY: clean
 clean:
@@ -75,6 +75,9 @@ dav.min.js: dav.js
 		--screw-ie8 \
 		--output ./dav.min.js \
 		--source-map ./dav.js.map \
+
+dav.zip: dav.js dav.min.js
+	zip dav dav.js dav.js.map dav.min.js
 
 test/integration/server/SabreDAV: SabreDAV
 	cp -r SabreDAV test/integration/server/SabreDAV
