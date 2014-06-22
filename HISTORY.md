@@ -1,3 +1,7 @@
+### 1.0.4
+
++ Implement #toString on models
+
 ### 1.0.3
 
 + Internal DELETE, PUT request refactor
