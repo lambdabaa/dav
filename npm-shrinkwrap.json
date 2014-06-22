@@ -1583,6 +1583,11 @@
         }
       }
     },
+    "json-stringify-safe": {
+      "version": "5.0.0",
+      "from": "json-stringify-safe@5.0.0",
+      "resolved": "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz"
+    },
     "mocha": {
       "version": "1.19.0",
       "from": "https://registry.npmjs.org/mocha/-/mocha-1.19.0.tgz",

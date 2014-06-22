@@ -19,6 +19,7 @@
   "dependencies": {
     "debug": "0.8.1",
     "handlebars": "2.0.x",
+    "json-stringify-safe": "5.0.0",
     "xmldom": "0.1.19",
     "xmlhttprequest": "1.6.0"
   },
