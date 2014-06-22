@@ -17,16 +17,13 @@ suite('calendars', function() {
       })
     );
 
-    return dav.createAccount({
-      server: 'http://127.0.0.1:8888/',
-      xhr: xhr
-    })
+    return dav.createAccount({ server: 'http://127.0.0.1:8888/', xhr: xhr })
     .then(function(response) {
       var calendar = response.calendars[0];
       var objects = calendar.objects;
       assert.isArray(objects);
       assert.lengthOf(objects, 0, 'initially 0 calendar objects');
-      debug('Create calendar object');
+      debug('Create calendar object.');
       return dav.createCalendarObject(calendar, {
         filename: 'test.ics',
         data: data.bastilleDayParty,

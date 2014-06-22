@@ -1,0 +1,10 @@
+<card:addressbook-query xmlns:c="urn:ietf:params:xml:ns:caldav"
+                        xmlns:card="urn:ietf:params:xml:ns:carddav"
+                        xmlns:cs="http://calendarserver.org/ns/"
+                        xmlns:d="DAV:">
+  <d:prop>
+    {{#each props}}
+      {{prop this}}
+    {{/each}}
+  </d:prop>
+</card:addressbook-query>

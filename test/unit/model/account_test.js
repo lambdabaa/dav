@@ -10,12 +10,12 @@ suite('Account', function() {
           username: 'Killer BOB',
           password: 'blacklodge'
         }),
-        caldavUrl = 'http://dav.example.com/caldav';
+        rootUrl = 'http://dav.example.com/caldav';
 
     var account = new dav.Account({
       server: server,
       credentials: credentials,
-      caldavUrl: caldavUrl
+      rootUrl: rootUrl
     });
 
     var calendars = [new dav.Calendar({ account: account })];
@@ -27,7 +27,7 @@ suite('Account', function() {
       username: 'Killer BOB',
       password: 'blacklodge'
     });
-    assert.strictEqual(json.caldavUrl, caldavUrl);
+    assert.strictEqual(json.rootUrl, rootUrl);
     assert.deepEqual(json.calendars, [{
       account: '[Circular ~]'
     }]);

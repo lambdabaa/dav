@@ -2,7 +2,7 @@
 
 var assert = require('chai').assert,
     data = require('../data'),
-    namespace = require('../../../lib/namespace'),
+    ns = require('../../../lib/namespace'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request'),
@@ -38,7 +38,7 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      props: [ { name: 'calendar-data', namespace: namespace.CALDAV } ],
+      props: [ { name: 'calendar-data', namespace: ns.CALDAV } ],
       depth: 1
     });
 
@@ -53,7 +53,7 @@ suite('request.calendarQuery', function() {
 
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
-      props: [ { name: 'catdog', namespace: namespace.DAV } ]
+      props: [ { name: 'catdog', namespace: ns.DAV } ]
     });
 
     return nockUtils.verifyNock(xhr.send(req), mock);
@@ -99,8 +99,8 @@ suite('request.calendarQuery', function() {
     var req = request.calendarQuery({
       url: 'http://127.0.0.1:1337/',
       props: [
-        { name: 'getetag', namespace: namespace.DAV },
-        { name: 'calendar-data', namespace: namespace.CALDAV }
+        { name: 'getetag', namespace: ns.DAV },
+        { name: 'calendar-data', namespace: ns.CALDAV }
       ],
       filters: [ { type: 'comp', attrs: { name: 'VCALENDAR' } } ]
     });

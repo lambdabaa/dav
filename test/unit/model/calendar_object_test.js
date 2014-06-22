@@ -3,14 +3,14 @@
 var assert = require('chai').assert,
     dav = require('../../../lib');
 
-suite('Calendar', function() {
+suite('CalendarObject', function() {
   test('#toString', function() {
     var server = 'http://dav.example.com',
         credentials = new dav.Credentials({
           username: 'Killer BOB',
           password: 'blacklodge'
         }),
-        caldavUrl = 'http://dav.example.com/caldav',
+        rootUrl = 'http://dav.example.com/caldav',
         ctag = 'abc123',
         displayName = 'default',
         components = [
@@ -31,7 +31,7 @@ suite('Calendar', function() {
     var account = new dav.Account({
       server: server,
       credentials: credentials,
-      caldavUrl: caldavUrl
+      rootUrl: rootUrl
     });
 
     var calendar = new dav.Calendar({
@@ -63,7 +63,7 @@ suite('Calendar', function() {
       username: 'Killer BOB',
       password: 'blacklodge'
     });
-    assert.strictEqual(json.calendar.account.caldavUrl, caldavUrl);
+    assert.strictEqual(json.calendar.account.rootUrl, rootUrl);
     assert.deepEqual(
       json.calendar.account.calendars,
       ['[Circular ~.calendar]']

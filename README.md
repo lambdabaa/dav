@@ -1,7 +1,7 @@
 dav [![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://travis-ci.org/gaye/dav) [![Coverage Status](https://img.shields.io/coveralls/gaye/dav.svg)](https://coveralls.io/r/gaye/dav)
 =========
 
-rfc 4791 caldav client for node.js and the browser.
+caldav and carddav client for nodejs and the browser.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -13,6 +13,10 @@ rfc 4791 caldav client for node.js and the browser.
   - [dav.updateCalendarObject(calendarObject, options)](#davupdatecalendarobjectcalendarobject-options)
   - [dav.deleteCalendarObject(calendarObject, options)](#davdeletecalendarobjectcalendarobject-options)
   - [dav.syncCalendar(calendar, options)](#davsynccalendarcalendar-options)
+  - [dav.createCard(addressBook, options)](#davcreatecardaddressbook-options)
+  - [dav.updateCard(card, options)](#davupdatecardcard-options)
+  - [dav.deleteCard(card, options)](#davdeletecardcard-options)
+  - [dav.syncAddressBook(addressBook, options)](#davsyncaddressbookaddressbook-options)
   - [dav.createSandbox()](#davcreatesandbox)
   - [dav.Credentials(options)](#davcredentialsoptions)
   - [dav.transport.Basic(credentials)](#davtransportbasiccredentials)
@@ -29,11 +33,12 @@ rfc 4791 caldav client for node.js and the browser.
 
 #### dav.createAccount(options)
 
-Perform an initial download of a caldav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [dav.Account](https://github.com/gaye/dav/blob/master/lib/model/account.js) object.
+Perform an initial download of a caldav or carddav account's data. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with a [dav.Account](https://github.com/gaye/dav/blob/master/lib/model/account.js) object.
 
 ```
 Options:
 
+  (String) accountType - one of 'caldav' or 'carddav'. Defaults to 'caldav'.
   (Array.<Object>) filters - list of caldav filters to send with request.
   (Object) sandbox - optional request sandbox.
   (String) server - some url for server (needn't be base url).
@@ -99,6 +104,64 @@ Options:
   (String) timezone - VTIMEZONE calendar object.
   (dav.Transport) xhr - request sender.
 ```
+
+#### dav.createCard(addressBook, options)
+
+Create a vcard object on the parameter address book. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the vcard has been created.
+
+```
+@param {dav.AddressBook} addressBook the address book to put the object on.
+
+Options:
+
+  (String) data - VCARD object.
+  (String) filename - name for the vcard vcf file.
+  (Object) sandbox - optional request sandbox.
+  (dav.Transport) xhr - request sender.
+```
+
+#### dav.updateCard(card, options)
+
+Persist updates to the parameter vcard object to the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the vcard has been updated.
+
+```
+@param {dav.VCard} card updated vcard object.
+
+Options:
+
+  (Object) sandbox - optional request sandbox.
+  (dav.Transport) xhr - request sender.
+```
+
+#### dav.deleteCard(card, options)
+
+Delete the parameter vcard object on the server. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the vcard has been deleted.
+
+```
+@param {dav.VCard} card target vcard object.
+
+Options:
+
+  (Object) sandbox - optional request sandbox.
+  (dav.Transport) xhr - request sender.
+```
+
+#### dav.syncAddressBook(addressBook, options)
+
+Fetch changes from the remote server to the parameter address books. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [dav.AddressBook](https://github.com/gaye/dav/blob/master/lib/model/address_book.js) object once sync is complete.
+
+```
+@param {dav.AddressBook} addressBook the address book to fetch changes for.
+
+Options:
+
+  (Object) sandbox - optional request sandbox.
+  (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
+      try to do webdav sync and failover to basic sync if rfc 6578 is not
+      supported by the server.
+  (dav.Transport) xhr - request sender.
+```
+
 
 #### dav.createSandbox()
 
@@ -220,3 +283,4 @@ test/unit/transport/         # Test cases for authorizing and issuing requests
 
 + [RFC 4791](http://tools.ietf.org/html/rfc4791)
 + [RFC 5545](http://tools.ietf.org/html/rfc5545)
++ [RFC 6352](http://tools.ietf.org/html/rfc6352)

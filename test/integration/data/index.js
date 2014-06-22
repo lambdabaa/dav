@@ -4,11 +4,12 @@ var camelize = require('../../../lib/camelize'),
     fs = require('fs');
 
 [
-  'bastille_day_party'
-].forEach(function(filename) {
-  var camelCase = camelize(filename);
+  { name: 'bastille_day_party', fmt: 'ics' },
+  { name: 'forrest_gump', fmt: 'vcf' }
+].forEach(function(file) {
+  var camelCase = camelize(file.name);
   exports[camelCase] = fs.readFileSync(
-    format('%s/%s.ics', __dirname, filename),
+    format('%s/%s.%s', __dirname, file.name, file.fmt),
     'utf-8'
   );
 });

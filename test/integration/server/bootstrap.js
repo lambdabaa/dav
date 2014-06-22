@@ -6,37 +6,60 @@ var debug = require('debug')('dav:server'),
     spawn = require('child_process').spawn,
     tcpPortUsed = require('tcp-port-used');
 
-var data = {
-  principaluri: 'principals/admin',
-  displayname: 'default calendar',
-  uri: 'default',
-  description: 'administrator calendar',
-  components: 'VEVENT,VTODO',
-  transparent: '0',
-  synctoken: '1'
+var calendarData = {
+  table: 'calendars',
+  data: {
+    principaluri: 'principals/admin',
+    displayname: 'default calendar',
+    uri: 'default',
+    description: 'administrator calendar',
+    components: 'VEVENT,VTODO',
+    transparent: '0',
+    synctoken: '1'
+  }
 };
 
-var columns = [],
-    values = [];
-for (var column in data) {
-  var value = data[column];
-  columns.push(column);
-  values.push('\'' + value + '\'');
-}
+var contactsData = {
+  table: 'addressbooks',
+  data: {
+    principaluri: 'principals/admin',
+    displayname: 'default address book',
+    uri: 'default',
+    description: 'administrator address book',
+    synctoken: '1'
+  }
+};
 
-var insert = format(
-  'echo "INSERT INTO calendars (%s) VALUES (%s);" | sqlite3 data/db.sqlite',
-  columns.join(','),
-  values.join(',')
-);
+
+var inserts = [
+  calendarData,
+  contactsData
+].map(function(tableData) {
+  var table = tableData.table,
+      data = tableData.data;
+
+  var columns = [],
+      values = [];
+  for (var column in data) {
+    var value = data[column];
+    columns.push(column);
+    values.push('\'' + value + '\'');
+  }
+
+  return format(
+    'echo "INSERT INTO %s (%s) VALUES (%s);" | sqlite3 data/db.sqlite',
+    table,
+    columns.join(','),
+    values.join(',')
+  );
+});
 
 [
   'rm -rf data/',
   'mkdir data/',
   'chmod -R a+rw data/',
-  'cat examples/sql/sqlite.* | sqlite3 data/db.sqlite',
-  insert
-].forEach(function(command) {
+  'cat examples/sql/sqlite.* | sqlite3 data/db.sqlite'
+].concat(inserts).forEach(function(command) {
   debug('exec: ' + command);
   setup(function(done) {
     exec(command, { cwd: __dirname + '/SabreDAV' }, function() { done(); });

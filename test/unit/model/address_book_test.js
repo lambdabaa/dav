@@ -3,27 +3,22 @@
 var assert = require('chai').assert,
     dav = require('../../../lib');
 
-suite('Calendar', function() {
+suite('AddressBook', function() {
   test('#toString', function() {
     var server = 'http://dav.example.com',
         credentials = new dav.Credentials({
           username: 'Killer BOB',
           password: 'blacklodge'
         }),
-        rootUrl = 'http://dav.example.com/caldav',
+        rootUrl = 'http://dav.example.com/carddav',
         ctag = 'abc123',
         displayName = 'default',
-        components = [
-          'VEVENT',
-          'VTODO'
-        ],
         reports = [
-          'sync-calendar'
+          'addressbook-query'
         ],
-        url = 'http://dav.example.com/caldav/Killer BOB/work',
-        description = 'Killer BOB work calendar',
-        timezone = 'BEGIN:VTIMEZONE\nTZID:America/New_York\nEND:VTIMEZONE',
-        syncToken = 'http://dav.example.com/caldav/sync/0';
+        url = 'http://dav.example.com/carddav/Killer BOB/coworkers',
+        description = 'Killer BOB coworkers',
+        syncToken = 'http://dav.example.com/carddav/sync/0';
 
     var account = new dav.Account({
       server: server,
@@ -31,15 +26,13 @@ suite('Calendar', function() {
       rootUrl: rootUrl
     });
 
-    var calendar = new dav.Calendar({
+    var calendar = new dav.AddressBook({
       account: account,
       ctag: ctag,
       displayName: displayName,
-      components: components,
       reports: reports,
       url: url,
       description: description,
-      timezone: timezone,
       syncToken: syncToken
     });
 
@@ -55,11 +48,9 @@ suite('Calendar', function() {
     assert.deepEqual(json.account.calendars, ['[Circular ~]']);
     assert.strictEqual(json.ctag, calendar.ctag);
     assert.strictEqual(json.displayName, calendar.displayName);
-    assert.deepEqual(json.components, calendar.components);
     assert.deepEqual(json.reports, calendar.reports);
     assert.strictEqual(json.url, url);
     assert.strictEqual(json.description, description);
-    assert.strictEqual(json.timezone, timezone);
     assert.strictEqual(json.syncToken, syncToken);
   });
 });
