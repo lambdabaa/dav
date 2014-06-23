@@ -1,6 +1,6 @@
 {
   "name": "dav",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "dependencies": {
     "brfs": {
       "version": "1.1.1",
@@ -1585,7 +1585,7 @@
     },
     "json-stringify-safe": {
       "version": "5.0.0",
-      "from": "json-stringify-safe@5.0.0",
+      "from": "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz",
       "resolved": "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz"
     },
     "mocha": {

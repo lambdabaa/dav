@@ -1,3 +1,7 @@
+### 1.1.0
+
++ Support for rfc 6352 carddav
+
 ### 1.0.4
 
 + Implement #toString on models

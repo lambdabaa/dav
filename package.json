@@ -1,18 +1,24 @@
 {
   "name": "dav",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
-  "description": "Javascript CalDAV client library",
+  "description": "caldav and carddav client for nodejs and the browser",
   "license": "MPL-2.0",
   "main": "./lib/index",
 
   "keywords": [
+    "address book",
     "calendar",
-    "caldav",
-    "webdav",
+    "contacts",
     "dav",
+    "caldav",
+    "carddav",
+    "webdav",
+    "ical",
+    "vcard",
     "sync",
     "rfc 4791",
+    "rfc 6352",
     "rfc 6578"
   ],
 
