@@ -263,6 +263,7 @@ test/integration/data/       # Fixture data for integration tests
 test/integration/server/     # Code to bootstrap dav server
 test/unit/                   # Unit tests
 test/unit/data/              # Fixture data for unit tests
+test/unit/model/             # Test cases for model methods
 test/unit/parser/            # Test cases for parsing server dav responses
 test/unit/request/           # Test cases for issuing dav client requests
 test/unit/template/          # Test cases for xml templating helpers
