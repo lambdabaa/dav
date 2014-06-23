@@ -78,7 +78,8 @@ suite('request.propfind', function() {
       depth: 1
     });
 
-    return xhr.send(req).then(function(responses) {
+    return xhr.send(req)
+    .then(function(responses) {
       assert.isArray(responses);
       responses.forEach(function(response) {
         assert.typeOf(response.href, 'string');

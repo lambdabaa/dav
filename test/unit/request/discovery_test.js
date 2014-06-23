@@ -38,7 +38,8 @@ suite('request.discovery', function() {
       server: 'http://127.0.0.1:1337'
     });
 
-    return xhr.send(req).then(function(contextPath) {
+    return xhr.send(req)
+    .then(function(contextPath) {
       assert.strictEqual(contextPath, 'http://127.0.0.1:1337/servlet/caldav');
     });
   });
@@ -67,7 +68,8 @@ suite('request.discovery', function() {
       server: 'http://127.0.0.1:1337'
     });
 
-    return xhr.send(req).then(function(contextPath) {
+    return xhr.send(req)
+    .then(function(contextPath) {
       assert.strictEqual(contextPath, 'http://127.0.0.1:1337/');
     });
   });

@@ -71,7 +71,8 @@ suite('put', function() {
       url: 'http://127.0.0.1:1337/'
     });
 
-    return xhr.send(req).then(function() {
+    return xhr.send(req)
+    .then(function() {
       assert.fail('request.basic should have thrown an error');
     })
     .catch(function(error) {

@@ -46,7 +46,8 @@ suite('Basic#send', function() {
       .reply(200, '200 OK');
 
     assert.notOk(nockObj.isDone());
-    xhr.send(req).then(function() {
+    xhr.send(req)
+    .then(function() {
       assert.ok(nockObj.isDone());
     });
   });
@@ -70,7 +71,8 @@ suite('Basic#send', function() {
       .get('/')
       .reply(200, '200 OK');
 
-    return xhr.send(req).then(function(value) {
+    return xhr.send(req)
+    .then(function(value) {
       assert.instanceOf(value, XMLHttpRequest);
       assert.strictEqual(value.native.readyState, 4);
     });

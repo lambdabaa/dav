@@ -48,7 +48,8 @@ suite('XMLHttpRequest#send', function() {
       .reply(500, '500 Internal Server Error');
 
     request.open('GET', 'http://127.0.0.1:1337', true);
-    return request.send().then(function() {
+    return request.send()
+    .then(function() {
       assert.fail('Did not reject promise on xhr error.');
     })
     .catch(function(error) {
@@ -64,14 +65,13 @@ suite('XMLHttpRequest#send', function() {
 
     request.timeout = 1;
     request.open('GET', 'http://127.0.0.1:1337', true);
-    return request
-      .send()
-      .then(function() {
-        assert.fail('Did not reject promise on timeout.');
-      })
-      .catch(function(error) {
-        assert.instanceOf(error, Error);
-      });
+    return request.send()
+    .then(function() {
+      assert.fail('Did not reject promise on timeout.');
+    })
+    .catch(function(error) {
+      assert.instanceOf(error, Error);
+    });
   });
 
   test('should resolve with responseText if everything ok', function() {
@@ -80,7 +80,8 @@ suite('XMLHttpRequest#send', function() {
       .reply(200, '200 OK');
 
     request.open('GET', 'http://127.0.0.1:1337', true);
-    return request.send().then(function(responseText) {
+    return request.send()
+    .then(function(responseText) {
       assert.strictEqual(responseText.trim(), '200 OK');
     });
   });

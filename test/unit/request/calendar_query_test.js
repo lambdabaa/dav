@@ -105,7 +105,8 @@ suite('request.calendarQuery', function() {
       filters: [ { type: 'comp', attrs: { name: 'VCALENDAR' } } ]
     });
 
-    return xhr.send(req).then(function(calendars) {
+    return xhr.send(req)
+    .then(function(calendars) {
       assert.lengthOf(calendars, 2);
       calendars.forEach(function(calendar) {
         assert.typeOf(calendar.href, 'string');

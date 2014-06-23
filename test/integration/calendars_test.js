@@ -70,7 +70,8 @@ suite('calendars', function() {
       'SUMMARY:Happy Hour'
     );
 
-    return dav.updateCalendarObject(object, { xhr: xhr }).then(function() {
+    return dav.updateCalendarObject(object, { xhr: xhr })
+    .then(function() {
       return dav.syncCalendar(calendar, { syncMethod: 'basic', xhr: xhr });
     })
     .then(function(calendar) {
@@ -119,7 +120,8 @@ suite('calendars', function() {
     assert.typeOf(prevSyncToken, 'string');
     assert.operator(prevSyncToken.length, '>', 0);
 
-    return dav.updateCalendarObject(object, { xhr: xhr }).then(function() {
+    return dav.updateCalendarObject(object, { xhr: xhr })
+    .then(function() {
       return dav.syncCalendar(calendar, { syncMethod: 'webdav', xhr: xhr });
     })
     .then(function(calendar) {
@@ -171,7 +173,8 @@ suite('calendars', function() {
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
     var object = objects[0];
-    return dav.deleteCalendarObject(object, { xhr: xhr }).then(function() {
+    return dav.deleteCalendarObject(object, { xhr: xhr })
+    .then(function() {
       // TODO(gareth): Once we implement incremental/webdav sync,
       //     do that here.
       return dav.createAccount({

@@ -50,7 +50,8 @@ suite('OAuth2#send', function() {
       .matchHeader('Authorization', 'Bearer sosafesosecret')
       .reply(200);
 
-    return xhr.send(req, { retry: false }).then(function(response) {
+    return xhr.send(req, { retry: false })
+    .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.ok(access.isDone(), 'should get access');
       assert.strictEqual(credentials.accessToken, 'sosafesosecret');
@@ -80,7 +81,8 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = '1/oPHTPFgECWFPrs7KgHdis24u6Xl4E4EnRrkkiwLfzdk';
     credentials.expiration = Date.now() - 1;
 
-    return xhr.send(req, { retry: false }).then(function(response) {
+    return xhr.send(req, { retry: false })
+    .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.ok(refresh.isDone(), 'should refresh');
       assert.strictEqual(credentials.accessToken, 'Little Bear');
@@ -104,7 +106,8 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = 'spicy tamales';
     var expiration = credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    return xhr.send(req, { retry: false }).then(function(response) {
+    return xhr.send(req, { retry: false })
+    .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.notOk(token.isDone(), 'should not fetch new token(s)');
       assert.strictEqual(credentials.accessToken, 'Little Bear');
@@ -139,7 +142,8 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = 'raspberry pie';
     credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    return xhr.send(req).then(function(response) {
+    return xhr.send(req)
+    .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.strictEqual(response.status, 200);
       assert.strictEqual(response.responseText, '200 OK');
