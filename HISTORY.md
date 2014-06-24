@@ -1,3 +1,7 @@
+### 1.1.1
+
++ %s/toString/jsonify/ for models
+
 ### 1.1.0
 
 + Support for rfc 6352 carddav
