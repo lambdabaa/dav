@@ -4,7 +4,7 @@ var assert = require('chai').assert,
     dav = require('../../../lib');
 
 suite('CalendarObject', function() {
-  test('#toString', function() {
+  test('#jsonify', function() {
     var server = 'http://dav.example.com',
         credentials = new dav.Credentials({
           username: 'Killer BOB',
@@ -57,7 +57,7 @@ suite('CalendarObject', function() {
 
     calendar.objects = [calendarObject];
 
-    var json = JSON.parse(calendarObject.toString());
+    var json = calendarObject.jsonify();
     assert.strictEqual(json.calendar.account.server, server);
     assert.deepEqual(json.calendar.account.credentials, {
       username: 'Killer BOB',

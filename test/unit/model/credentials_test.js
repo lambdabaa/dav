@@ -4,7 +4,7 @@ var assert = require('chai').assert,
     dav = require('../../../lib');
 
 suite('Credentials', function() {
-  test('#toString', function() {
+  test('#jsonify', function() {
     var username = 'Killer BOB',
         password = 'blacklodge';
 
@@ -14,7 +14,7 @@ suite('Credentials', function() {
     });
 
     assert.deepEqual(
-      JSON.parse(credentials.toString()),
+      credentials.jsonify(),
       {
         username: username,
         password: password

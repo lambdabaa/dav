@@ -4,7 +4,7 @@ var assert = require('chai').assert,
     dav = require('../../../lib');
 
 suite('VCard', function() {
-  test('#toString', function() {
+  test('#jsonify', function() {
     var server = 'http://dav.example.com',
         credentials = new dav.Credentials({
           username: 'Killer BOB',
@@ -48,7 +48,7 @@ suite('VCard', function() {
 
     addressBook.objects = [vcard];
 
-    var json = JSON.parse(vcard.toString());
+    var json = vcard.jsonify();
     assert.strictEqual(json.addressBook.account.server, server);
     assert.deepEqual(json.addressBook.account.credentials, {
       username: 'Killer BOB',
