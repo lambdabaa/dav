@@ -17,7 +17,7 @@ clean:
 		test/integration/server/SabreDAV/
 
 .PHONY: ci
-ci: lint test-unit test-integration coverage
+ci: test coverage
 
 .PHONY: coverage
 coverage: node_modules
@@ -33,6 +33,11 @@ lint: node_modules
 .PHONY: node_modules
 node_modules:
 	npm install
+
+# PHONY since there can be an outdated node_modules directory.
+.PHONY: node_modules_production
+node_modules_production:
+	npm install --production
 
 # IMPORTANT: Only run |make shrinkwrap| when making changes to dependencies.
 .PHONY: shrinkwrap
@@ -60,7 +65,7 @@ SabreDAV:
 	unzip -q $(SABRE_DAV_ZIPBALL)
 
 # TODO(gareth): Is there a better way to not bundle the DOMParser and XMLHttpRequest polyfills?
-dav.js: node_modules
+dav.js: node_modules_production
 	npm uninstall xmlhttprequest
 	npm uninstall xmldom
 	./node_modules/.bin/browserify \
