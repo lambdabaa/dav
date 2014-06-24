@@ -7,27 +7,33 @@ caldav and carddav client for nodejs and the browser.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [API](#api)
-  - [dav.createAccount(options)](#davcreateaccountoptions)
-  - [dav.createCalendarObject(calendar, options)](#davcreatecalendarobjectcalendar-options)
-  - [dav.updateCalendarObject(calendarObject, options)](#davupdatecalendarobjectcalendarobject-options)
-  - [dav.deleteCalendarObject(calendarObject, options)](#davdeletecalendarobjectcalendarobject-options)
-  - [dav.syncCalendar(calendar, options)](#davsynccalendarcalendar-options)
-  - [dav.createCard(addressBook, options)](#davcreatecardaddressbook-options)
-  - [dav.updateCard(card, options)](#davupdatecardcard-options)
-  - [dav.deleteCard(card, options)](#davdeletecardcard-options)
-  - [dav.syncAddressBook(addressBook, options)](#davsyncaddressbookaddressbook-options)
-  - [dav.createSandbox()](#davcreatesandbox)
-  - [dav.Credentials(options)](#davcredentialsoptions)
-  - [dav.transport.Basic(credentials)](#davtransportbasiccredentials)
-  - [dav.transport.OAuth2(credentials)](#davtransportoauth2credentials)
-  - [dav.Client(xhr)](#davclientxhr)
-- [Example Usage](#example-usage)
-- [Directory Structure](#directory-structure)
-- [Publishing a release](#publishing-a-release)
-- [Related Material](#related-material)
+- [Usage](#usage)
+  - [API](#api)
+    - [dav.createAccount(options)](#davcreateaccountoptions)
+    - [dav.createCalendarObject(calendar, options)](#davcreatecalendarobjectcalendar-options)
+    - [dav.updateCalendarObject(calendarObject, options)](#davupdatecalendarobjectcalendarobject-options)
+    - [dav.deleteCalendarObject(calendarObject, options)](#davdeletecalendarobjectcalendarobject-options)
+    - [dav.syncCalendar(calendar, options)](#davsynccalendarcalendar-options)
+    - [dav.createCard(addressBook, options)](#davcreatecardaddressbook-options)
+    - [dav.updateCard(card, options)](#davupdatecardcard-options)
+    - [dav.deleteCard(card, options)](#davdeletecardcard-options)
+    - [dav.syncAddressBook(addressBook, options)](#davsyncaddressbookaddressbook-options)
+    - [dav.createSandbox()](#davcreatesandbox)
+    - [dav.Credentials(options)](#davcredentialsoptions)
+    - [dav.transport.Basic(credentials)](#davtransportbasiccredentials)
+    - [dav.transport.OAuth2(credentials)](#davtransportoauth2credentials)
+    - [dav.Client(xhr)](#davclientxhr)
+  - [Example Usage](#example-usage)
+- [Contributing](#contributing)
+  - [Directory Structure](#directory-structure)
+  - [Under the hood](#under-the-hood)
+  - [Running the tests](#running-the-tests)
+  - [Publishing a release](#publishing-a-release)
+  - [Related Material](#related-material)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Usage
 
 ### API
 
@@ -234,19 +240,34 @@ var xhr = new dav.transport.Basic(
   })
 );
 
-dav.createAccount({
-  server: 'http://dav.example.com',
-  xhr: xhr
-})
+dav.createAccount({ server: 'http://dav.example.com', xhr: xhr })
 .then(function(account) {
   // account instanceof dav.Account
   account.calendars.forEach(function(calendar) {
     console.log('Found calendar named ' + calendar.displayName);
+    // etc.
+  });
+});
+
+// Or, using the dav.Client interface:
+
+var client = new dav.Client(xhr);
+// No transport arg
+client.createAccount({
+  server: 'http://dav.example.com,
+  accountType: 'carddav'
+})
+.then(function(account) {
+  account.addressBooks.forEach(function(addressBook) {
+    console.log('Found address book name ' + addressBook.displayName);
+    // etc.
   });
 });
 ```
 
 For more example usages, check out the [suite of integration tests](https://github.com/gaye/dav/tree/master/test/integration).
+
+## Contributing
 
 ### Directory Structure
 
@@ -270,18 +291,49 @@ test/unit/template/          # Test cases for xml templating helpers
 test/unit/transport/         # Test cases for authorizing and issuing requests
 ```
 
+### Under the hood
+
+dav uses npm to manage external dependencies. External npm modules get bundled into the browser js binary with the (excellent) [browserify](http://browserify.org/) utility. dav uses the `DOMParser` and `XMLHttpRequest` web apis (to parse xml and send http requests). All of the async library operations use es6 [Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+
+### Running the tests
+
+```
+///////////////////////////////////////
+/ suite       / command               /
+///////////////////////////////////////
+/ integration / make test-integration /
+///////////////////////////////////////
+/ lint        / make lint             /
+///////////////////////////////////////
+/ unit        / make test-unit        /
+///////////////////////////////////////
+```
+
+Things to note:
+
++ As of 1.1.1, all of the tests run dav via nodejs. There are no browser tests (yet).
++ You can add helpful debug logs to test output with the `DEBUG` environment variable.
+  + Filter logs by setting `DEBUG=dav:*`, `DEBUG=dav:request:*`, etc.
++ Integration tests run against [sabredav](http://sabre.io/)
+  + The server code lives [here](https://github.com/gaye/dav/blob/master/test/integration/server/calendarserver.php)
+  + There is a make task which downloads a sabredav release from GitHub that `make test-integration` depends on
+  + The sabredav instance uses sqlite to store dav collections and objects among other things.
+    + The code that seeds the database lives [here](https://github.com/gaye/dav/blob/master/test/integration/server/bootstrap.js)
+
 ### Publishing a release
 
-1. Update `package.json` to reflect the new version.
+1. Update `package.json` to reflect the new version. Use [semver](http://semver.org/) to help decide what new version number is best.
 2. Run `make shrinkwrap` to write changes to `package.json` through npm shrinkwrap.
 3. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset.
 4. Commit the changes to `package.json`, `npm-shrinkwrap.json`, and `HISTORY.md`. Push to GitHub.
 5. Run `make clean && make` to generate the build outputs.
-6. Create a new GitHub release named `v.{x}.{y}.{z}` with a description of the changeset. Upload the freshly generated zipball.
+6. Create a new GitHub release named `v.{MAJOR}.{MINOR}.{PATCH}` with a description of the changeset. Upload the freshly generated zipball.
 7. Run `npm publish`.
+8. Write the updated binaries through [dav-bower](https://github.com/gaye/dav-bower) with a new git tag `v.{MAJOR}.{MINOR}.{PATCH}`.
 
 ### Related Material
 
++ [Amazing webdav docs](http://sabre.io/dav/)
 + [RFC 4791](http://tools.ietf.org/html/rfc4791)
 + [RFC 5545](http://tools.ietf.org/html/rfc5545)
 + [RFC 6352](http://tools.ietf.org/html/rfc6352)
