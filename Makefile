@@ -59,6 +59,7 @@ test-integration: node_modules test/integration/server/SabreDAV
 .PHONY: toc
 toc: node_modules
 	./node_modules/.bin/doctoc README.md
+	./node_modules/.bin/doctoc CONTRIBUTING.md
 
 SabreDAV:
 	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
