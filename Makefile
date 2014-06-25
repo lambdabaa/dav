@@ -62,12 +62,8 @@ SabreDAV:
 	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
 	unzip -q $(SABRE_DAV_ZIPBALL)
 
-# TODO(gareth): Is there a better way to not bundle the DOMParser and XMLHttpRequest polyfills?
 dav.js: node_modules
-	npm uninstall xmlhttprequest
-	npm uninstall xmldom
 	./node_modules/.bin/browserify \
-		--ignore-missing \
 		--standalone dav \
 		--transform brfs \
 		./lib/index.js > ./dav.js
