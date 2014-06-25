@@ -248,7 +248,7 @@ dav.createAccount({ server: 'http://dav.example.com', xhr: xhr })
 var client = new dav.Client(xhr);
 // No transport arg
 client.createAccount({
-  server: 'http://dav.example.com,
+  server: 'http://dav.example.com',
   accountType: 'carddav'
 })
 .then(function(account) {
