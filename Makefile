@@ -35,10 +35,6 @@ node_modules:
 	npm install
 
 # PHONY since there can be an outdated node_modules directory.
-.PHONY: node_modules_production
-node_modules_production:
-	npm install --production
-
 # IMPORTANT: Only run |make shrinkwrap| when making changes to dependencies.
 .PHONY: shrinkwrap
 shrinkwrap: node_modules
@@ -66,7 +62,7 @@ SabreDAV:
 	unzip -q $(SABRE_DAV_ZIPBALL)
 
 # TODO(gareth): Is there a better way to not bundle the DOMParser and XMLHttpRequest polyfills?
-dav.js: node_modules_production
+dav.js: node_modules
 	npm uninstall xmlhttprequest
 	npm uninstall xmldom
 	./node_modules/.bin/browserify \
