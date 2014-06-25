@@ -1,3 +1,34 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [1.1.1](#111)
+- [1.1.0](#110)
+- [1.0.4](#104)
+- [1.0.3](#103)
+- [1.0.2](#102)
+- [1.0.1](#101)
+- [1.0.0](#100)
+- [0.11.0](#0110)
+- [0.10.1](#0101)
+- [0.10.0](#0100)
+- [0.9.3](#093)
+- [0.9.2](#092)
+- [0.9.1](#091)
+- [0.9.0](#090)
+- [0.8.0](#080)
+- [0.7.1](#071)
+- [0.7.0](#070)
+- [0.6.0](#060)
+- [0.5.0](#050)
+- [0.4.0](#040)
+- [0.3.1](#031)
+- [0.3.0](#030)
+- [0.2.0](#020)
+- [0.1.0](#010)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ### 1.1.1
 
 + %s/toString/jsonify/ for models
