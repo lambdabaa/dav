@@ -3,6 +3,8 @@ dav [![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://
 
 caldav and carddav client for nodejs and the browser.
 
+[![NPM](https://nodei.co/npm/dav.png?compact=true)](https://www.npmjs.org/package/dav)
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
