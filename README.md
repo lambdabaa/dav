@@ -38,7 +38,7 @@ caldav and carddav client for nodejs and the browser.
     - [dav.Client(xhr, options)](#davclientxhr-options)
       - [dav.Client#send(req, options)](#davclient#sendreq-options)
   - [Example Usage](#example-usage)
-    - [Using the lower-level api](#using-the-lower-level-api)
+    - [Using the lower-level webdav request api](#using-the-lower-level-webdav-request-api)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -371,7 +371,7 @@ client.createAccount({
 });
 ```
 
-#### Using the lower-level api
+#### Using the lower-level webdav request api
 
 ```
 var dav = require('dav');
