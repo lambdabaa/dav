@@ -7,29 +7,44 @@ caldav and carddav client for nodejs and the browser.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [Usage](#usage)
-  - [API](#api)
+- [API](#api)
+  - [accounts](#accounts)
     - [dav.createAccount(options)](#davcreateaccountoptions)
+  - [calendars](#calendars)
     - [dav.createCalendarObject(calendar, options)](#davcreatecalendarobjectcalendar-options)
     - [dav.updateCalendarObject(calendarObject, options)](#davupdatecalendarobjectcalendarobject-options)
     - [dav.deleteCalendarObject(calendarObject, options)](#davdeletecalendarobjectcalendarobject-options)
     - [dav.syncCalendar(calendar, options)](#davsynccalendarcalendar-options)
+  - [contacts](#contacts)
     - [dav.createCard(addressBook, options)](#davcreatecardaddressbook-options)
     - [dav.updateCard(card, options)](#davupdatecardcard-options)
     - [dav.deleteCard(card, options)](#davdeletecardcard-options)
     - [dav.syncAddressBook(addressBook, options)](#davsyncaddressbookaddressbook-options)
+  - [sandbox](#sandbox)
     - [dav.createSandbox()](#davcreatesandbox)
-    - [dav.Credentials(options)](#davcredentialsoptions)
+  - [transport](#transport)
     - [dav.transport.Basic(credentials)](#davtransportbasiccredentials)
+      - [dav.transport.Basic#send(request, options)](#davtransportbasic#sendrequest-options)
     - [dav.transport.OAuth2(credentials)](#davtransportoauth2credentials)
-    - [dav.Client(xhr)](#davclientxhr)
+      - [dav.transport.OAuth2#send(request, options)](#davtransportoauth2#sendrequest-options)
+  - [request](#request)
+    - [dav.request.addressBookQuery(options)](#davrequestaddressbookqueryoptions)
+    - [dav.request.basic(options)](#davrequestbasicoptions)
+    - [dav.request.calendarQuery(options)](#davrequestcalendarqueryoptions)
+    - [dav.request.discovery(options)](#davrequestdiscoveryoptions)
+    - [dav.request.propfind(options)](#davrequestpropfindoptions)
+    - [dav.request.syncCollection(options)](#davrequestsynccollectionoptions)
+  - [Client](#client)
+    - [dav.Client(xhr, options)](#davclientxhr-options)
+      - [dav.Client#send(req, options)](#davclient#sendreq-options)
   - [Example Usage](#example-usage)
+    - [Using the lower-level api](#using-the-lower-level-api)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Usage
+## API
 
-### API
+### accounts
 
 #### dav.createAccount(options)
 
@@ -45,6 +60,8 @@ Options:
   (String) timezone - VTIMEZONE calendar object.
   (dav.Transport) xhr - request sender.
 ```
+
+### calendars
 
 #### dav.createCalendarObject(calendar, options)
 
@@ -105,6 +122,8 @@ Options:
   (dav.Transport) xhr - request sender.
 ```
 
+### contacts
+
 #### dav.createCard(addressBook, options)
 
 Create a vcard object on the parameter address book. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled when the vcard has been created.
@@ -162,6 +181,7 @@ Options:
   (dav.Transport) xhr - request sender.
 ```
 
+### sandbox
 
 #### dav.createSandbox()
 
@@ -180,23 +200,7 @@ dav.createAccount({
 ```
 And abort sandboxed requests as a group with `sandbox.abort()`.
 
-#### dav.Credentials(options)
-
-Create a new `dav.Credentials` object. This is a union of various authentication details needed to sign requests.
-
-```
-Options:
-  (String) username - username (perhaps email) for calendar user.
-  (String) password - plaintext password for calendar user.
-  (String) clientId - oauth client id.
-  (String) clientSecret - oauth client secret.
-  (String) authorizationCode - oauth code.
-  (String) redirectUrl - oauth redirect url.
-  (String) tokenUrl - oauth token url.
-  (String) accessToken - oauth access token.
-  (String) refreshToken - oauth refresh token.
-  (Number) expiration - unix time for access token expiration.
-```
+### transport
 
 #### dav.transport.Basic(credentials)
 
@@ -204,6 +208,17 @@ Create a new `dav.transport.Basic` object. This sends dav requests using http ba
 
 ```
 @param {dav.Credentials} credentials user authorization.
+```
+
+##### dav.transport.Basic#send(request, options)
+
+```
+@param {dav.Request} request object with request info.
+@return {Promise} a promise that will be resolved with an xhr request after its readyState is 4 or the result of applying an optional request `transformResponse` function to the xhr object after its readyState is 4.
+
+Options:
+
+  (Object) sandbox - optional request sandbox.
 ```
 
 #### dav.transport.OAuth2(credentials)
@@ -214,12 +229,109 @@ Create a new `dav.transport.OAuth2` object. This sends dav requests authorized v
 @param {dav.Credentials} credentials user authorization.
 ```
 
-#### dav.Client(xhr)
+##### dav.transport.OAuth2#send(request, options)
+
+```
+@param {dav.Request} request object with request info.
+@return {Promise} a promise that will be resolved with an xhr request after its readyState is 4 or the result of applying an optional request `transformResponse` function to the xhr object after its readyState is 4.
+
+Options:
+
+  (Object) sandbox - optional request sandbox.
+```
+
+### request
+
+#### dav.request.addressBookQuery(options)
+
+```
+Options:
+
+  (String) depth - optional value for Depth header.
+  (Array.<Object>) props - list of props to request.
+  (String) url - endpoint to request.
+```
+
+#### dav.request.basic(options)
+
+```
+Options:
+
+  (String) data - put request body.
+  (String) method - http method.
+  (String) etag - cached calendar object etag.
+  (String) url - endpoint to request.
+```
+
+#### dav.request.calendarQuery(options)
+
+```
+Options:
+
+  (String) depth - optional value for Depth header.
+  (Array.<Object>) filters - list of filters to send with request.
+  (Array.<Object>) props - list of props to request.
+  (String) timezone - VTIMEZONE calendar object.
+  (String) url - endpoint to request.
+```
+
+#### dav.request.discovery(options)
+
+```
+Options:
+
+  (String) bootstrap - one of 'caldav' or 'carddav'. Defaults to 'caldav'.
+  (String) server - url for calendar server.
+```
+
+#### dav.request.propfind(options)
+
+```
+Options:
+
+  (String) depth - optional value for Depth header.
+  (Array.<Object>) props - list of props to request.
+  (String) url - endpoint to request.
+```
+
+#### dav.request.syncCollection(options)
+
+```
+Options:
+
+  (String) depth - option value for Depth header.
+  (Array.<Object>) props - list of props to request.
+  (Number) syncLevel - indicates scope of the sync report request.
+  (String) syncToken - synchronization token provided by the server.
+  (String) url - endpoint to request.
+```
+
+### Client
+
+#### dav.Client(xhr, options)
 
 Create a new `dav.Client` object. The client interface allows consumers to set their credentials and transport once and then make authorized requests without passing them to each request. Each of the other, public API methods should be available on `dav.Client` objects.
 
 ```
 @param {dav.Transport} xhr - request sender.
+
+Options:
+
+  (String) baseUrl - root url to resolve relative request urls with.
+```
+
+##### dav.Client#send(req, options)
+
+Send a request using this client's transport (and perhaps baseUrl).
+
+```
+@param {dav.request.Request} req - dav request.
+@return {Promise} a promise that will be resolved with an xhr request after its readyState is 4 or the result of applying an optional request `transformResponse` function to the xhr object after its readyState is 4.
+
+Options:
+
+  (Object) sandbox - optional request sandbox.
+  (String) url - relative url for request.
 ```
 
 ### Example Usage
@@ -256,6 +368,60 @@ client.createAccount({
     console.log('Found address book name ' + addressBook.displayName);
     // etc.
   });
+});
+```
+
+#### Using the lower-level api
+
+```
+var dav = require('dav');
+
+var client = new dav.Client(
+  new dav.transport.Basic(
+    new dav.Credentials({
+      username: 'xxx',
+      password: 'xxx'
+    })
+  ),
+  {
+    baseUrl: 'https://mail.mozilla.com'
+  }
+);
+
+var req = dav.request.basic({
+  method: 'PUT',
+  data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
+  etag: '12345'
+});
+
+client.send(req, { url: '/calendars/123.ics' })
+.then(function(response) {
+  // response instanceof XMLHttpRequest
+});
+```
+
+Or perhaps without the client:
+
+```
+var dav = require('dav');
+
+var xhr = new dav.transport.Basic(
+  new dav.Credentials({
+    username: 'xxx',
+    password: 'xxx'
+  })
+);
+
+var req = dav.request.basic({
+  method: 'PUT',
+  data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
+  etag: '12345',
+  url: 'https://mail.mozilla.com/calendars/123.ics'
+});
+
+xhr.send(req)
+.then(function(response) {
+  // response instanceof XMLHttpRequest
 });
 ```
 

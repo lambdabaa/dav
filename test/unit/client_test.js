@@ -1,10 +1,11 @@
 'use strict';
 
-var dav = require('../../lib'),
+var assert = require('chai').assert,
+    dav = require('../../lib'),
     sinon = require('sinon');
 
 suite('Client', function() {
-  var client, xhr;
+  var client, xhr, send;
 
   setup(function() {
     xhr = new dav.transport.Basic(
@@ -14,7 +15,36 @@ suite('Client', function() {
       })
     );
 
-    client = new dav.Client(xhr);
+    send = sinon.stub(xhr, 'send');
+    client = new dav.Client(xhr, { baseUrl: 'https://mail.mozilla.com' });
+  });
+
+  teardown(function() {
+    send.restore();
+  });
+
+  test('#send', function() {
+    var req = dav.request.basic({
+      method: 'PUT',
+      data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
+      etag: 'abc123',
+      url: 'https://mail.mozilla.com'
+    });
+
+    var sandbox = dav.createSandbox();
+    client.send(req, { sandbox: sandbox });
+    sinon.assert.calledWith(send, req, { sandbox: sandbox });
+  });
+
+  test('#send with relative url', function() {
+    var req = dav.request.basic({
+      method: 'PUT',
+      data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
+      etag: 'abc123'
+    });
+
+    client.send(req, { url: '/calendars/123.ics' });
+    assert.strictEqual(req.url, 'https://mail.mozilla.com/calendars/123.ics');
   });
 
   suite('accounts', function() {
