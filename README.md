@@ -3,7 +3,7 @@ dav [![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://
 
 WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
 
-[![NPM](https://nodei.co/npm/dav.png?compact=true)](https://www.npmjs.org/package/dav)
+[![NPM](https://nodei.co/npm/dav.png?compact=true)](https://nodei.co/npm/dav)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
