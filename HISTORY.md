@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.4.1](#141)
 - [1.4.0](#140)
 - [1.3.0](#130)
 - [1.2.0](#120)
@@ -32,6 +33,10 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.4.1
+
++ Add missing use strict statement to lib/index.js
 
 ### 1.4.0
 
