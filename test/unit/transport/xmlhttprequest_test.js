@@ -2,7 +2,7 @@
 
 var XMLHttpRequest = require('../../../lib/transport/xmlhttprequest'),
     assert = require('chai').assert,
-    createSandbox = require('../../../lib/sandbox'),
+    createSandbox = require('../../../lib').createSandbox,
     nock = require('nock'),
     sinon = require('sinon');
 

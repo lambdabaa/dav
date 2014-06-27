@@ -21,7 +21,7 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
     - [dav.deleteCard(card, options)](#davdeletecardcard-options)
     - [dav.syncAddressBook(addressBook, options)](#davsyncaddressbookaddressbook-options)
   - [sandbox](#sandbox)
-    - [dav.createSandbox()](#davcreatesandbox)
+    - [dav.Sandbox()](#davsandbox)
   - [transport](#transport)
     - [dav.transport.Basic(credentials)](#davtransportbasiccredentials)
       - [dav.transport.Basic.send(request, options)](#davtransportbasicsendrequest-options)
@@ -55,7 +55,7 @@ Options:
 
   (String) accountType - one of 'caldav' or 'carddav'. Defaults to 'caldav'.
   (Array.<Object>) filters - list of caldav filters to send with request.
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (String) server - some url for server (needn't be base url).
   (String) timezone - VTIMEZONE calendar object.
   (dav.Transport) xhr - request sender.
@@ -74,7 +74,7 @@ Options:
 
   (String) data - rfc 5545 VCALENDAR object.
   (String) filename - name for the calendar ics file.
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (dav.Transport) xhr - request sender.
 ```
 
@@ -87,7 +87,7 @@ Persist updates to the parameter calendar object to the server. Returns a [Promi
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (dav.Transport) xhr - request sender.
 ```
 
@@ -100,7 +100,7 @@ Delete the parameter calendar object on the server. Returns a [Promise](https://
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (dav.Transport) xhr - request sender.
 ```
 
@@ -114,7 +114,7 @@ Fetch changes from the remote server to the parameter calendar. Returns a [Promi
 Options:
 
   (Array.<Object>) filters - list of caldav filters to send with request.
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
       try to do webdav sync and failover to basic sync if rfc 6578 is not
       supported by the server.
@@ -135,7 +135,7 @@ Options:
 
   (String) data - VCARD object.
   (String) filename - name for the vcard vcf file.
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (dav.Transport) xhr - request sender.
 ```
 
@@ -148,7 +148,7 @@ Persist updates to the parameter vcard object to the server. Returns a [Promise]
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (dav.Transport) xhr - request sender.
 ```
 
@@ -161,7 +161,7 @@ Delete the parameter vcard object on the server. Returns a [Promise](https://dev
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (dav.Transport) xhr - request sender.
 ```
 
@@ -174,7 +174,7 @@ Fetch changes from the remote server to the parameter address books. Returns a [
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
       try to do webdav sync and failover to basic sync if rfc 6578 is not
       supported by the server.
@@ -183,12 +183,14 @@ Options:
 
 ### sandbox
 
-#### dav.createSandbox()
+#### dav.Sandbox()
 
-Create a request sandbox. Add requests to the sandbox like so:
+Create a request sandbox. There is also a deprecated interface
+`dav.createSandbox()`. Add requests to the sandbox like so:
 
 ```js
-var sandbox = dav.createSandbox();
+var sandbox = new dav.Sandbox();
+// sandbox instanceof Sandbox
 dav.createAccount({
   username: 'Yoshi',
   password: 'babybowsersoscaryomg',
@@ -219,7 +221,7 @@ Create a new `dav.transport.Basic` object. This sends dav requests using http ba
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
 ```
 
 #### dav.transport.OAuth2(credentials)
@@ -238,7 +240,7 @@ Create a new `dav.transport.OAuth2` object. This sends dav requests authorized v
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
 ```
 
 ### request
@@ -331,7 +333,7 @@ Send a request using this client's transport (and perhaps baseUrl).
 
 Options:
 
-  (Object) sandbox - optional request sandbox.
+  (dav.Sandbox) sandbox - optional request sandbox.
   (String) url - relative url for request.
 ```
 
