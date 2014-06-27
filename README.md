@@ -397,6 +397,8 @@ var req = dav.request.basic({
   etag: '12345'
 });
 
+// req instanceof dav.Request
+
 client.send(req, { url: '/calendars/123.ics' })
 .then(function(response) {
   // response instanceof XMLHttpRequest
@@ -415,12 +417,16 @@ var xhr = new dav.transport.Basic(
   })
 );
 
+// xhr instanceof dav.Transport
+
 var req = dav.request.basic({
   method: 'PUT',
   data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
   etag: '12345',
   url: 'https://mail.mozilla.com/calendars/123.ics'
 });
+
+// req instanceof dav.Request
 
 xhr.send(req)
 .then(function(response) {
