@@ -2,7 +2,7 @@
   "name": "dav",
   "version": "1.2.0",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
-  "description": "caldav and carddav client for nodejs and the browser",
+  "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
   "main": "./lib/index",
 
