@@ -196,7 +196,8 @@ dav.createAccount({
   password: 'babybowsersoscaryomg',
   server: 'https://caldav.yoshisstory.com',
   sandbox: sandbox  // <- Insert sandbox here!
-}).then(function(calendars) {
+})
+.then(function(calendars) {
   // etc, etc.
 });
 ```
