@@ -26,9 +26,9 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
     - [dav.createSandbox()](#davcreatesandbox)
   - [transport](#transport)
     - [dav.transport.Basic(credentials)](#davtransportbasiccredentials)
-      - [dav.transport.Basic#send(request, options)](#davtransportbasic#sendrequest-options)
+      - [dav.transport.Basic.send(request, options)](#davtransportbasicsendrequest-options)
     - [dav.transport.OAuth2(credentials)](#davtransportoauth2credentials)
-      - [dav.transport.OAuth2#send(request, options)](#davtransportoauth2#sendrequest-options)
+      - [dav.transport.OAuth2.send(request, options)](#davtransportoauth2sendrequest-options)
   - [request](#request)
     - [dav.request.addressBookQuery(options)](#davrequestaddressbookqueryoptions)
     - [dav.request.basic(options)](#davrequestbasicoptions)
@@ -38,7 +38,7 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
     - [dav.request.syncCollection(options)](#davrequestsynccollectionoptions)
   - [Client](#client)
     - [dav.Client(xhr, options)](#davclientxhr-options)
-      - [dav.Client#send(req, options)](#davclient#sendreq-options)
+      - [dav.Client.send(req, options)](#davclientsendreq-options)
   - [Example Usage](#example-usage)
     - [Using the lower-level webdav request api](#using-the-lower-level-webdav-request-api)
 
@@ -212,7 +212,7 @@ Create a new `dav.transport.Basic` object. This sends dav requests using http ba
 @param {dav.Credentials} credentials user authorization.
 ```
 
-##### dav.transport.Basic#send(request, options)
+##### dav.transport.Basic.send(request, options)
 
 ```
 @param {dav.Request} request object with request info.
@@ -231,7 +231,7 @@ Create a new `dav.transport.OAuth2` object. This sends dav requests authorized v
 @param {dav.Credentials} credentials user authorization.
 ```
 
-##### dav.transport.OAuth2#send(request, options)
+##### dav.transport.OAuth2.send(request, options)
 
 ```
 @param {dav.Request} request object with request info.
@@ -322,7 +322,7 @@ Options:
   (String) baseUrl - root url to resolve relative request urls with.
 ```
 
-##### dav.Client#send(req, options)
+##### dav.Client.send(req, options)
 
 Send a request using this client's transport (and perhaps baseUrl).
 
