@@ -1,7 +1,7 @@
 dav [![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://travis-ci.org/gaye/dav) [![Coverage Status](https://img.shields.io/coveralls/gaye/dav.svg)](https://coveralls.io/r/gaye/dav)
 =========
 
-caldav and carddav client for nodejs and the browser.
+WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
 
 [![NPM](https://nodei.co/npm/dav.png?compact=true)](https://www.npmjs.org/package/dav)
 
