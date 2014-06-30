@@ -252,7 +252,6 @@ Options:
 
   (String) depth - optional value for Depth header.
   (Array.<Object>) props - list of props to request.
-  (String) url - endpoint to request.
 ```
 
 #### dav.request.basic(options)
@@ -263,7 +262,6 @@ Options:
   (String) data - put request body.
   (String) method - http method.
   (String) etag - cached calendar object etag.
-  (String) url - endpoint to request.
 ```
 
 #### dav.request.calendarQuery(options)
@@ -275,16 +273,6 @@ Options:
   (Array.<Object>) filters - list of filters to send with request.
   (Array.<Object>) props - list of props to request.
   (String) timezone - VTIMEZONE calendar object.
-  (String) url - endpoint to request.
-```
-
-#### dav.request.discovery(options)
-
-```
-Options:
-
-  (String) bootstrap - one of 'caldav' or 'carddav'. Defaults to 'caldav'.
-  (String) server - url for calendar server.
 ```
 
 #### dav.request.propfind(options)
@@ -294,7 +282,6 @@ Options:
 
   (String) depth - optional value for Depth header.
   (Array.<Object>) props - list of props to request.
-  (String) url - endpoint to request.
 ```
 
 #### dav.request.syncCollection(options)
@@ -306,7 +293,6 @@ Options:
   (Array.<Object>) props - list of props to request.
   (Number) syncLevel - indicates scope of the sync report request.
   (String) syncToken - synchronization token provided by the server.
-  (String) url - endpoint to request.
 ```
 
 ### Client
@@ -376,6 +362,8 @@ client.createAccount({
 
 #### Using the lower-level webdav request api
 
+_Caution_: The lower-level request api is undergoing some _major_ reworking with frequent changes which will break consumers upgrading from earlier versions. If you're looking for a stable api and can live with the higher-level CalDAV and/or CardDAV abstractions, I _strongly_ recommend those since that api is largely stable.
+
 ```
 var dav = require('dav');
 
@@ -399,7 +387,7 @@ var req = dav.request.basic({
 
 // req instanceof dav.Request
 
-client.send(req, { url: '/calendars/123.ics' })
+client.send(req, '/calendars/123.ics')
 .then(function(response) {
   // response instanceof XMLHttpRequest
 });
@@ -422,13 +410,12 @@ var xhr = new dav.transport.Basic(
 var req = dav.request.basic({
   method: 'PUT',
   data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
-  etag: '12345',
-  url: 'https://mail.mozilla.com/calendars/123.ics'
+  etag: '12345'
 });
 
 // req instanceof dav.Request
 
-xhr.send(req)
+xhr.send(req, 'https://mail.mozilla.com/calendars/123.ics')
 .then(function(response) {
   // response instanceof XMLHttpRequest
 });

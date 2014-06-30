@@ -22,7 +22,6 @@ suite('request.propfind', function() {
   test('should return request.Request', function() {
     assert.instanceOf(
       request.propfind({
-        url: 'http://127.0.0.1:1337/',
         props: [ { name: 'catdog', namespace: namespace.DAV } ],
         depth: '0'
       }),
@@ -37,12 +36,14 @@ suite('request.propfind', function() {
       .reply(200);
 
     var req = request.propfind({
-      url: 'http://127.0.0.1:1337/',
       props: [ { name: 'catdog', namespace: namespace.DAV } ],
       depth: '0'
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337'),
+      mock
+    );
   });
 
   test('should add specified properties to propfind body', function() {
@@ -52,12 +53,11 @@ suite('request.propfind', function() {
     });
 
     var req = request.propfind({
-      url: 'http://127.0.0.1:1337/',
       props: [ { name: 'catdog', namespace: namespace.DAV } ],
       depth: '0'
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
   });
 
   test('should resolve with appropriate data structure', function() {
@@ -66,7 +66,6 @@ suite('request.propfind', function() {
       .reply(200, data.propfind);
 
     var req = request.propfind({
-      url: 'http://127.0.0.1:1337/',
       props: [
         { name: 'displayname', namespace: namespace.DAV },
         { name: 'getctag', namespace: namespace.CALENDAR_SERVER },
@@ -78,7 +77,7 @@ suite('request.propfind', function() {
       depth: 1
     });
 
-    return xhr.send(req)
+    return xhr.send(req, 'http://127.0.0.1:1337/')
     .then(function(responses) {
       assert.isArray(responses);
       responses.forEach(function(response) {

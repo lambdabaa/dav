@@ -21,7 +21,6 @@ suite('request.syncCollection', function() {
   test('should return request.Request', function() {
     assert.instanceOf(
       request.syncCollection({
-        url: 'http://127.0.0.1:1337/principals/admin/default',
         syncLevel: 1,
         syncToken: 'abc123',
         props: [
@@ -45,7 +44,6 @@ suite('request.syncCollection', function() {
     );
 
     var req = request.syncCollection({
-      url: 'http://127.0.0.1:1337/principals/admin/default/',
       syncLevel: 1,
       syncToken: 'abc123',
       props: [
@@ -54,7 +52,10 @@ suite('request.syncCollection', function() {
       ]
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/default/'),
+      mock
+    );
   });
 
   test('should set sync details in request body', function() {
@@ -69,7 +70,6 @@ suite('request.syncCollection', function() {
     );
 
     var req = request.syncCollection({
-      url: 'http://127.0.0.1:1337/principals/admin/default/',
       syncLevel: 1,
       syncToken: 'abc123',
       props: [
@@ -78,6 +78,9 @@ suite('request.syncCollection', function() {
       ]
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/default/'),
+      mock
+    );
   });
 });

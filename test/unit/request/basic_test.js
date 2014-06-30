@@ -21,7 +21,6 @@ suite('put', function() {
     assert.instanceOf(
       request.basic({
         method: 'PUT',
-        url: 'http://127.0.0.1:1337/',
         username: 'abc',
         password: '123',
         data: 'yoyoma'
@@ -38,11 +37,10 @@ suite('put', function() {
 
     var req = request.basic({
       method: 'PUT',
-      url: 'http://127.0.0.1:1337',
       etag: '1337'
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
   });
 
   test('should send options data as request body', function() {
@@ -53,11 +51,10 @@ suite('put', function() {
 
     var req = request.basic({
       method: 'PUT',
-      url: 'http://127.0.0.1:1337/',
       data: 'Bad hair day!'
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
   });
 
   test('should throw error on bad response', function() {
@@ -66,12 +63,9 @@ suite('put', function() {
       .delay(1)
       .reply('400', '400 Bad Request');
 
-    var req = request.basic({
-      method: 'PUT',
-      url: 'http://127.0.0.1:1337/'
-    });
+    var req = request.basic({ method: 'PUT' });
 
-    return xhr.send(req)
+    return xhr.send(req, 'http://127.0.0.1:1337')
     .then(function() {
       assert.fail('request.basic should have thrown an error');
     })

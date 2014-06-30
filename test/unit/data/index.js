@@ -5,6 +5,7 @@ var camelize = require('../../../lib/camelize'),
     fs = require('fs');
 
 [
+  'address_book_query',
   'current_user_principal',
   'calendar_query',
   'propfind',

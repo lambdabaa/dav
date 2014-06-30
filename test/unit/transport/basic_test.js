@@ -18,7 +18,6 @@ suite('Basic#send', function() {
 
     req = {
       method: 'GET',
-      url: 'http://127.0.0.1:1337/',
       transformRequest: function() {}
     };
   });
@@ -30,13 +29,13 @@ suite('Basic#send', function() {
   test('should sandbox xhr', function() {
     var sandbox = createSandbox();
     assert.lengthOf(sandbox.requestList, 0);
-    xhr.send(req, { sandbox: sandbox });
+    xhr.send(req, 'http://127.0.0.1:1337', { sandbox: sandbox });
     assert.lengthOf(sandbox.requestList, 1);
   });
 
   test('should apply `transformRequest`', function() {
     var stub = sinon.stub(req, 'transformRequest');
-    xhr.send(req);
+    xhr.send(req, 'http://127.0.0.1:1337');
     sinon.assert.called(stub);
   });
 
@@ -46,7 +45,7 @@ suite('Basic#send', function() {
       .reply(200, '200 OK');
 
     assert.notOk(nockObj.isDone());
-    xhr.send(req)
+    xhr.send(req, 'http://127.0.0.1:1337')
     .then(function() {
       assert.ok(nockObj.isDone());
     });
@@ -63,7 +62,7 @@ suite('Basic#send', function() {
       done();
     };
 
-    xhr.send(req);
+    xhr.send(req, 'http://127.0.0.1:1337');
   });
 
   test('should return promise that resolves with xhr', function() {
@@ -71,7 +70,7 @@ suite('Basic#send', function() {
       .get('/')
       .reply(200, '200 OK');
 
-    return xhr.send(req)
+    return xhr.send(req, 'http://127.0.0.1:1337')
     .then(function(value) {
       assert.instanceOf(value, XMLHttpRequest);
       assert.strictEqual(value.native.readyState, 4);

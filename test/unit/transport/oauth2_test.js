@@ -23,10 +23,7 @@ suite('OAuth2#send', function() {
 
     xhr = new transport.OAuth2(credentials);
 
-    req = {
-      method: 'GET',
-      url: 'http://127.0.0.1:1337/'
-    };
+    req = { method: 'GET' };
   });
 
   teardown(function() {
@@ -50,7 +47,7 @@ suite('OAuth2#send', function() {
       .matchHeader('Authorization', 'Bearer sosafesosecret')
       .reply(200);
 
-    return xhr.send(req, { retry: false })
+    return xhr.send(req, 'http://127.0.0.1:1337', { retry: false })
     .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.ok(access.isDone(), 'should get access');
@@ -81,7 +78,7 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = '1/oPHTPFgECWFPrs7KgHdis24u6Xl4E4EnRrkkiwLfzdk';
     credentials.expiration = Date.now() - 1;
 
-    return xhr.send(req, { retry: false })
+    return xhr.send(req, 'http://127.0.0.1:1337', { retry: false })
     .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.ok(refresh.isDone(), 'should refresh');
@@ -106,7 +103,7 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = 'spicy tamales';
     var expiration = credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    return xhr.send(req, { retry: false })
+    return xhr.send(req, 'http://127.0.0.1:1337', { retry: false })
     .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.notOk(token.isDone(), 'should not fetch new token(s)');
@@ -142,7 +139,7 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = 'raspberry pie';
     credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    return xhr.send(req)
+    return xhr.send(req, 'http://127.0.0.1:1337')
     .then(function(response) {
       assert.instanceOf(response, XMLHttpRequest);
       assert.strictEqual(response.status, 200);
@@ -177,7 +174,8 @@ suite('OAuth2#send', function() {
 
     var spy = sinon.spy(xhr, 'send');
 
-    return xhr.send(req).catch(function(error) {
+    return xhr.send(req, 'http://127.0.0.1:1337')
+    .catch(function(error) {
       assert.instanceOf(error, Error);
       assert.include(error.toString(), 'Bad status: 401');
       assert.ok(refresh.isDone(), 'should refresh access token on 401');

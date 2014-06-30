@@ -22,7 +22,6 @@ suite('request.calendarQuery', function() {
   test('should return request.Request', function() {
     assert.instanceOf(
       request.calendarQuery({
-        url: 'http://127.0.0.1:1337/principals/admin',
         props: [],
         depth: 1
       }),
@@ -37,12 +36,14 @@ suite('request.calendarQuery', function() {
       .reply(200);
 
     var req = request.calendarQuery({
-      url: 'http://127.0.0.1:1337/principals/admin/',
       props: [ { name: 'calendar-data', namespace: ns.CALDAV } ],
       depth: 1
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
+      mock
+    );
   });
 
   test('should add specified props to report body', function() {
@@ -52,11 +53,13 @@ suite('request.calendarQuery', function() {
     });
 
     var req = request.calendarQuery({
-      url: 'http://127.0.0.1:1337/principals/admin/',
       props: [ { name: 'catdog', namespace: ns.DAV } ]
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
+      mock
+    );
   });
 
   test('should add specified filters to report body', function() {
@@ -66,14 +69,16 @@ suite('request.calendarQuery', function() {
     });
 
     var req = request.calendarQuery({
-      url: 'http://127.0.0.1:1337/principals/admin/',
       filters: [{
         type: 'comp-filter',
         attrs: { name: 'VCALENDAR' },
       }]
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
+      mock
+    );
   });
 
   test('should add timezone to report body', function() {
@@ -88,7 +93,10 @@ suite('request.calendarQuery', function() {
       timezone: 'BEGIN:VTIMEZONE\nEND:VTIMEZONE'
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
+      mock
+    );
   });
 
   test('should resolve with appropriate data structure', function() {
@@ -97,7 +105,6 @@ suite('request.calendarQuery', function() {
       .reply(200, data.calendarQuery);
 
     var req = request.calendarQuery({
-      url: 'http://127.0.0.1:1337/',
       props: [
         { name: 'getetag', namespace: ns.DAV },
         { name: 'calendar-data', namespace: ns.CALDAV }
@@ -105,7 +112,7 @@ suite('request.calendarQuery', function() {
       filters: [ { type: 'comp', attrs: { name: 'VCALENDAR' } } ]
     });
 
-    return xhr.send(req)
+    return xhr.send(req, 'http://127.0.0.1:1337/')
     .then(function(calendars) {
       assert.lengthOf(calendars, 2);
       calendars.forEach(function(calendar) {

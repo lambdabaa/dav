@@ -1,6 +1,7 @@
 'use strict';
 
 var assert = require('chai').assert,
+    data = require('../data'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
     ns = require('../../../lib/namespace'),
@@ -21,7 +22,6 @@ suite('request.addressBookQuery', function() {
   test('should return request.Request', function() {
     assert.instanceOf(
       request.addressBookQuery({
-        url: 'http://127.0.0.1:1337/principals/admin',
         props: [],
         depth: 1
       }),
@@ -36,12 +36,14 @@ suite('request.addressBookQuery', function() {
       .reply(200);
 
     var req = request.addressBookQuery({
-      url: 'http://127.0.0.1:1337/principals/admin/',
       props: [ { name: 'address-data', namespace: ns.CARDDAV } ],
       depth: 1
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
+      mock
+    );
   });
 
   test('should add specified props to report body', function() {
@@ -51,14 +53,36 @@ suite('request.addressBookQuery', function() {
     });
 
     var req = request.addressBookQuery({
-      url: 'http://127.0.0.1:1337/principals/admin/',
       props: [ { name: 'catdog', namespace: ns.DAV } ]
     });
 
-    return nockUtils.verifyNock(xhr.send(req), mock);
+    return nockUtils.verifyNock(
+      xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
+      mock
+    );
   });
 
-  test.skip('should resolve with appropriate data structure', function() {
-    // TODO(gareth)
+  test('should resolve with appropriate data structure', function() {
+    nock('http://127.0.0.1:1337')
+      .intercept('/', 'REPORT')
+      .reply(200, data.addressBookQuery);
+
+
+    var req = request.addressBookQuery({
+      props: [
+        { name: 'getetag', namespace: ns.DAV },
+        { name: 'address-data', namespace: ns.CARDDAV }
+      ]
+    });
+
+    return xhr.send(req, 'http://127.0.0.1:1337/')
+    .then(function(addressBooks) {
+      assert.lengthOf(addressBooks, 2);
+      addressBooks.forEach(function(addressBook) {
+        assert.typeOf(addressBook.href, 'string');
+        assert.operator(addressBook.href.length, '>', 0);
+        assert.typeOf(addressBook.props, 'object');
+      });
+    });
   });
 });
