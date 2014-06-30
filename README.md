@@ -31,7 +31,6 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
     - [dav.request.addressBookQuery(options)](#davrequestaddressbookqueryoptions)
     - [dav.request.basic(options)](#davrequestbasicoptions)
     - [dav.request.calendarQuery(options)](#davrequestcalendarqueryoptions)
-    - [dav.request.discovery(options)](#davrequestdiscoveryoptions)
     - [dav.request.propfind(options)](#davrequestpropfindoptions)
     - [dav.request.syncCollection(options)](#davrequestsynccollectionoptions)
   - [Client](#client)
