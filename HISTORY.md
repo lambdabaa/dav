@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.5.2](#152)
 - [1.5.1](#151)
 - [1.5.0](#150)
 - [1.4.1](#141)
@@ -35,6 +36,10 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.5.2
+
++ Use xmldom in the browser since it's missing from web workers
 
 ### 1.5.1
 
