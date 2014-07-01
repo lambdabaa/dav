@@ -6,6 +6,10 @@
   "license": "MPL-2.0",
   "main": "./lib/index",
 
+  "browserify": {
+    "transform": ["brfs"]
+  },
+
   "keywords": [
     "address book",
     "calendar",
