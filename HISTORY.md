@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.5.5](#155)
 - [1.5.4](#154)
 - [1.5.3](#153)
 - [1.5.2](#152)
@@ -38,6 +39,10 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.5.5
+
++ Bundle XMLHttpRequest polyfill for environments where it's not available
 
 ### 1.5.4
 
