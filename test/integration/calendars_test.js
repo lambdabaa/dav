@@ -231,4 +231,26 @@ suite('calendars', function() {
 
     return Promise.all([inrange, outofrange]);
   });
+
+  test('#syncCaldavAccount', function() {
+    return dav.createAccount({
+      server: 'http://127.0.0.1:8888/',
+      xhr: xhr,
+      accountType: 'caldav',
+      loadCollections: false
+    })
+    .then(function(account) {
+      assert.instanceOf(account, dav.Account);
+      assert.notOk(account.calendars);
+      return dav.syncCaldavAccount(account, { xhr: xhr });
+    })
+    .then(function(account) {
+      assert.instanceOf(account, dav.Account);
+      assert.isArray(account.calendars);
+      assert.lengthOf(account.calendars, 1);
+      var calendar = account.calendars[0];
+      assert.instanceOf(calendar, dav.Calendar);
+      assert.strictEqual(calendar.displayName, 'default calendar');
+    });
+  });
 });

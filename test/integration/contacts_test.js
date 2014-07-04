@@ -215,4 +215,28 @@ suite('contacts', function() {
       assert.lengthOf(objects, 0, 'should be deleted');
     });
   });
+
+  test('#syncCarddavAccount', function() {
+    return dav.createAccount({
+      server: 'http://127.0.0.1:8888/',
+      xhr: xhr,
+      accountType: 'carddav',
+      loadCollections: false
+    })
+    .then(function(account) {
+      assert.instanceOf(account, dav.Account);
+      assert.notOk(account.addressBooks);
+      return dav.syncCarddavAccount(account, { xhr: xhr });
+    })
+    .then(function(account) {
+      assert.instanceOf(account, dav.Account);
+      assert.isArray(account.addressBooks);
+      assert.ok(
+        account.addressBooks.some(function(addressBook) {
+          return addressBook instanceof dav.AddressBook &&
+                 addressBook.displayName === 'default address book';
+        })
+      );
+    });
+  });
 });
