@@ -75,7 +75,8 @@ suite('Client', function() {
     var createCalendarObject,
         updateCalendarObject,
         deleteCalendarObject,
-        syncCalendar;
+        syncCalendar,
+        syncCaldavAccount;
 
     setup(function() {
       createCalendarObject = sinon.stub(
@@ -91,6 +92,7 @@ suite('Client', function() {
         'deleteCalendarObject'
       );
       syncCalendar = sinon.stub(client._calendars, 'sync');
+      syncCaldavAccount = sinon.stub(client._calendars, 'syncAccount');
     });
 
     teardown(function() {
@@ -98,6 +100,7 @@ suite('Client', function() {
       updateCalendarObject.restore();
       deleteCalendarObject.restore();
       syncCalendar.restore();
+      syncCaldavAccount.restore();
     });
 
     test('#createCalendarObject', function() {
@@ -143,12 +146,23 @@ suite('Client', function() {
 
     test('#syncCalendar', function() {
       var calendar = new dav.Calendar();
-      client.syncCalendar(calendar, {
-        syncMethod: 'webdav'
-      });
+      client.syncCalendar(calendar, { syncMethod: 'webdav' });
       sinon.assert.calledWith(
         syncCalendar,
         calendar,
+        {
+          syncMethod: 'webdav',
+          xhr: xhr
+        }
+      );
+    });
+
+    test('#syncCaldavAccount', function() {
+      var account = new dav.Account();
+      client.syncCaldavAccount(account, { syncMethod: 'webdav' });
+      sinon.assert.calledWith(
+        syncCaldavAccount,
+        account,
         {
           syncMethod: 'webdav',
           xhr: xhr
@@ -161,13 +175,15 @@ suite('Client', function() {
     var createCard,
         updateCard,
         deleteCard,
-        syncAddressBook;
+        syncAddressBook,
+        syncCarddavAccount;
 
     setup(function() {
       createCard = sinon.stub(client._contacts, 'createCard');
       updateCard = sinon.stub(client._contacts, 'updateCard');
       deleteCard = sinon.stub(client._contacts, 'deleteCard');
       syncAddressBook = sinon.stub(client._contacts, 'sync');
+      syncCarddavAccount = sinon.stub(client._contacts, 'syncAccount');
     });
 
     teardown(function() {
@@ -175,6 +191,7 @@ suite('Client', function() {
       updateCard.restore();
       deleteCard.restore();
       syncAddressBook.restore();
+      syncCarddavAccount.restore();
     });
 
     test('#createCard', function() {
@@ -226,6 +243,19 @@ suite('Client', function() {
       sinon.assert.calledWith(
         syncAddressBook,
         addressBook,
+        {
+          syncMethod: 'basic',
+          xhr: xhr
+        }
+      );
+    });
+
+    test('#syncCarddavAccount', function() {
+      var account = new dav.Account();
+      client.syncCarddavAccount(account, { syncMethod: 'basic' });
+      sinon.assert.calledWith(
+        syncCarddavAccount,
+        account,
         {
           syncMethod: 'basic',
           xhr: xhr
