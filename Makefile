@@ -25,6 +25,11 @@ coverage: node_modules
 	cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
 	rm -rf ./coverage
 
+.PHONY: doc
+doc: node_modules
+	rm -rf doc/
+	./node_modules/.bin/jsdoc -r -d doc/ lib/
+
 .PHONY: lint
 lint: node_modules
 	./node_modules/.bin/jshint --verbose lib/ test/

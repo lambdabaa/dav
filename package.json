@@ -41,6 +41,7 @@
     "coveralls": "2.10.0",
     "doctoc": "0.7.1",
     "istanbul": "0.2.10",
+    "jsdoc": "3.2.2",
     "jshint": "2.5.1",
     "mocha": "1.19.0",
     "nock": "0.32.3",

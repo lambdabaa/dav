@@ -2,6 +2,7 @@ SabreDAV/
 
 /*.zip
 /coverage/
+/doc/
 /dav.js
 /dav.js.map
 /dav.min.js
