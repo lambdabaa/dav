@@ -1,8 +1,9 @@
+JS := $(shell find lib/ -name "*.js")
+
 SABRE_DAV_VERSION=2.0.1
 SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
-.PHONY: default
 default: dav.zip
 
 .PHONY: clean
@@ -29,16 +30,10 @@ coverage: node_modules
 lint: node_modules
 	./node_modules/.bin/jshint --verbose lib/ test/
 
-# PHONY since there can be an outdated node_modules directory.
-.PHONY: node_modules
-node_modules:
+node_modules: npm-shrinkwrap.json
 	npm install
 
-# PHONY since there can be an outdated node_modules directory.
-# IMPORTANT: Only run |make shrinkwrap| when making changes to dependencies.
-.PHONY: shrinkwrap
-shrinkwrap: node_modules
-	rm -f ./npm-shrinkwrap.json
+npm-shrinkwrap.json: package.json
 	npm shrinkwrap --dev
 
 .PHONY: test
@@ -62,7 +57,7 @@ SabreDAV:
 	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/fruux/sabre-dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
 	unzip -q $(SABRE_DAV_ZIPBALL)
 
-dav.js: node_modules
+dav.js: $(JS) node_modules
 	./node_modules/.bin/browserify \
 		--standalone dav \
 		--transform brfs \

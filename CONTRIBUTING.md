@@ -66,7 +66,7 @@ Things to note:
 ### Publishing a release
 
 1. Update `package.json` to reflect the new version. Use [semver](http://semver.org/) to help decide what new version number is best.
-2. Run `make shrinkwrap` to write changes to `package.json` through npm shrinkwrap.
+2. Run `make npm-shrinkwrap.json` to write changes to `package.json` through npm shrinkwrap.
 3. If there are changes to the public api, document them in the README. Then regenerate the `README.md` table of contents with `make toc`.
 4. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset. Regenerate the `HISTORY.md` table of contents with `make toc`.
 5. Commit the changes to `package.json`, `npm-shrinkwrap.json`, `HISTORY.md`, and (perhaps) `README.md`. Push to GitHub.
