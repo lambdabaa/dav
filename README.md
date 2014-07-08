@@ -15,11 +15,13 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
     - [dav.updateCalendarObject(calendarObject, options)](#davupdatecalendarobjectcalendarobject-options)
     - [dav.deleteCalendarObject(calendarObject, options)](#davdeletecalendarobjectcalendarobject-options)
     - [dav.syncCalendar(calendar, options)](#davsynccalendarcalendar-options)
+    - [dav.syncCaldavAccount(account, options)](#davsynccaldavaccountaccount-options)
   - [contacts](#contacts)
     - [dav.createCard(addressBook, options)](#davcreatecardaddressbook-options)
     - [dav.updateCard(card, options)](#davupdatecardcard-options)
     - [dav.deleteCard(card, options)](#davdeletecardcard-options)
     - [dav.syncAddressBook(addressBook, options)](#davsyncaddressbookaddressbook-options)
+    - [dav.syncCarddavAccount(account, options)](#davsynccarddavaccountaccount-options)
   - [sandbox](#sandbox)
     - [dav.Sandbox()](#davsandbox)
   - [transport](#transport)
@@ -36,6 +38,9 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
   - [Client](#client)
     - [dav.Client(xhr, options)](#davclientxhr-options)
       - [dav.Client.send(req, options)](#davclientsendreq-options)
+  - [etc](#etc)
+    - [dav.jsonify(obj)](#davjsonifyobj)
+    - [dav.ns](#davns)
   - [Example Usage](#example-usage)
     - [Using the lower-level webdav request api](#using-the-lower-level-webdav-request-api)
 
@@ -121,6 +126,19 @@ Options:
   (dav.Transport) xhr - request sender.
 ```
 
+#### dav.syncCaldavAccount(account, options)
+
+Fetch changes from the remote server to the account's calendars. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [dav.Account](https://github.com/gaye/dav/blob/master/lib/model/account.js) object once sync is complete.
+
+```
+@param {dav.Account} account the calendar account to sync.
+
+Options:
+
+  (dav.Sandbox) sandbox - optional request sandbox.
+  (dav.Transport) xhr - request sender.
+```
+
 ### contacts
 
 #### dav.createCard(addressBook, options)
@@ -177,6 +195,18 @@ Options:
   (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
       try to do webdav sync and failover to basic sync if rfc 6578 is not
       supported by the server.
+  (dav.Transport) xhr - request sender.
+```
+#### dav.syncCarddavAccount(account, options)
+
+Fetch changes from the remote server to the account's address books. Returns a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will be fulfilled with an updated [dav.Account](https://github.com/gaye/dav/blob/master/lib/model/account.js) object once sync is complete.
+
+```
+@param {dav.Account} account the address book account to sync.
+
+Options:
+
+  (dav.Sandbox) sandbox - optional request sandbox.
   (dav.Transport) xhr - request sender.
 ```
 
@@ -321,6 +351,16 @@ Options:
   (dav.Sandbox) sandbox - optional request sandbox.
   (String) url - relative url for request.
 ```
+
+### etc
+
+#### dav.jsonify(obj)
+
+Take an object that may contain circular references and dump it to JSON.
+
+#### dav.ns
+
+Object that holds various xml namespace constants.
 
 ### Example Usage
 

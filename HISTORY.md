@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.6.0](#160)
 - [1.5.5](#155)
 - [1.5.4](#154)
 - [1.5.3](#153)
@@ -39,6 +40,12 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.6.0
+
++ Add #syncCaldavAccount and #syncCarddavAccount to the public api
++ Expose dav.jsonify and dav.ns
++ Small correctness fix to error case in basic calendar sync
 
 ### 1.5.5
 
