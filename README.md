@@ -59,6 +59,8 @@ Options:
 
   (String) accountType - one of 'caldav' or 'carddav'. Defaults to 'caldav'.
   (Array.<Object>) filters - list of caldav filters to send with request.
+  (Boolean) loadCollections - whether or not to load dav collections.
+  (Boolean) loadObjects - whether or not to load dav objects.
   (dav.Sandbox) sandbox - optional request sandbox.
   (String) server - some url for server (needn't be base url).
   (String) timezone - VTIMEZONE calendar object.
