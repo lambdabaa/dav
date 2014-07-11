@@ -41,6 +41,10 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+### 1.6.1
+
++ Don't bundle xmlhttprequest polyfill in browser binary... again
+
 ### 1.6.0
 
 + Add #syncCaldavAccount and #syncCarddavAccount to the public api
