@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.6.1](#161)
 - [1.6.0](#160)
 - [1.5.5](#155)
 - [1.5.4](#154)
