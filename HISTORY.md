@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.6.2](#162)
 - [1.6.1](#161)
 - [1.6.0](#160)
 - [1.5.5](#155)
@@ -41,6 +42,10 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.6.2
+
++ Export debug library under dav ns
 
 ### 1.6.1
 
