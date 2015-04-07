@@ -6,6 +6,7 @@ var assert = require('chai').assert,
     nockUtils = require('./nock_utils'),
     ns = require('../../../lib/namespace'),
     request = require('../../../lib/request'),
+    template = require('../../../lib/template'),
     transport = require('../../../lib/transport');
 
 suite('request.addressBookQuery', function() {
@@ -19,14 +20,17 @@ suite('request.addressBookQuery', function() {
     nock.cleanAll();
   });
 
-  test('should return request.Request', function() {
-    assert.instanceOf(
-      request.addressBookQuery({
-        props: [],
-        depth: 1
-      }),
-      request.Request
-    );
+  test('should return proper Request', function() {
+    var req = request.addressBookQuery({
+      props: [],
+      depth: 1
+    });
+    assert.equal(req.method, 'REPORT');
+    assert.equal(req.depth, 1);
+    assert.equal(req.data, template.addressBookQuery({ props: [] }));
+    assert.isFunction(req.transformResponse);
+    assert.isUndefined(req.etag);
+    assert.isUndefined(req.props);
   });
 
   test('should set depth header', function() {

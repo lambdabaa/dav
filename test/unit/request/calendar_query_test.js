@@ -6,6 +6,7 @@ var assert = require('chai').assert,
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request'),
+    template = require('../../../lib/template'),
     transport = require('../../../lib/transport');
 
 suite('request.calendarQuery', function() {
@@ -19,14 +20,21 @@ suite('request.calendarQuery', function() {
     nock.cleanAll();
   });
 
-  test('should return request.Request', function() {
-    assert.instanceOf(
-      request.calendarQuery({
-        props: [],
-        depth: 1
-      }),
-      request.Request
-    );
+  test('should return valid request', function() {
+    var opts ={
+      props: [],
+      depth: 1
+    };
+    var req = request.calendarQuery(opts);
+    assert.equal(req.method, 'REPORT');
+    assert.equal(req.depth, 1);
+    assert.equal(req.data, template.calendarQuery({
+      props: [],
+      filters: [],
+      timezone: undefined
+    }));
+    assert.isFunction(req.transformResponse);
+    assert.isUndefined(req.props);
   });
 
   test('should set depth header', function() {

@@ -24,11 +24,11 @@ suite('Client', function() {
 
   test('#send', function() {
     var url = 'https://mail.mozilla.com/';
-    var req = dav.request.basic({
+    var req = {
       method: 'PUT',
       data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
       etag: 'abc123'
-    });
+    };
 
     var sandbox = dav.createSandbox();
     client.send(req, url, { sandbox: sandbox });
@@ -36,11 +36,11 @@ suite('Client', function() {
   });
 
   test('#send with relative url', function() {
-    var req = dav.request.basic({
+    var req = {
       method: 'PUT',
       data: 'BEGIN:VCALENDAR\nEND:VCALENDAR',
       etag: 'abc123'
-    });
+    };
 
     client.send(req, '/calendars/123.ics');
     sinon.assert.calledWith(
