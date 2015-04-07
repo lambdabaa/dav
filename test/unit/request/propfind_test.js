@@ -6,6 +6,7 @@ var assert = require('chai').assert,
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request'),
+    template = require('../../../lib/template'),
     transport = require('../../../lib/transport');
 
 suite('request.propfind', function() {
@@ -19,14 +20,17 @@ suite('request.propfind', function() {
     nock.cleanAll();
   });
 
-  test('should return request.Request', function() {
-    assert.instanceOf(
-      request.propfind({
-        props: [ { name: 'catdog', namespace: namespace.DAV } ],
-        depth: '0'
-      }),
-      request.Request
-    );
+  test('should return valid request', function() {
+    var opts = {
+      props: [ { name: 'catdog', namespace: namespace.DAV } ],
+      depth: '0'
+    };
+    var req = request.propfind(opts);
+    assert.equal(req.method, 'PROPFIND');
+    assert.equal(req.depth, '0');
+    assert.equal(req.data, template.propfind(opts));
+    assert.isFunction(req.transformResponse);
+    assert.isUndefined(req.props);
   });
 
   test('should set depth header', function() {

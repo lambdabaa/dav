@@ -5,7 +5,6 @@ var XMLHttpRequest = require('../../../lib/transport/xmlhttprequest'),
     createSandbox = require('../../../lib').createSandbox,
     model = require('../../../lib/model'),
     nock = require('nock'),
-    sinon = require('sinon'),
     transport = require('../../../lib/transport');
 
 suite('Basic#send', function() {
@@ -31,12 +30,6 @@ suite('Basic#send', function() {
     assert.lengthOf(sandbox.requestList, 0);
     xhr.send(req, 'http://127.0.0.1:1337', { sandbox: sandbox });
     assert.lengthOf(sandbox.requestList, 1);
-  });
-
-  test('should apply `transformRequest`', function() {
-    var stub = sinon.stub(req, 'transformRequest');
-    xhr.send(req, 'http://127.0.0.1:1337');
-    sinon.assert.called(stub);
   });
 
   test('should send req', function() {

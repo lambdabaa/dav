@@ -5,6 +5,7 @@ var assert = require('chai').assert,
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
     request = require('../../../lib/request'),
+    template = require('../../../lib/template'),
     transport = require('../../../lib/transport');
 
 suite('request.syncCollection', function() {
@@ -18,18 +19,20 @@ suite('request.syncCollection', function() {
     nock.cleanAll();
   });
 
-  test('should return request.Request', function() {
-    assert.instanceOf(
-      request.syncCollection({
-        syncLevel: 1,
-        syncToken: 'abc123',
-        props: [
-          { name: 'getetag', namespace: namespace.DAV },
-          { name: 'calendar-data', namespace: namespace.CALDAV }
-        ]
-      }),
-      request.Request
-    );
+  test('should return valid request', function() {
+    var opts = {
+      syncLevel: 1,
+      syncToken: 'abc123',
+      props: [
+        { name: 'getetag', namespace: namespace.DAV },
+        { name: 'calendar-data', namespace: namespace.CALDAV }
+      ]
+    };
+    var req = request.syncCollection(opts);
+    assert.equal(req.method, 'REPORT');
+    assert.equal(req.data, template.syncCollection(opts));
+    assert.isUndefined(req.depth);
+    assert.isFunction(req.transformResponse);
   });
 
   test('should add props to request body', function() {

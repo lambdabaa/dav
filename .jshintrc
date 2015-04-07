@@ -23,7 +23,7 @@
   "asi"           : false,     // true: Tolerate Automatic Semicolon Insertion (no semicolons)
   "boss"          : false,     // true: Tolerate assignments where comparisons would be expected
   "debug"         : false,     // true: Allow debugger statements e.g. browser breakpoints.
-  "eqnull"        : false,     // true: Tolerate use of `== null`
+  "eqnull"        : true,      // true: Tolerate use of `== null`
   "esnext"        : true,      // true: Allow ES.next (ES6) syntax (ex: `const`)
   "moz"           : true,      // true: Allow Mozilla specific syntax (extends and overrides esnext features)
                                // (ex: `for each`, multiple try/catch, function expression…)

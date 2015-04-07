@@ -3,7 +3,6 @@
 var assert = require('chai').assert,
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
-    request = require('../../../lib/request'),
     transport = require('../../../lib/transport');
 
 suite('put', function() {
@@ -17,28 +16,16 @@ suite('put', function() {
     nock.cleanAll();
   });
 
-  test('should return request.Request', function() {
-    assert.instanceOf(
-      request.basic({
-        method: 'PUT',
-        username: 'abc',
-        password: '123',
-        data: 'yoyoma'
-      }),
-      request.Request
-    );
-  });
-
   test('should set If-Match header', function() {
     var mock = nock('http://127.0.0.1:1337')
       .matchHeader('If-Match', '1337')
       .intercept('/', 'PUT')
       .reply(200);
 
-    var req = request.basic({
+    var req = {
       method: 'PUT',
       etag: '1337'
-    });
+    };
 
     return nockUtils.verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
   });
@@ -49,10 +36,10 @@ suite('put', function() {
       return body === 'Bad hair day!';
     });
 
-    var req = request.basic({
+    var req = {
       method: 'PUT',
       data: 'Bad hair day!'
-    });
+    };
 
     return nockUtils.verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
   });
@@ -63,7 +50,7 @@ suite('put', function() {
       .delay(1)
       .reply('400', '400 Bad Request');
 
-    var req = request.basic({ method: 'PUT' });
+    var req = { method: 'PUT' };
 
     return xhr.send(req, 'http://127.0.0.1:1337')
     .then(function() {
