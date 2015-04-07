@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('chai').assert,
-    camelize = require('../../lib/camelize');
+    camelize = require('../../build/camelize');
 
 suite('camelize', function() {
   test('single word', function() {

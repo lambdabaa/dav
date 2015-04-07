@@ -1,8 +1,8 @@
 'use strict';
 
-var XMLHttpRequest = require('../../lib/transport/xmlhttprequest'),
+var XMLHttpRequest = require('../../build/xmlhttprequest'),
     assert = require('chai').assert,
-    dav = require('../../lib'),
+    dav = require('../../build'),
     sinon = require('sinon');
 
 var createSandbox = dav.createSandbox;

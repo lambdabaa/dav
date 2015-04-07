@@ -5,6 +5,7 @@
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
   "main": "./lib/index",
+  "repository": "https://github.com/gaye/dav",
 
   "browserify": {
     "transform": ["brfs"]
@@ -30,27 +31,24 @@
     "debug": "0.8.1",
     "handlebars": "2.0.x",
     "json-stringify-safe": "5.0.0",
+    "lodash": "3.6.0",
     "xmldom": "0.1.19",
     "xmlhttprequest": "1.6.0"
   },
 
   "devDependencies": {
+    "babel": "4.7.16",
     "brfs": "1.1.1",
     "browserify": "4.1.5",
     "chai": "1.9.1",
     "coveralls": "2.10.0",
     "doctoc": "0.7.1",
     "istanbul": "0.2.10",
-    "jshint": "2.5.1",
     "mocha": "1.19.0",
     "nock": "0.32.3",
     "sinon": "1.10.0",
     "tcp-port-used": "0.1.2",
     "uglify-js": "2.4.14"
-  },
-
-  "engines": {
-    "node": ">=0.11"
   },
 
   "scripts": {

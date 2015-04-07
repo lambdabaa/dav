@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert'),
-    helpers = require('../../../lib/template/helpers');
+    helpers = require('../../../build/template');
 
 suite('Handlebars helpers', function() {
   test('comp-filter', function() {

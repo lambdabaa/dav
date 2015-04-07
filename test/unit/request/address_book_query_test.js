@@ -4,9 +4,9 @@ var assert = require('chai').assert,
     data = require('../data'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
-    ns = require('../../../lib/namespace'),
-    request = require('../../../lib/request'),
-    transport = require('../../../lib/transport');
+    ns = require('../../../build/namespace'),
+    request = require('../../../build/request'),
+    transport = require('../../../build/transport');
 
 suite('request.addressBookQuery', function() {
   var xhr;

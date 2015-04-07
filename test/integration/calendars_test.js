@@ -2,7 +2,7 @@
 
 var assert = require('chai').assert,
     data = require('./data'),
-    dav = require('../../lib'),
+    dav = require('../../build'),
     debug = require('debug')('dav:calendars_test');
 
 suite('calendars', function() {

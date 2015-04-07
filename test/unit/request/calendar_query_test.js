@@ -2,11 +2,11 @@
 
 var assert = require('chai').assert,
     data = require('../data'),
-    ns = require('../../../lib/namespace'),
+    ns = require('../../../build/namespace'),
     nock = require('nock'),
     nockUtils = require('./nock_utils'),
-    request = require('../../../lib/request'),
-    transport = require('../../../lib/transport');
+    request = require('../../../build/request'),
+    transport = require('../../../build/transport');
 
 suite('request.calendarQuery', function() {
   var xhr;

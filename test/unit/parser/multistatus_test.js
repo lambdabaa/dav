@@ -2,7 +2,7 @@
 
 var assert = require('chai').assert,
     data = require('../data'),
-    parser = require('../../../lib/parser');
+    parser = require('../../../build/parser');
 
 suite('parser.multistatus', function() {
   test('propfind (current-user-principal)', function() {

@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('chai').assert,
-    dav = require('../../lib');
+    dav = require('../../build');
 
 suite('accounts', function() {
   suite('#create', function() {

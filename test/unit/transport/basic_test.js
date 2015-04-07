@@ -1,12 +1,12 @@
 'use strict';
 
-var XMLHttpRequest = require('../../../lib/transport/xmlhttprequest'),
+var XMLHttpRequest = require('../../../build/xmlhttprequest'),
     assert = require('chai').assert,
-    createSandbox = require('../../../lib').createSandbox,
-    model = require('../../../lib/model'),
+    createSandbox = require('../../../build').createSandbox,
+    model = require('../../../build/model'),
     nock = require('nock'),
     sinon = require('sinon'),
-    transport = require('../../../lib/transport');
+    transport = require('../../../build/transport');
 
 suite('Basic#send', function() {
   var xhr, req;
@@ -73,7 +73,7 @@ suite('Basic#send', function() {
     return xhr.send(req, 'http://127.0.0.1:1337')
     .then(function(value) {
       assert.instanceOf(value, XMLHttpRequest);
-      assert.strictEqual(value.native.readyState, 4);
+      assert.strictEqual(value.request.readyState, 4);
     });
   });
 });

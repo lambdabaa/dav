@@ -1,5 +1,5 @@
 'use strict';
-var camelize = require('../../../lib/camelize'),
+var camelize = require('../../../build/camelize'),
     format = require('util').format,
     fs = require('fs');
 

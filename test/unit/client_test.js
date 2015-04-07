@@ -1,6 +1,6 @@
 'use strict';
 
-var dav = require('../../lib'),
+var dav = require('../../build'),
     sinon = require('sinon');
 
 suite('Client', function() {
@@ -54,7 +54,7 @@ suite('Client', function() {
     var createAccount;
 
     setup(function() {
-      createAccount = sinon.stub(client._accounts, 'create');
+      createAccount = sinon.stub(client._accounts, 'createAccount');
     });
 
     teardown(function() {
@@ -91,8 +91,8 @@ suite('Client', function() {
         client._calendars,
         'deleteCalendarObject'
       );
-      syncCalendar = sinon.stub(client._calendars, 'sync');
-      syncCaldavAccount = sinon.stub(client._calendars, 'syncAccount');
+      syncCalendar = sinon.stub(client._calendars, 'syncCalendar');
+      syncCaldavAccount = sinon.stub(client._calendars, 'syncCaldavAccount');
     });
 
     teardown(function() {
@@ -182,8 +182,8 @@ suite('Client', function() {
       createCard = sinon.stub(client._contacts, 'createCard');
       updateCard = sinon.stub(client._contacts, 'updateCard');
       deleteCard = sinon.stub(client._contacts, 'deleteCard');
-      syncAddressBook = sinon.stub(client._contacts, 'sync');
-      syncCarddavAccount = sinon.stub(client._contacts, 'syncAccount');
+      syncAddressBook = sinon.stub(client._contacts, 'syncAddressBook');
+      syncCarddavAccount = sinon.stub(client._contacts, 'syncCarddavAccount');
     });
 
     teardown(function() {

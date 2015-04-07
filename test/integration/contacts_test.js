@@ -2,7 +2,7 @@
 
 var assert = require('chai').assert,
     data = require('./data'),
-    dav = require('../../lib'),
+    dav = require('../../build'),
     debug = require('debug')('dav:contacts_test');
 
 suite('contacts', function() {
@@ -24,7 +24,7 @@ suite('contacts', function() {
       accountType: 'carddav'
     })
     .then(function(response) {
-      var addressBook = response.addressBooks[1];
+      var addressBook = response.addressBooks[0];
       var objects = addressBook.objects;
       assert.isArray(objects);
       assert.lengthOf(objects, 0, 'initially 0 address books');
@@ -51,7 +51,7 @@ suite('contacts', function() {
   });
 
   test('#createCard', function() {
-    var addressBook = addressBooks[1];
+    var addressBook = addressBooks[0];
     var objects = addressBook.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
@@ -74,7 +74,7 @@ suite('contacts', function() {
   });
 
   test('#updateCard, #sync', function() {
-    var addressBook = addressBooks[1];
+    var addressBook = addressBooks[0];
     var object = addressBook.objects[0];
     object.addressData = object.addressData.replace(
       'forrestgump@example.com',
@@ -124,7 +124,7 @@ suite('contacts', function() {
   });
 
   test('webdav sync', function() {
-    var addressBook = addressBooks[1];
+    var addressBook = addressBooks[0];
     var object = addressBook.objects[0];
     object.addressData = object.addressData.replace(
       'forrestgump@example.com',
@@ -192,7 +192,7 @@ suite('contacts', function() {
   });
 
   test('#deleteCard', function() {
-    var addressBook = addressBooks[1];
+    var addressBook = addressBooks[0];
     var objects = addressBook.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
@@ -231,6 +231,7 @@ suite('contacts', function() {
     .then(function(account) {
       assert.instanceOf(account, dav.Account);
       assert.isArray(account.addressBooks);
+      assert.lengthOf(account.addressBooks, 1);
       assert.ok(
         account.addressBooks.some(function(addressBook) {
           return addressBook instanceof dav.AddressBook &&

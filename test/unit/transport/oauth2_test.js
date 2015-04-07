@@ -1,12 +1,12 @@
 /* jshint -W106 */
 'use strict';
 
-var XMLHttpRequest = require('../../../lib/transport/xmlhttprequest'),
+var XMLHttpRequest = require('../../../build/xmlhttprequest'),
     assert = require('chai').assert,
-    model = require('../../../lib/model'),
+    model = require('../../../build/model'),
     nock = require('nock'),
     sinon = require('sinon'),
-    transport = require('../../../lib/transport');
+    transport = require('../../../build/transport');
 
 suite('OAuth2#send', function() {
   var xhr, req, credentials;
