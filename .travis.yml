@@ -7,6 +7,6 @@ language: php
 php:
   - "5.4"
 before_install:
-  - "nvm install 0.11"
+  - "nvm install 0.10"
 install: npm install
 script: npm test
