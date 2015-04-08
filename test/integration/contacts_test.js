@@ -1,14 +1,13 @@
-'use strict';
+import { assert } from 'chai';
+import data from './data';
+import * as dav from '../../lib';
 
-var assert = require('chai').assert,
-    data = require('./data'),
-    dav = require('../../build'),
-    debug = require('debug')('dav:contacts_test');
+let debug = require('debug')('dav:contacts_test');
 
 suite('contacts', function() {
-  var addressBooks, xhr;
+  let addressBooks, xhr;
 
-  setup(function() {
+  setup(async function() {
     debug('Create account.');
 
     xhr = new dav.transport.Basic(
@@ -18,44 +17,38 @@ suite('contacts', function() {
       })
     );
 
-    return dav.createAccount({
+    let account = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       accountType: 'carddav'
-    })
-    .then(function(response) {
-      var addressBook = response.addressBooks[0];
-      var objects = addressBook.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 0, 'initially 0 address books');
-      debug('Create vcard.');
-      return dav.createCard(addressBook, {
-        filename: 'test.vcf',
-        data: data.forrestGump,
-        xhr: xhr
-      });
-    })
-    .then(function() {
-      // TODO(gareth): Once we implement account sync,
-      //     do that here.
-      debug('Fetch account again.');
-      return dav.createAccount({
-        server: 'http://127.0.0.1:8888/',
-        xhr: xhr,
-        accountType: 'carddav'
-      });
-    })
-    .then(function(response) {
-      addressBooks = response.addressBooks;
     });
+
+    let addressBook = account.addressBooks[0];
+    let objects = addressBook.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 0, 'initially 0 address books');
+
+    debug('Create vcard.');
+    await dav.createCard(addressBook, {
+      filename: 'test.vcf',
+      data: data.forrestGump,
+      xhr: xhr
+    });
+
+    let updated = await dav.syncCarddavAccount(account, {
+      syncMethod: 'basic',
+      xhr: xhr
+    });
+
+    addressBooks = updated.addressBooks;
   });
 
   test('#createCard', function() {
-    var addressBook = addressBooks[0];
-    var objects = addressBook.objects;
+    let addressBook = addressBooks[0];
+    let objects = addressBook.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
-    var object = objects[0];
+    let object = objects[0];
     assert.instanceOf(object, dav.VCard);
     assert.instanceOf(object.addressBook, dav.AddressBook);
     assert.strictEqual(
@@ -73,171 +66,151 @@ suite('contacts', function() {
     );
   });
 
-  test('#updateCard, #sync', function() {
-    var addressBook = addressBooks[0];
-    var object = addressBook.objects[0];
+  test('#updateCard, #sync', async function() {
+    let addressBook = addressBooks[0];
+    let object = addressBook.objects[0];
     object.addressData = object.addressData.replace(
       'forrestgump@example.com',
       'lieutenantdan@example.com'
     );
 
-    return dav.updateCard(object, { xhr: xhr })
-    .then(function() {
-      return dav.syncAddressBook(addressBook, {
-        syncMethod: 'basic',
-        xhr: xhr
-      });
-    })
-    .then(function(addressBook) {
-      var objects = addressBook.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 1, 'update should not create new object');
-      var object = objects[0];
-      assert.instanceOf(object, dav.VCard);
-      assert.instanceOf(object.addressBook, dav.AddressBook);
-      assert.notStrictEqual(
-        object.addressData
-          .replace(/UID\:[^\n]+\n/, '')
-          .replace(/;/g, '')
-          .replace(/\s+/g, ''),
-        data.forrestGump
-          .replace(/;/g, '')
-          .replace(/\s+/g, ''),
-        'data should have changed on server'
-      );
-      assert.include(
-        object.addressData,
-        'lieutenantdan@example.com',
-        'data should reflect update'
-      );
-      assert.notInclude(
-        object.addressData,
-        'forrestgump@example.com',
-        'data should reflect update'
-      );
-      assert.strictEqual(
-        object.url,
-        'http://127.0.0.1:8888/addressbooks/admin/default/test.vcf',
-        'update should not change object url'
-      );
+    await dav.updateCard(object, { xhr: xhr });
+    let updated = await dav.syncAddressBook(addressBook, {
+      syncMethod: 'basic',
+      xhr: xhr
     });
+
+    let objects = updated.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 1, 'update should not create new object');
+    object = objects[0];
+    assert.instanceOf(object, dav.VCard);
+    assert.instanceOf(object.addressBook, dav.AddressBook);
+    assert.notStrictEqual(
+      object.addressData
+        .replace(/UID\:[^\n]+\n/, '')
+        .replace(/;/g, '')
+        .replace(/\s+/g, ''),
+      data.forrestGump
+        .replace(/;/g, '')
+        .replace(/\s+/g, ''),
+      'data should have changed on server'
+    );
+    assert.include(
+      object.addressData,
+      'lieutenantdan@example.com',
+      'data should reflect update'
+    );
+    assert.notInclude(
+      object.addressData,
+      'forrestgump@example.com',
+      'data should reflect update'
+    );
+    assert.strictEqual(
+      object.url,
+      'http://127.0.0.1:8888/addressbooks/admin/default/test.vcf',
+      'update should not change object url'
+    );
   });
 
-  test('webdav sync', function() {
-    var addressBook = addressBooks[0];
-    var object = addressBook.objects[0];
+  test('webdav sync', async function() {
+    let addressBook = addressBooks[0];
+    let object = addressBook.objects[0];
     object.addressData = object.addressData.replace(
       'forrestgump@example.com',
       'lieutenantdan@example.com'
     );
 
-    var prevEtag = object.etag;
+    let prevEtag = object.etag;
     assert.typeOf(prevEtag, 'string');
     assert.operator(prevEtag.length, '>', 0);
 
-    var prevSyncToken = addressBook.syncToken;
+    let prevSyncToken = addressBook.syncToken;
     assert.typeOf(prevSyncToken, 'string');
     assert.operator(prevSyncToken.length, '>', 0);
 
-    return dav.updateCard(object, { xhr: xhr })
-    .then(function() {
-      return dav.syncAddressBook(addressBook, {
-        syncMethod: 'webdav',
-        xhr: xhr
-      });
-    })
-    .then(function(addressBook) {
-      var objects = addressBook.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 1, 'update should not create new object');
-
-      var object = objects[0];
-      assert.instanceOf(object, dav.VCard);
-      assert.instanceOf(object.addressBook, dav.AddressBook);
-
-      assert.notStrictEqual(
-        object.addressData
-          .replace(/UID\:[^\n]+\n/, '')
-          .replace(/;/g, '')
-          .replace(/\s+/g, ''),
-        data.forrestGump
-          .replace(/;/g, '')
-          .replace(/\s+/g, ''),
-        'data should have changed on server'
-      );
-      assert.include(
-        object.addressData,
-        'lieutenantdan@example.com',
-        'data should reflect update'
-      );
-      assert.notInclude(
-        object.addressData,
-        'forrestgump@example.com',
-        'data should reflect update'
-      );
-      assert.notStrictEqual(
-        object.addressData,
-        data.bastilleDayParty,
-        'data should have changed on server'
-      );
-
-      assert.typeOf(object.etag, 'string');
-      assert.operator(object.etag.length, '>', 0);
-      assert.notStrictEqual(prevEtag, object.etag, 'new etag');
-
-      assert.typeOf(addressBook.syncToken, 'string');
-      assert.operator(addressBook.syncToken.length, '>', 0);
-      assert.notStrictEqual(addressBook.syncToken, prevSyncToken, 'new token');
+    await dav.updateCard(object, { xhr: xhr });
+    let updated = await dav.syncAddressBook(addressBook, {
+      syncMethod: 'webdav',
+      xhr: xhr
     });
+
+    let objects = updated.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 1, 'update should not create new object');
+
+    object = objects[0];
+    assert.instanceOf(object, dav.VCard);
+    assert.instanceOf(object.addressBook, dav.AddressBook);
+
+    assert.notStrictEqual(
+      object.addressData
+        .replace(/UID\:[^\n]+\n/, '')
+        .replace(/;/g, '')
+        .replace(/\s+/g, ''),
+      data.forrestGump
+        .replace(/;/g, '')
+        .replace(/\s+/g, ''),
+      'data should have changed on server'
+    );
+    assert.include(
+      object.addressData,
+      'lieutenantdan@example.com',
+      'data should reflect update'
+    );
+    assert.notInclude(
+      object.addressData,
+      'forrestgump@example.com',
+      'data should reflect update'
+    );
+    assert.notStrictEqual(
+      object.addressData,
+      data.bastilleDayParty,
+      'data should have changed on server'
+    );
+
+    assert.typeOf(object.etag, 'string');
+    assert.operator(object.etag.length, '>', 0);
+    assert.notStrictEqual(prevEtag, object.etag, 'new etag');
+
+    assert.typeOf(addressBook.syncToken, 'string');
+    assert.operator(addressBook.syncToken.length, '>', 0);
+    assert.notStrictEqual(addressBook.syncToken, prevSyncToken, 'new token');
   });
 
-  test('#deleteCard', function() {
-    var addressBook = addressBooks[0];
-    var objects = addressBook.objects;
+  test('#deleteCard', async function() {
+    let addressBook = addressBooks[0];
+    let objects = addressBook.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
-    var object = objects[0];
-    return dav.deleteCard(object, { xhr: xhr })
-    .then(function() {
-      // TODO(gareth): Once we implement incremental/webdav sync,
-      //     do that here.
-      return dav.createAccount({
-        server: 'http://127.0.0.1:8888/',
-        xhr: xhr,
-        accountType: 'carddav'
-      });
-    })
-    .then(function(response) {
-      var addressBooks = response.addressBooks;
-      var addressBook = addressBooks[0];
-      var objects = addressBook.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 0, 'should be deleted');
+    let object = objects[0];
+    await dav.deleteCard(object, { xhr: xhr });
+    let updated = await dav.syncAddressBook(addressBook, {
+      syncMethod: 'basic',
+      xhr: xhr
     });
+
+    objects = addressBook.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 0, 'should be deleted');
   });
 
-  test('#syncCarddavAccount', function() {
-    return dav.createAccount({
+  test('#syncCarddavAccount', async function() {
+    let account = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       accountType: 'carddav',
       loadCollections: false
-    })
-    .then(function(account) {
-      assert.instanceOf(account, dav.Account);
-      assert.notOk(account.addressBooks);
-      return dav.syncCarddavAccount(account, { xhr: xhr });
-    })
-    .then(function(account) {
-      assert.instanceOf(account, dav.Account);
-      assert.isArray(account.addressBooks);
-      assert.lengthOf(account.addressBooks, 1);
-      assert.ok(
-        account.addressBooks.some(function(addressBook) {
-          return addressBook instanceof dav.AddressBook &&
-                 addressBook.displayName === 'default address book';
-        })
-      );
     });
+
+    assert.instanceOf(account, dav.Account);
+    assert.notOk(account.addressBooks);
+    let updated = await dav.syncCarddavAccount(account, { xhr: xhr });
+    assert.instanceOf(updated, dav.Account);
+    assert.isArray(updated.addressBooks);
+    assert.lengthOf(updated.addressBooks, 1);
+    let addressBook = addressBooks[0];
+    assert.instanceOf(addressBook, dav.AddressBook);
+    assert.strictEqual(addressBook.displayName, 'default address book');
   });
 });

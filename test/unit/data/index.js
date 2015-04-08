@@ -1,8 +1,9 @@
-'use strict';
+import camelize from '../../../lib/camelize';
+import { format } from 'util';
+import fs from 'fs';
 
-var camelize = require('../../../build/camelize'),
-    format = require('util').format,
-    fs = require('fs');
+let docs = {};
+export default docs;
 
 [
   'address_book_query',
@@ -12,7 +13,7 @@ var camelize = require('../../../build/camelize'),
   'sync_collection'
 ].forEach(function(responseType) {
   var camelCase = camelize(responseType);
-  exports[camelCase] = fs
+  docs[camelCase] = fs
     .readFileSync(
       format('%s/%s.xml', __dirname, responseType),
       'utf-8'

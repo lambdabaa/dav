@@ -1,15 +1,13 @@
-'use strict';
-
-var assert = require('chai').assert,
-    data = require('../data'),
-    ns = require('../../../build/namespace'),
-    nock = require('nock'),
-    nockUtils = require('./nock_utils'),
-    request = require('../../../build/request'),
-    transport = require('../../../build/transport');
+import { assert } from 'chai';
+import data from '../data';
+import * as ns from '../../../lib/namespace';
+import nock from 'nock';
+import { extend, verifyNock } from './nock_utils';
+import { Request, calendarQuery } from '../../../lib/request';
+import * as transport from '../../../lib/transport';
 
 suite('request.calendarQuery', function() {
-  var xhr;
+  let xhr;
 
   setup(function() {
     xhr = new transport.Basic({ username: 'admin', password: 'admin' });
@@ -21,90 +19,90 @@ suite('request.calendarQuery', function() {
 
   test('should return request.Request', function() {
     assert.instanceOf(
-      request.calendarQuery({
+      calendarQuery({
         props: [],
         depth: 1
       }),
-      request.Request
+      Request
     );
   });
 
   test('should set depth header', function() {
-    var mock = nock('http://127.0.0.1:1337')
+    let mock = nock('http://127.0.0.1:1337')
       .matchHeader('Depth', 1)
       .intercept('/principals/admin/', 'REPORT')
       .reply(200);
 
-    var req = request.calendarQuery({
+    let req = calendarQuery({
       props: [ { name: 'calendar-data', namespace: ns.CALDAV } ],
       depth: 1
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
       mock
     );
   });
 
   test('should add specified props to report body', function() {
-    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
-    mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
+    let mock = extend(nock('http://127.0.0.1:1337'));
+    mock.matchRequestBody('/principals/admin/', 'REPORT', body => {
       return body.indexOf('<d:catdog />') !== -1;
     });
 
-    var req = request.calendarQuery({
+    let req = calendarQuery({
       props: [ { name: 'catdog', namespace: ns.DAV } ]
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
       mock
     );
   });
 
   test('should add specified filters to report body', function() {
-    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
-    mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
+    let mock = extend(nock('http://127.0.0.1:1337'));
+    mock.matchRequestBody('/principals/admin/', 'REPORT', body => {
       return body.indexOf('<c:comp-filter name="VCALENDAR"/>') !== -1;
     });
 
-    var req = request.calendarQuery({
+    let req = calendarQuery({
       filters: [{
         type: 'comp-filter',
         attrs: { name: 'VCALENDAR' },
       }]
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
       mock
     );
   });
 
   test('should add timezone to report body', function() {
-    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
-    mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
-      var data = '<c:timezone>BEGIN:VTIMEZONE\nEND:VTIMEZONE</c:timezone>';
+    let mock = extend(nock('http://127.0.0.1:1337'));
+    mock.matchRequestBody('/principals/admin/', 'REPORT', body => {
+      let data = '<c:timezone>BEGIN:VTIMEZONE\nEND:VTIMEZONE</c:timezone>';
       return body.indexOf(data) !== -1;
     });
 
-    var req = request.calendarQuery({
+    let req = calendarQuery({
       url: 'http://127.0.0.1:1337/principals/admin/',
       timezone: 'BEGIN:VTIMEZONE\nEND:VTIMEZONE'
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
       mock
     );
   });
 
-  test('should resolve with appropriate data structure', function() {
+  test('should resolve with appropriate data structure', async function() {
     nock('http://127.0.0.1:1337')
       .intercept('/', 'REPORT')
       .reply(200, data.calendarQuery);
 
-    var req = request.calendarQuery({
+    let req = calendarQuery({
       props: [
         { name: 'getetag', namespace: ns.DAV },
         { name: 'calendar-data', namespace: ns.CALDAV }
@@ -112,19 +110,17 @@ suite('request.calendarQuery', function() {
       filters: [ { type: 'comp', attrs: { name: 'VCALENDAR' } } ]
     });
 
-    return xhr.send(req, 'http://127.0.0.1:1337/')
-    .then(function(calendars) {
-      assert.lengthOf(calendars, 2);
-      calendars.forEach(function(calendar) {
-        assert.typeOf(calendar.href, 'string');
-        assert.operator(calendar.href.length, '>', 0);
-        assert.include(calendar.href, '.ics');
-        assert.typeOf(calendar.props, 'object');
-        assert.typeOf(calendar.props.getetag, 'string');
-        assert.operator(calendar.props.getetag.length, '>', 0);
-        assert.typeOf(calendar.props.calendarData, 'string');
-        assert.operator(calendar.props.calendarData.length, '>', 0);
-      });
+    let calendars = await xhr.send(req, 'http://127.0.0.1:1337/');
+    assert.lengthOf(calendars, 2);
+    calendars.forEach(calendar => {
+      assert.typeOf(calendar.href, 'string');
+      assert.operator(calendar.href.length, '>', 0);
+      assert.include(calendar.href, '.ics');
+      assert.typeOf(calendar.props, 'object');
+      assert.typeOf(calendar.props.getetag, 'string');
+      assert.operator(calendar.props.getetag.length, '>', 0);
+      assert.typeOf(calendar.props.calendarData, 'string');
+      assert.operator(calendar.props.calendarData.length, '>', 0);
     });
   });
 });

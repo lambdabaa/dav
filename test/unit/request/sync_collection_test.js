@@ -1,14 +1,12 @@
-'use strict';
-
-var assert = require('chai').assert,
-    namespace = require('../../../build/namespace'),
-    nock = require('nock'),
-    nockUtils = require('./nock_utils'),
-    request = require('../../../build/request'),
-    transport = require('../../../build/transport');
+import { assert } from 'chai';
+import * as namespace from '../../../lib/namespace';
+import nock from 'nock';
+import { extend, verifyNock } from './nock_utils';
+import { Request, syncCollection } from '../../../lib/request';
+import * as transport from '../../../lib/transport';
 
 suite('request.syncCollection', function() {
-  var xhr;
+  let xhr;
 
   setup(function() {
     xhr = new transport.Basic({ username: 'admin', password: 'admin' });
@@ -20,7 +18,7 @@ suite('request.syncCollection', function() {
 
   test('should return request.Request', function() {
     assert.instanceOf(
-      request.syncCollection({
+      syncCollection({
         syncLevel: 1,
         syncToken: 'abc123',
         props: [
@@ -28,12 +26,12 @@ suite('request.syncCollection', function() {
           { name: 'calendar-data', namespace: namespace.CALDAV }
         ]
       }),
-      request.Request
+      Request
     );
   });
 
   test('should add props to request body', function() {
-    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
+    let mock = extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody(
       '/principals/admin/default/',
       'REPORT',
@@ -43,7 +41,7 @@ suite('request.syncCollection', function() {
       }
     );
 
-    var req = request.syncCollection({
+    let req = syncCollection({
       syncLevel: 1,
       syncToken: 'abc123',
       props: [
@@ -52,14 +50,14 @@ suite('request.syncCollection', function() {
       ]
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/default/'),
       mock
     );
   });
 
   test('should set sync details in request body', function() {
-    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
+    let mock = extend(nock('http://127.0.0.1:1337'));
     mock.matchRequestBody(
       '/principals/admin/default/',
       'REPORT',
@@ -69,7 +67,7 @@ suite('request.syncCollection', function() {
       }
     );
 
-    var req = request.syncCollection({
+    let req = syncCollection({
       syncLevel: 1,
       syncToken: 'abc123',
       props: [
@@ -78,7 +76,7 @@ suite('request.syncCollection', function() {
       ]
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/default/'),
       mock
     );

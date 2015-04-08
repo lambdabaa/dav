@@ -37,13 +37,13 @@
   },
 
   "devDependencies": {
-    "babel": "4.7.16",
+    "babel": "5.0.4",
     "brfs": "1.1.1",
     "browserify": "4.1.5",
     "chai": "1.9.1",
     "coveralls": "2.10.0",
     "doctoc": "0.7.1",
-    "istanbul": "0.2.10",
+    "isparta": "3.0.3",
     "mocha": "1.19.0",
     "nock": "0.32.3",
     "sinon": "1.10.0",

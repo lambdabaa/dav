@@ -1,18 +1,15 @@
-/* jshint -W106 */
-'use strict';
-
-var XMLHttpRequest = require('../../../build/xmlhttprequest'),
-    assert = require('chai').assert,
-    model = require('../../../build/model'),
-    nock = require('nock'),
-    sinon = require('sinon'),
-    transport = require('../../../build/transport');
+import XMLHttpRequest from '../../../lib/xmlhttprequest';
+import { assert } from 'chai';
+import { Credentials } from '../../../lib/model';
+import nock from 'nock';
+import sinon from 'sinon';
+import { OAuth2 } from '../../../lib/transport';
 
 suite('OAuth2#send', function() {
-  var xhr, req, credentials;
+  let xhr, req, credentials;
 
   setup(function() {
-    credentials = new model.Credentials({
+    credentials = new Credentials({
       clientId: '605300196874-1ki833poa7uqabmh3hq' +
                 '6u1onlqlsi54h.apps.googleusercontent.com',
       clientSecret: 'jQTKlOhF-RclGaGJot3HIcVf',
@@ -21,7 +18,7 @@ suite('OAuth2#send', function() {
       authorizationCode: 'gareth'
     });
 
-    xhr = new transport.OAuth2(credentials);
+    xhr = new OAuth2(credentials);
 
     req = { method: 'GET' };
   });
@@ -30,8 +27,8 @@ suite('OAuth2#send', function() {
     nock.cleanAll();
   });
 
-  test('should get access token', function() {
-    var access = nock('https://accounts.google.com')
+  test('should get access token', async function() {
+    let access = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
         200,
@@ -42,24 +39,25 @@ suite('OAuth2#send', function() {
         })
       );
 
-    var mock = nock('http://127.0.0.1:1337')
+    let mock = nock('http://127.0.0.1:1337')
       .get('/')
       .matchHeader('Authorization', 'Bearer sosafesosecret')
       .reply(200);
 
-    return xhr.send(req, 'http://127.0.0.1:1337', { retry: false })
-    .then(function(response) {
-      assert.instanceOf(response, XMLHttpRequest);
-      assert.ok(access.isDone(), 'should get access');
-      assert.strictEqual(credentials.accessToken, 'sosafesosecret');
-      assert.strictEqual(credentials.refreshToken, 'lemonade!!1');
-      assert.operator(credentials.expiration, '>', Date.now());
-      assert.ok(mock.isDone(), 'should send req with Authorization header');
+    let response = await xhr.send(req, 'http://127.0.0.1:1337', {
+      retry: false
     });
+
+    assert.instanceOf(response, XMLHttpRequest);
+    assert.ok(access.isDone(), 'should get access');
+    assert.strictEqual(credentials.accessToken, 'sosafesosecret');
+    assert.strictEqual(credentials.refreshToken, 'lemonade!!1');
+    assert.operator(credentials.expiration, '>', Date.now());
+    assert.ok(mock.isDone(), 'should send req with Authorization header');
   });
 
-  test('should refresh access token if expired', function() {
-    var refresh = nock('https://accounts.google.com')
+  test('should refresh access token if expired', async function() {
+    let refresh = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
         200,
@@ -69,7 +67,7 @@ suite('OAuth2#send', function() {
         })
       );
 
-    var mock = nock('http://127.0.0.1:1337')
+    let mock = nock('http://127.0.0.1:1337')
       .get('/')
       .matchHeader('Authorization', 'Bearer Little Bear')
       .reply(200, '200 OK');
@@ -78,44 +76,46 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = '1/oPHTPFgECWFPrs7KgHdis24u6Xl4E4EnRrkkiwLfzdk';
     credentials.expiration = Date.now() - 1;
 
-    return xhr.send(req, 'http://127.0.0.1:1337', { retry: false })
-    .then(function(response) {
-      assert.instanceOf(response, XMLHttpRequest);
-      assert.ok(refresh.isDone(), 'should refresh');
-      assert.strictEqual(credentials.accessToken, 'Little Bear');
-      assert.typeOf(credentials.expiration, 'number');
-      assert.operator(credentials.expiration, '>', Date.now());
-      assert.ok(mock.isDone(), 'should send req with Authorization header');
+    let response = await xhr.send(req, 'http://127.0.0.1:1337', {
+      retry: false
     });
+
+    assert.instanceOf(response, XMLHttpRequest);
+    assert.ok(refresh.isDone(), 'should refresh');
+    assert.strictEqual(credentials.accessToken, 'Little Bear');
+    assert.typeOf(credentials.expiration, 'number');
+    assert.operator(credentials.expiration, '>', Date.now());
+    assert.ok(mock.isDone(), 'should send req with Authorization header');
   });
 
-  test('should use provided access token if not expired', function() {
-    var token = nock('https://accounts.google.com')
+  test('should use provided access token if not expired', async function() {
+    let token = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(500);
 
-    var mock = nock('http://127.0.0.1:1337')
+    let mock = nock('http://127.0.0.1:1337')
       .get('/')
       .matchHeader('Authorization', 'Bearer Little Bear')
       .reply(200, '200 OK');
 
     credentials.accessToken = 'Little Bear';
     credentials.refreshToken = 'spicy tamales';
-    var expiration = credentials.expiration = Date.now() + 60 * 60 * 1000;
+    let expiration = credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    return xhr.send(req, 'http://127.0.0.1:1337', { retry: false })
-    .then(function(response) {
-      assert.instanceOf(response, XMLHttpRequest);
-      assert.notOk(token.isDone(), 'should not fetch new token(s)');
-      assert.strictEqual(credentials.accessToken, 'Little Bear');
-      assert.strictEqual(credentials.refreshToken, 'spicy tamales');
-      assert.strictEqual(expiration, credentials.expiration);
-      assert.ok(mock.isDone());
+    let response = await xhr.send(req, 'http://127.0.0.1:1337', {
+      retry: false
     });
+
+    assert.instanceOf(response, XMLHttpRequest);
+    assert.notOk(token.isDone(), 'should not fetch new token(s)');
+    assert.strictEqual(credentials.accessToken, 'Little Bear');
+    assert.strictEqual(credentials.refreshToken, 'spicy tamales');
+    assert.strictEqual(expiration, credentials.expiration);
+    assert.ok(mock.isDone());
   });
 
-  test('should retry if 401', function() {
-    var refresh = nock('https://accounts.google.com')
+  test('should retry if 401', async function() {
+    let refresh = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
         200,
@@ -125,12 +125,12 @@ suite('OAuth2#send', function() {
         })
       );
 
-    var authorized = nock('http://127.0.0.1:1337')
+    let authorized = nock('http://127.0.0.1:1337')
       .get('/')
       .matchHeader('Authorization', 'Bearer Little Bear')
       .reply(200, '200 OK');
 
-    var unauthorized = nock('http://127.0.0.1:1337')
+    let unauthorized = nock('http://127.0.0.1:1337')
       .get('/')
       .matchHeader('Authorization', 'Bearer EXPIRED')
       .reply(401, '401 Unauthorized');
@@ -139,21 +139,19 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = 'raspberry pie';
     credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    return xhr.send(req, 'http://127.0.0.1:1337')
-    .then(function(response) {
-      assert.instanceOf(response, XMLHttpRequest);
-      assert.strictEqual(response.status, 200);
-      assert.strictEqual(response.responseText, '200 OK');
-      assert.ok(unauthorized.isDone(), 'tried to use expired access token');
-      assert.ok(refresh.isDone(), 'should refresh access token on 401');
-      assert.strictEqual(credentials.accessToken, 'Little Bear');
-      assert.operator(credentials.expiration, '>', Date.now());
-      assert.ok(authorized.isDone(), 'should then use new access token');
-    });
+    let response = await xhr.send(req, 'http://127.0.0.1:1337');
+    assert.instanceOf(response, XMLHttpRequest);
+    assert.strictEqual(response.status, 200);
+    assert.strictEqual(response.responseText, '200 OK');
+    assert.ok(unauthorized.isDone(), 'tried to use expired access token');
+    assert.ok(refresh.isDone(), 'should refresh access token on 401');
+    assert.strictEqual(credentials.accessToken, 'Little Bear');
+    assert.operator(credentials.expiration, '>', Date.now());
+    assert.ok(authorized.isDone(), 'should then use new access token');
   });
 
-  test('should retry once at most', function() {
-    var refresh = nock('https://accounts.google.com')
+  test('should retry once at most', async function() {
+    let refresh = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
         200,
@@ -172,15 +170,17 @@ suite('OAuth2#send', function() {
     credentials.accessToken = 'EXPIRED';
     credentials.refreshToken = 'soda';
 
-    var spy = sinon.spy(xhr, 'send');
+    let spy = sinon.spy(xhr, 'send');
 
-    return xhr.send(req, 'http://127.0.0.1:1337')
-    .catch(function(error) {
+    try {
+      await xhr.send(req, 'http://127.0.0.1:1337')
+      assert.fail('Should have failed on error');
+    } catch (error) {
       assert.instanceOf(error, Error);
       assert.include(error.toString(), 'Bad status: 401');
       assert.ok(refresh.isDone(), 'should refresh access token on 401');
       assert.strictEqual(spy.callCount, 2);
       spy.restore();
-    });
+    }
   });
 });

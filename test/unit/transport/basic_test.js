@@ -1,19 +1,17 @@
-'use strict';
-
-var XMLHttpRequest = require('../../../build/xmlhttprequest'),
-    assert = require('chai').assert,
-    createSandbox = require('../../../build').createSandbox,
-    model = require('../../../build/model'),
-    nock = require('nock'),
-    sinon = require('sinon'),
-    transport = require('../../../build/transport');
+import XMLHttpRequest from '../../../lib/xmlhttprequest';
+import { assert } from 'chai';
+import { createSandbox } from '../../../lib/sandbox';
+import { Credentials } from '../../../lib/model';
+import nock from 'nock';
+import sinon from 'sinon';
+import { Basic } from '../../../lib/transport';
 
 suite('Basic#send', function() {
-  var xhr, req;
+  let xhr, req;
 
   setup(function() {
-    xhr = new transport.Basic(
-      new model.Credentials({ username: 'admin', password: 'admin' })
+    xhr = new Basic(
+      new Credentials({ username: 'admin', password: 'admin' })
     );
 
     req = {
@@ -27,28 +25,26 @@ suite('Basic#send', function() {
   });
 
   test('should sandbox xhr', function() {
-    var sandbox = createSandbox();
+    let sandbox = createSandbox();
     assert.lengthOf(sandbox.requestList, 0);
     xhr.send(req, 'http://127.0.0.1:1337', { sandbox: sandbox });
     assert.lengthOf(sandbox.requestList, 1);
   });
 
   test('should apply `transformRequest`', function() {
-    var stub = sinon.stub(req, 'transformRequest');
+    let stub = sinon.stub(req, 'transformRequest');
     xhr.send(req, 'http://127.0.0.1:1337');
     sinon.assert.called(stub);
   });
 
-  test('should send req', function() {
-    var nockObj = nock('http://127.0.0.1:1337')
+  test('should send req', async function() {
+    let nockObj = nock('http://127.0.0.1:1337')
       .get('/')
       .reply(200, '200 OK');
 
     assert.notOk(nockObj.isDone());
-    xhr.send(req, 'http://127.0.0.1:1337')
-    .then(function() {
-      assert.ok(nockObj.isDone());
-    });
+    await xhr.send(req, 'http://127.0.0.1:1337');
+    assert.ok(nockObj.isDone());
   });
 
   test('should invoke onerror if error thrown', function(done) {
@@ -65,15 +61,13 @@ suite('Basic#send', function() {
     xhr.send(req, 'http://127.0.0.1:1337');
   });
 
-  test('should return promise that resolves with xhr', function() {
+  test('should return promise that resolves with xhr', async function() {
     nock('http://127.0.0.1:1337')
       .get('/')
       .reply(200, '200 OK');
 
-    return xhr.send(req, 'http://127.0.0.1:1337')
-    .then(function(value) {
-      assert.instanceOf(value, XMLHttpRequest);
-      assert.strictEqual(value.request.readyState, 4);
-    });
+    let value = await xhr.send(req, 'http://127.0.0.1:1337');
+    assert.instanceOf(value, XMLHttpRequest);
+    assert.strictEqual(value.request.readyState, 4);
   });
 });

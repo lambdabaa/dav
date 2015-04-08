@@ -1,14 +1,13 @@
-'use strict';
+import { assert } from 'chai';
+import data from './data';
+import * as dav from '../../lib';
 
-var assert = require('chai').assert,
-    data = require('./data'),
-    dav = require('../../build'),
-    debug = require('debug')('dav:calendars_test');
+let debug = require('debug')('dav:calendars_test');
 
 suite('calendars', function() {
-  var calendars, xhr;
+  let calendars, xhr;
 
-  setup(function() {
+  setup(async function() {
     debug('Create account.');
     xhr = new dav.transport.Basic(
       new dav.Credentials({
@@ -17,39 +16,32 @@ suite('calendars', function() {
       })
     );
 
-    return dav.createAccount({ server: 'http://127.0.0.1:8888/', xhr: xhr })
-    .then(function(response) {
-      var calendar = response.calendars[0];
-      var objects = calendar.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 0, 'initially 0 calendar objects');
-      debug('Create calendar object.');
-      return dav.createCalendarObject(calendar, {
-        filename: 'test.ics',
-        data: data.bastilleDayParty,
-        xhr: xhr
-      });
-    })
-    .then(function() {
-      // TODO(gareth): Once we implement account sync,
-      //     do that here.
-      debug('Fetch account again.');
-      return dav.createAccount({
-        server: 'http://127.0.0.1:8888/',
-        xhr: xhr
-      });
-    })
-    .then(function(response) {
-      calendars = response.calendars;
+    let account = await dav.createAccount({
+      server: 'http://127.0.0.1:8888/',
+      xhr: xhr
     });
+
+    let calendar = account.calendars[0];
+    let objects = calendar.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 0, 'initially 0 calendar objects');
+    debug('Create calendar object.');
+    await dav.createCalendarObject(calendar, {
+      filename: 'test.ics',
+      data: data.bastilleDayParty,
+      xhr: xhr
+    });
+
+    let synced = await dav.syncCaldavAccount(account, { xhr: xhr });
+    calendars = synced.calendars;
   });
 
   test('#createCalendarObject', function() {
-    var calendar = calendars[0];
-    var objects = calendar.objects;
+    let calendar = calendars[0];
+    let objects = calendar.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
-    var object = objects[0];
+    let object = objects[0];
     assert.instanceOf(object, dav.CalendarObject);
     assert.instanceOf(object.calendar, dav.Calendar);
     assert.strictEqual(object.calendarData, data.bastilleDayParty);
@@ -59,137 +51,130 @@ suite('calendars', function() {
     );
   });
 
-  test('#updateCalendarObject, #sync', function() {
-    var calendar = calendars[0];
-    var object = calendar.objects[0];
+  test('#updateCalendarObject, #sync', async function() {
+    let calendar = calendars[0];
+    let object = calendar.objects[0];
     object.calendarData = object.calendarData.replace(
       'SUMMARY:Bastille Day Party',
       'SUMMARY:Happy Hour'
     );
 
-    return dav.updateCalendarObject(object, { xhr: xhr })
-    .then(function() {
-      return dav.syncCalendar(calendar, { syncMethod: 'basic', xhr: xhr });
-    })
-    .then(function(calendar) {
-      var objects = calendar.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 1, 'update should not create new object');
-      var object = objects[0];
-      assert.instanceOf(object, dav.CalendarObject);
-      assert.instanceOf(object.calendar, dav.Calendar);
-      assert.notStrictEqual(
-        object.calendarData,
-        data.bastilleDayParty,
-        'data should have changed on server'
-      );
-      assert.include(
-        object.calendarData,
-        'SUMMARY:Happy Hour',
-        'data should reflect update'
-      );
-      assert.notInclude(
-        object.calendardata,
-        'SUMMARY:Bastille Day Party',
-        'data should reflect update'
-      );
-      assert.strictEqual(
-        object.url,
-        'http://127.0.0.1:8888/calendars/admin/default/test.ics',
-        'update should not change object url'
-      );
+    await dav.updateCalendarObject(object, { xhr: xhr });
+    calendar = await dav.syncCalendar(calendar, {
+      syncMethod: 'basic',
+      xhr: xhr
     });
+
+    let objects = calendar.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 1, 'update should not create new object');
+    object = objects[0];
+    assert.instanceOf(object, dav.CalendarObject);
+    assert.instanceOf(object.calendar, dav.Calendar);
+    assert.notStrictEqual(
+      object.calendarData,
+      data.bastilleDayParty,
+      'data should have changed on server'
+    );
+    assert.include(
+      object.calendarData,
+      'SUMMARY:Happy Hour',
+      'data should reflect update'
+    );
+    assert.notInclude(
+      object.calendardata,
+      'SUMMARY:Bastille Day Party',
+      'data should reflect update'
+    );
+    assert.strictEqual(
+      object.url,
+      'http://127.0.0.1:8888/calendars/admin/default/test.ics',
+      'update should not change object url'
+    );
   });
 
-  test('webdav sync', function() {
-    var calendar = calendars[0];
-    var object = calendar.objects[0];
+  test('webdav sync', async function() {
+    let calendar = calendars[0];
+    let object = calendar.objects[0];
     object.calendarData = object.calendarData.replace(
       'SUMMARY:Bastille Day Party',
       'SUMMARY:Happy Hour'
     );
 
-    var prevEtag = object.etag;
+    let prevEtag = object.etag;
     assert.typeOf(prevEtag, 'string');
     assert.operator(prevEtag.length, '>', 0);
 
-    var prevSyncToken = calendar.syncToken;
+    let prevSyncToken = calendar.syncToken;
     assert.typeOf(prevSyncToken, 'string');
     assert.operator(prevSyncToken.length, '>', 0);
 
-    return dav.updateCalendarObject(object, { xhr: xhr })
-    .then(function() {
-      return dav.syncCalendar(calendar, { syncMethod: 'webdav', xhr: xhr });
-    })
-    .then(function(calendar) {
-      var objects = calendar.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 1, 'update should not create new object');
-
-      var object = objects[0];
-      assert.instanceOf(object, dav.CalendarObject);
-      assert.instanceOf(object.calendar, dav.Calendar);
-
-      assert.notStrictEqual(
-        object.calendarData,
-        data.bastilleDayParty,
-        'data should have changed on server'
-      );
-
-      assert.include(
-        object.calendarData,
-        'SUMMARY:Happy Hour',
-        'data should reflect update'
-      );
-
-      assert.notInclude(
-        object.calendardata,
-        'SUMMARY:Bastille Day Party',
-        'data should reflect update'
-      );
-
-      assert.strictEqual(
-        object.url,
-        'http://127.0.0.1:8888/calendars/admin/default/test.ics',
-        'update should not change object url'
-      );
-
-      assert.typeOf(object.etag, 'string');
-      assert.operator(object.etag.length, '>', 0);
-      assert.notStrictEqual(prevEtag, object.etag, 'new etag');
-
-      assert.typeOf(calendar.syncToken, 'string');
-      assert.operator(calendar.syncToken.length, '>', 0);
-      assert.notStrictEqual(calendar.syncToken, prevSyncToken, 'new token');
+    await dav.updateCalendarObject(object, { xhr: xhr });
+    calendar = await dav.syncCalendar(calendar, {
+      syncMethod: 'webdav',
+      xhr: xhr
     });
+
+    let objects = calendar.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 1, 'update should not create new object');
+
+    object = objects[0];
+    assert.instanceOf(object, dav.CalendarObject);
+    assert.instanceOf(object.calendar, dav.Calendar);
+
+    assert.notStrictEqual(
+      object.calendarData,
+      data.bastilleDayParty,
+      'data should have changed on server'
+    );
+
+    assert.include(
+      object.calendarData,
+      'SUMMARY:Happy Hour',
+      'data should reflect update'
+    );
+
+    assert.notInclude(
+      object.calendardata,
+      'SUMMARY:Bastille Day Party',
+      'data should reflect update'
+    );
+
+    assert.strictEqual(
+      object.url,
+      'http://127.0.0.1:8888/calendars/admin/default/test.ics',
+      'update should not change object url'
+    );
+
+    assert.typeOf(object.etag, 'string');
+    assert.operator(object.etag.length, '>', 0);
+    assert.notStrictEqual(prevEtag, object.etag, 'new etag');
+
+    assert.typeOf(calendar.syncToken, 'string');
+    assert.operator(calendar.syncToken.length, '>', 0);
+    assert.notStrictEqual(calendar.syncToken, prevSyncToken, 'new token');
   });
 
-  test('#deleteCalendarObject', function() {
-    var calendar = calendars[0];
-    var objects = calendar.objects;
+  test('#deleteCalendarObject', async function() {
+    let calendar = calendars[0];
+    let objects = calendar.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
-    var object = objects[0];
-    return dav.deleteCalendarObject(object, { xhr: xhr })
-    .then(function() {
-      // TODO(gareth): Once we implement incremental/webdav sync,
-      //     do that here.
-      return dav.createAccount({
-        server: 'http://127.0.0.1:8888/',
-        xhr: xhr
-      });
-    })
-    .then(function(response) {
-      var calendars = response.calendars;
-      var calendar = calendars[0];
-      var objects = calendar.objects;
-      assert.isArray(objects);
-      assert.lengthOf(objects, 0, 'should be deleted');
+    let object = objects[0];
+    await dav.deleteCalendarObject(object, { xhr: xhr });
+    let updated = await dav.syncCalendar(calendar, {
+      syncMethod: 'basic',
+      xhr: xhr
     });
+
+    objects = updated.objects;
+    assert.isArray(objects);
+    assert.lengthOf(objects, 0, 'should be deleted');
   });
 
-  test('time-range filtering', function() {
-    var inrange = dav.createAccount({
+  test('time-range filtering', async function() {
+    let account1 = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       filters: [{
         type: 'comp-filter',
@@ -204,12 +189,11 @@ suite('calendars', function() {
         }]
       }],
       xhr: xhr
-    })
-    .then(function(account) {
-      assert.lengthOf(account.calendars[0].objects, 1, 'in range');
     });
 
-    var outofrange = dav.createAccount({
+    assert.lengthOf(account1.calendars[0].objects, 1, 'in range');
+
+    let account2 = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       filters: [{
         type: 'comp-filter',
@@ -224,33 +208,27 @@ suite('calendars', function() {
         }]
       }],
       xhr: xhr
-    })
-    .then(function(account) {
-      assert.lengthOf(account.calendars[0].objects, 0, 'out of range');
     });
 
-    return Promise.all([inrange, outofrange]);
+    assert.lengthOf(account2.calendars[0].objects, 0, 'out of range');
   });
 
-  test('#syncCaldavAccount', function() {
-    return dav.createAccount({
+  test('#syncCaldavAccount', async function() {
+    let account = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       accountType: 'caldav',
       loadCollections: false
-    })
-    .then(function(account) {
-      assert.instanceOf(account, dav.Account);
-      assert.notOk(account.calendars);
-      return dav.syncCaldavAccount(account, { xhr: xhr });
-    })
-    .then(function(account) {
-      assert.instanceOf(account, dav.Account);
-      assert.isArray(account.calendars);
-      assert.lengthOf(account.calendars, 1);
-      var calendar = account.calendars[0];
-      assert.instanceOf(calendar, dav.Calendar);
-      assert.strictEqual(calendar.displayName, 'default calendar');
     });
+    assert.instanceOf(account, dav.Account);
+    assert.notOk(account.calendars);
+
+    account = await dav.syncCaldavAccount(account, { xhr: xhr });
+    assert.instanceOf(account, dav.Account);
+    assert.isArray(account.calendars);
+    assert.lengthOf(account.calendars, 1);
+    let calendar = account.calendars[0];
+    assert.instanceOf(calendar, dav.Calendar);
+    assert.strictEqual(calendar.displayName, 'default calendar');
   });
 });

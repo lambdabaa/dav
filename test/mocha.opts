@@ -1,4 +1,6 @@
+--compilers babel:babel/register
 --recursive
+--require test/unit/entrypoint
 --reporter spec
 --timeout 20s
 --ui tdd

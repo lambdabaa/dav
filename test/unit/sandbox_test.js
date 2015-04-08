@@ -1,14 +1,11 @@
-'use strict';
-
-var XMLHttpRequest = require('../../build/xmlhttprequest'),
-    assert = require('chai').assert,
-    dav = require('../../build'),
-    sinon = require('sinon');
-
-var createSandbox = dav.createSandbox;
+import XMLHttpRequest from '../../lib/xmlhttprequest';
+import { assert } from 'chai';
+import { Sandbox, createSandbox } from '../../lib/sandbox';
+import * as dav from '../../lib';
+import sinon from 'sinon';
 
 suite('sandbox', function() {
-  var sandbox;
+  let sandbox;
 
   setup(function() {
     sandbox = createSandbox();
@@ -16,7 +13,7 @@ suite('sandbox', function() {
 
   test('#add', function() {
     assert.lengthOf(sandbox.requestList, 0);
-    var one = new XMLHttpRequest(),
+    let one = new XMLHttpRequest(),
         two = new XMLHttpRequest();
     sandbox.add(one);
     sandbox.add(two);
@@ -26,11 +23,11 @@ suite('sandbox', function() {
   });
 
   test('#abort', function() {
-    var one = new XMLHttpRequest(),
+    let one = new XMLHttpRequest(),
         two = new XMLHttpRequest();
     sandbox.add(one);
     sandbox.add(two);
-    var stubOne = sinon.stub(one, 'abort'),
+    let stubOne = sinon.stub(one, 'abort'),
         stubTwo = sinon.stub(two, 'abort');
     sandbox.abort();
     sinon.assert.calledOnce(stubOne);
@@ -39,19 +36,19 @@ suite('sandbox', function() {
 });
 
 suite('new sandbox object interface', function() {
-  var sandbox;
+  let sandbox;
 
   setup(function() {
-    sandbox = new dav.Sandbox();
+    sandbox = new Sandbox();
   });
 
   test('constructor', function() {
-    assert.instanceOf(sandbox, dav.Sandbox);
+    assert.instanceOf(sandbox, Sandbox);
   });
 
   test('#add', function() {
     assert.lengthOf(sandbox.requestList, 0);
-    var one = new XMLHttpRequest(),
+    let one = new XMLHttpRequest(),
         two = new XMLHttpRequest();
     sandbox.add(one);
     sandbox.add(two);
@@ -61,11 +58,11 @@ suite('new sandbox object interface', function() {
   });
 
   test('#abort', function() {
-    var one = new XMLHttpRequest(),
+    let one = new XMLHttpRequest(),
         two = new XMLHttpRequest();
     sandbox.add(one);
     sandbox.add(two);
-    var stubOne = sinon.stub(one, 'abort'),
+    let stubOne = sinon.stub(one, 'abort'),
         stubTwo = sinon.stub(two, 'abort');
     sandbox.abort();
     sinon.assert.calledOnce(stubOne);

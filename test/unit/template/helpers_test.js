@@ -1,11 +1,9 @@
-'use strict';
-
-var assert = require('assert'),
-    helpers = require('../../../build/template');
+import { assert } from 'chai';
+import { filterHelper, propHelper } from '../../../lib/template';
 
 suite('Handlebars helpers', function() {
   test('comp-filter', function() {
-    var filter = helpers.filterHelper({
+    let filter = filterHelper({
       type: 'comp-filter',
       attrs: { name: 'VCALENDAR' }
     })
@@ -15,7 +13,7 @@ suite('Handlebars helpers', function() {
   });
 
   test('time-range', function() {
-    var filter = helpers.filterHelper({
+    let filter = filterHelper({
       type: 'time-range',
       attrs: { start: '20060104T000000Z', end: '20060105T000000Z' }
     })
@@ -28,7 +26,7 @@ suite('Handlebars helpers', function() {
   });
 
   test('time-range no end', function() {
-    var filter = helpers.filterHelper({
+    let filter = filterHelper({
       type: 'time-range',
       attrs: { start: '20060104T000000Z' }
     })
@@ -38,7 +36,7 @@ suite('Handlebars helpers', function() {
   });
 
   test('nested', function() {
-    var filter = helpers.filterHelper({
+    let filter = filterHelper({
       type: 'comp-filter',
       attrs: { name: 'VCALENDAR' },
       children: [{
@@ -63,7 +61,7 @@ suite('Handlebars helpers', function() {
   });
 
   test('prop', function() {
-    var prop = helpers.propHelper({
+    let prop = propHelper({
       name: 'spongebob',
       namespace: 'urn:ietf:params:xml:ns:caldav'
     })

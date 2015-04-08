@@ -1,13 +1,11 @@
-'use strict';
-
-var assert = require('chai').assert,
-    data = require('../data'),
-    parser = require('../../../build/parser');
+import { assert } from 'chai';
+import data from '../data';
+import { multistatus } from '../../../lib/parser';
 
 suite('parser.multistatus', function() {
   test('propfind (current-user-principal)', function() {
-    var currentUserPrincipal = data.currentUserPrincipal;
-    assert.deepEqual(parser.multistatus(currentUserPrincipal), {
+    let currentUserPrincipal = data.currentUserPrincipal;
+    assert.deepEqual(multistatus(currentUserPrincipal), {
       response: [{
         href: '/',
         propstat: [{
@@ -21,8 +19,8 @@ suite('parser.multistatus', function() {
   });
 
   test('report (calendar-query)', function() {
-    var calendarQuery = data.calendarQuery;
-    assert.deepEqual(parser.multistatus(calendarQuery), {
+    let calendarQuery = data.calendarQuery;
+    assert.deepEqual(multistatus(calendarQuery), {
       response: [
         {
           href: '/calendars/johndoe/home/132456762153245.ics',
@@ -49,8 +47,8 @@ suite('parser.multistatus', function() {
   });
 
   test('report (sync-collection)', function() {
-    var syncCollection = data.syncCollection;
-    assert.deepEqual(parser.multistatus(syncCollection), {
+    let syncCollection = data.syncCollection;
+    assert.deepEqual(multistatus(syncCollection), {
       response: [{
         href: '/calendars/admin/default/test.ics',
         propstat: [{

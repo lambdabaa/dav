@@ -1,12 +1,10 @@
-'use strict';
+import { format } from 'util';
+import { exec, spawn } from 'child_process';
+import tcpPortUsed from 'tcp-port-used';
 
-var debug = require('debug')('dav:server'),
-    format = require('util').format,
-    exec = require('child_process').exec,
-    spawn = require('child_process').spawn,
-    tcpPortUsed = require('tcp-port-used');
+let debug = require('debug')('dav:test:bootstrap');
 
-var calendarData = {
+let calendarData = {
   table: 'calendars',
   data: {
     principaluri: 'principals/admin',
@@ -19,7 +17,7 @@ var calendarData = {
   }
 };
 
-var contactsData = {
+let contactsData = {
   table: 'addressbooks',
   data: {
     principaluri: 'principals/admin',
@@ -31,19 +29,16 @@ var contactsData = {
 };
 
 
-var inserts = [
-  calendarData,
-  contactsData
-].map(function(tableData) {
-  var table = tableData.table,
+let inserts = [calendarData, contactsData].map(tableData => {
+  let table = tableData.table,
       data = tableData.data;
 
-  var columns = [],
+  let columns = [],
       values = [];
-  for (var column in data) {
-    var value = data[column];
+  for (let column in data) {
+    let value = data[column];
     columns.push(column);
-    values.push('\'' + value + '\'');
+    values.push(`\'${value}\'`);
   }
 
   return format(
@@ -59,14 +54,14 @@ var inserts = [
   'mkdir data/',
   'chmod -R a+rw data/',
   'cat examples/sql/sqlite.* | sqlite3 data/db.sqlite'
-].concat(inserts).forEach(function(command) {
-  debug('exec: ' + command);
+].concat(inserts).forEach(command => {
+  debug(`exec: ${command}`);
   setup(function(done) {
-    exec(command, { cwd: __dirname + '/SabreDAV' }, function() { done(); });
+    exec(command, { cwd: __dirname + '/SabreDAV' }, () => done());
   });
 });
 
-var server;
+let server;
 setup(function() {
   debug('Start dav server.');
   server = spawn('php', [
@@ -105,6 +100,6 @@ teardown(function() {
   'rm -rf data/'
 ].forEach(function(command) {
   teardown(function(done) {
-    exec(command, { cwd: __dirname }, function() { done(); });
+    exec(command, { cwd: __dirname }, () => done());
   });
 });

@@ -42,8 +42,10 @@ clean:
 ci: test coverage
 
 .PHONY: coverage
-coverage: node_modules
-	./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly
+coverage: node_modules test/integration/server/SabreDAV
+	./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover \
+		--report lcovonly \
+		./node_modules/.bin/_mocha
 	cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
 	rm -rf ./coverage
 
@@ -51,11 +53,11 @@ coverage: node_modules
 test: test-unit test-integration
 
 .PHONY: test-unit
-test-unit: build node_modules
+test-unit: node_modules
 	./node_modules/.bin/mocha test/unit
 
 .PHONY: test-integration
-test-integration: build node_modules test/integration/server/SabreDAV
+test-integration: node_modules test/integration/server/SabreDAV
 	./node_modules/.bin/mocha test/integration
 
 .PHONY: toc

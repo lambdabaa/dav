@@ -1,15 +1,13 @@
-'use strict';
-
-var assert = require('chai').assert,
-    data = require('../data'),
-    nock = require('nock'),
-    nockUtils = require('./nock_utils'),
-    ns = require('../../../build/namespace'),
-    request = require('../../../build/request'),
-    transport = require('../../../build/transport');
+import { assert } from 'chai';
+import data from '../data';
+import nock from 'nock';
+import { extend, verifyNock } from './nock_utils';
+import * as ns from '../../../lib/namespace';
+import { Request, addressBookQuery } from '../../../lib/request';
+import * as transport from '../../../lib/transport';
 
 suite('request.addressBookQuery', function() {
-  var xhr;
+  let xhr;
 
   setup(function() {
     xhr = new transport.Basic({ username: 'admin', password: 'admin' });
@@ -21,68 +19,66 @@ suite('request.addressBookQuery', function() {
 
   test('should return request.Request', function() {
     assert.instanceOf(
-      request.addressBookQuery({
+      addressBookQuery({
         props: [],
         depth: 1
       }),
-      request.Request
+      Request
     );
   });
 
   test('should set depth header', function() {
-    var mock = nock('http://127.0.0.1:1337')
+    let mock = nock('http://127.0.0.1:1337')
       .matchHeader('Depth', 1)
       .intercept('/principals/admin/', 'REPORT')
       .reply(200);
 
-    var req = request.addressBookQuery({
+    let req = addressBookQuery({
       props: [ { name: 'address-data', namespace: ns.CARDDAV } ],
       depth: 1
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
       mock
     );
   });
 
   test('should add specified props to report body', function() {
-    var mock = nockUtils.extend(nock('http://127.0.0.1:1337'));
-    mock.matchRequestBody('/principals/admin/', 'REPORT', function(body) {
+    let mock = extend(nock('http://127.0.0.1:1337'));
+    mock.matchRequestBody('/principals/admin/', 'REPORT', body => {
       return body.indexOf('<d:catdog />') !== -1;
     });
 
-    var req = request.addressBookQuery({
+    let req = addressBookQuery({
       props: [ { name: 'catdog', namespace: ns.DAV } ]
     });
 
-    return nockUtils.verifyNock(
+    return verifyNock(
       xhr.send(req, 'http://127.0.0.1:1337/principals/admin/'),
       mock
     );
   });
 
-  test('should resolve with appropriate data structure', function() {
+  test('should resolve with appropriate data structure', async function() {
     nock('http://127.0.0.1:1337')
       .intercept('/', 'REPORT')
       .reply(200, data.addressBookQuery);
 
 
-    var req = request.addressBookQuery({
+    let req = addressBookQuery({
       props: [
         { name: 'getetag', namespace: ns.DAV },
         { name: 'address-data', namespace: ns.CARDDAV }
       ]
     });
 
-    return xhr.send(req, 'http://127.0.0.1:1337/')
-    .then(function(addressBooks) {
-      assert.lengthOf(addressBooks, 2);
-      addressBooks.forEach(function(addressBook) {
-        assert.typeOf(addressBook.href, 'string');
-        assert.operator(addressBook.href.length, '>', 0);
-        assert.typeOf(addressBook.props, 'object');
-      });
+    let addressBooks = await xhr.send(req, 'http://127.0.0.1:1337');
+    assert.lengthOf(addressBooks, 2);
+    addressBooks.forEach(addressBook => {
+      assert.typeOf(addressBook.href, 'string');
+      assert.operator(addressBook.href.length, '>', 0);
+      assert.typeOf(addressBook.props, 'object');
     });
   });
 });

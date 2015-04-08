@@ -1,10 +1,9 @@
-'use strict';
-var assert = require('chai').assert;
+import { assert } from 'chai';
 
-exports.extend = function(nockObj) {
+export function extend(nockObj) {
   // This is a hack suggested here https://github.com/pgte/nock#protip
   // to intercept the request conditional on the request body.
-  nockObj.matchRequestBody = function(path, method, match, options) {
+  nockObj.matchRequestBody = (path, method, match, options) => {
     options = options || {};
     var statusCode = options.statusCode || 200,
         statusText = options.statusText || '200 OK';
@@ -24,13 +23,12 @@ exports.extend = function(nockObj) {
  * Whether or not an error is thrown in the promise,
  * the mock should have intercepted the request.
  */
-exports.verifyNock = function(promise, nockObj) {
-  return promise
-  .then(function() {
-    nockObj.done();
-  })
-  .catch(function(error) {
+export async function verifyNock(promise, nockObj) {
+  try {
+    await promise;
+  } catch (error) {
     assert.notInclude(error.toString(), 'ECONNREFUSED');
+  } finally {
     nockObj.done();
-  });
+  }
 };

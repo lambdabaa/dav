@@ -1,14 +1,16 @@
-'use strict';
-var camelize = require('../../../build/camelize'),
-    format = require('util').format,
-    fs = require('fs');
+import camelize from '../../../lib/camelize';
+import { format } from 'util';
+import fs from 'fs';
+
+let docs = {};
+export default docs;
 
 [
   { name: 'bastille_day_party', fmt: 'ics' },
   { name: 'forrest_gump', fmt: 'vcf' }
 ].forEach(function(file) {
-  var camelCase = camelize(file.name);
-  exports[camelCase] = fs.readFileSync(
+  let camelCase = camelize(file.name);
+  docs[camelCase] = fs.readFileSync(
     format('%s/%s.%s', __dirname, file.name, file.fmt),
     'utf-8'
   );
