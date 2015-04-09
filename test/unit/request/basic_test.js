@@ -1,8 +1,8 @@
 import { assert } from 'chai';
-import nock from 'nock';
-import { extend, verifyNock } from './nock_utils';
+
 import { Request, basic } from '../../../lib/request';
 import * as transport from '../../../lib/transport';
+import { nockWrapper } from '../nock_wrapper';
 
 suite('put', function() {
   let xhr;
@@ -11,24 +11,10 @@ suite('put', function() {
     xhr = new transport.Basic({ user: 'admin', password: 'admin' });
   });
 
-  teardown(function() {
-    nock.cleanAll();
-  });
+  teardown(() => nockWrapper.cleanAll());
 
-  test('should return request.Request', function() {
-    assert.instanceOf(
-      basic({
-        method: 'PUT',
-        username: 'abc',
-        password: '123',
-        data: 'yoyoma'
-      }),
-      Request
-    );
-  });
-
-  test('should set If-Match header', function() {
-    let mock = nock('http://127.0.0.1:1337')
+  test('should set If-Match header', async function() {
+    let mock = nockWrapper('http://127.0.0.1:1337')
       .matchHeader('If-Match', '1337')
       .intercept('/', 'PUT')
       .reply(200);
@@ -38,25 +24,27 @@ suite('put', function() {
       etag: '1337'
     });
 
-    return verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
+    let send = xhr.send(req, 'http://127.0.0.1:1337');
+    await mock.verify(send);
   });
 
-  test('should send options data as request body', function() {
-    let mock = extend(nock('http://127.0.0.1:1337'));
-    mock.matchRequestBody('/', 'PUT', body => {
-      return body === 'Bad hair day!';
-    });
+  test('should send options data as request body', async function() {
+    let mock = nockWrapper('http://127.0.0.1:1337')
+      .matchRequestBody('/', 'PUT', body => {
+        return body === 'Bad hair day!';
+      });
 
     let req = basic({
       method: 'PUT',
       data: 'Bad hair day!'
     });
 
-    return verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
+    let send = xhr.send(req, 'http://127.0.0.1:1337');
+    await mock.verify(send);
   });
 
   test('should throw error on bad response', async function() {
-    nock('http://127.0.0.1:1337')
+    nockWrapper('http://127.0.0.1:1337')
       .intercept('/', 'PUT')
       .delay(1)
       .reply('400', '400 Bad Request');

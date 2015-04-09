@@ -1,8 +1,9 @@
-import XMLHttpRequest from '../../../lib/xmlhttprequest';
 import { assert } from 'chai';
-import { createSandbox } from '../../../lib/sandbox';
 import nock from 'nock';
 import sinon from 'sinon';
+
+import { createSandbox } from '../../lib/sandbox';
+import XMLHttpRequest from '../../lib/xmlhttprequest';
 
 suite('XMLHttpRequest#send', function() {
   let request;

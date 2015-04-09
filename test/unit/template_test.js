@@ -1,5 +1,6 @@
 import { assert } from 'chai';
-import { filterHelper, propHelper } from '../../../lib/template';
+
+import { filterHelper, propHelper } from '../../lib/template';
 
 suite('Handlebars helpers', function() {
   test('comp-filter', function() {

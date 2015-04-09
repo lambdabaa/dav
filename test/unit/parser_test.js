@@ -1,6 +1,7 @@
 import { assert } from 'chai';
-import data from '../data';
-import { multistatus } from '../../../lib/parser';
+
+import { multistatus } from '../../lib/parser';
+import data from './data';
 
 suite('parser.multistatus', function() {
   test('propfind (current-user-principal)', function() {

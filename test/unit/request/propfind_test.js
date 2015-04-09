@@ -1,10 +1,10 @@
 import { assert } from 'chai';
-import data from '../data';
+
 import * as namespace from '../../../lib/namespace';
-import nock from 'nock';
-import { extend, verifyNock } from './nock_utils';
 import { Request, propfind } from '../../../lib/request';
 import * as transport from '../../../lib/transport';
+import data from '../data';
+import { nockWrapper } from '../nock_wrapper';
 
 suite('request.propfind', function() {
   let xhr;
@@ -13,22 +13,10 @@ suite('request.propfind', function() {
     xhr = new transport.Basic({ user: 'admin', password: 'admin' });
   });
 
-  teardown(function() {
-    nock.cleanAll();
-  });
+  teardown(() => nockWrapper.cleanAll());
 
-  test('should return request.Request', function() {
-    assert.instanceOf(
-      propfind({
-        props: [ { name: 'catdog', namespace: namespace.DAV } ],
-        depth: '0'
-      }),
-      Request
-    );
-  });
-
-  test('should set depth header', function() {
-    let mock = nock('http://127.0.0.1:1337')
+  test('should set depth header', async function() {
+    let mock = nockWrapper('http://127.0.0.1:1337')
       .matchHeader('Depth', '0')  // Will only get intercepted if Depth => 0.
       .intercept('/', 'PROPFIND')
       .reply(200);
@@ -38,28 +26,27 @@ suite('request.propfind', function() {
       depth: '0'
     });
 
-    return verifyNock(
-      xhr.send(req, 'http://127.0.0.1:1337'),
-      mock
-    );
+    let send = xhr.send(req, 'http://127.0.0.1:1337');
+    await mock.verify(send);
   });
 
-  test('should add specified properties to propfind body', function() {
-    let mock = extend(nock('http://127.0.0.1:1337'));
-    mock.matchRequestBody('/', 'PROPFIND', function(body) {
-      return body.indexOf('<d:catdog />') !== -1;
-    });
+  test('should add specified properties to propfind body', async function() {
+    let mock = nockWrapper('http://127.0.0.1:1337')
+      .matchRequestBody('/', 'PROPFIND', function(body) {
+        return body.indexOf('<d:catdog />') !== -1;
+      });
 
     let req = propfind({
       props: [ { name: 'catdog', namespace: namespace.DAV } ],
       depth: '0'
     });
 
-    return verifyNock(xhr.send(req, 'http://127.0.0.1:1337'), mock);
+    let send = xhr.send(req, 'http://127.0.0.1:1337');
+    await mock.verify(send);
   });
 
   test('should resolve with appropriate data structure', async function() {
-    nock('http://127.0.0.1:1337')
+    nockWrapper('http://127.0.0.1:1337')
       .intercept('/', 'PROPFIND')
       .reply(200, data.propfind);
 

@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+
 import camelize from '../../lib/camelize';
 
 suite('camelize', function() {

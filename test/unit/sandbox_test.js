@@ -1,8 +1,9 @@
-import XMLHttpRequest from '../../lib/xmlhttprequest';
 import { assert } from 'chai';
-import { Sandbox, createSandbox } from '../../lib/sandbox';
-import * as dav from '../../lib';
 import sinon from 'sinon';
+
+import * as dav from '../../lib';
+import { Sandbox, createSandbox } from '../../lib/sandbox';
+import XMLHttpRequest from '../../lib/xmlhttprequest';
 
 suite('sandbox', function() {
   let sandbox;
