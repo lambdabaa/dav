@@ -23,8 +23,8 @@ dav.js: build node_modules
 
 build: $(JS) build/template node_modules
 	./node_modules/.bin/babel lib \
-		--experimental \
 		--modules common \
+		--stage 0 \
 		--out-dir build
 
 build/template: $(HBS)
