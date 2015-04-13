@@ -28,6 +28,7 @@
   ],
 
   "dependencies": {
+    "brfs": "1.1.1",
     "debug": "0.8.1",
     "handlebars": "2.0.x",
     "json-stringify-safe": "5.0.0",
@@ -38,7 +39,6 @@
 
   "devDependencies": {
     "babel": "5.0.4",
-    "brfs": "1.1.1",
     "browserify": "4.1.5",
     "chai": "1.9.1",
     "coveralls": "2.10.0",
