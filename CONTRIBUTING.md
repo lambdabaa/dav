@@ -72,7 +72,6 @@ Things to note:
 5. Run `make clean && make` to generate the build outputs.
 6. Create a new GitHub release named `v.{MAJOR}.{MINOR}.{PATCH}` with a description of the changeset. Upload the freshly generated zipball.
 7. Run `npm publish`.
-8. Write the updated binaries through [dav-bower](https://github.com/gaye/dav-bower) with a new git tag `v.{MAJOR}.{MINOR}.{PATCH}`.
 
 ### Related Material
 
