@@ -39,7 +39,6 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
     - [dav.Client(xhr, options)](#davclientxhr-options)
       - [dav.Client.send(req, options)](#davclientsendreq-options)
   - [etc](#etc)
-    - [dav.jsonify(obj)](#davjsonifyobj)
     - [dav.ns](#davns)
   - [Example Usage](#example-usage)
     - [Using the lower-level webdav request api](#using-the-lower-level-webdav-request-api)
@@ -355,10 +354,6 @@ Options:
 ```
 
 ### etc
-
-#### dav.jsonify(obj)
-
-Take an object that may contain circular references and dump it to JSON.
 
 #### dav.ns
 

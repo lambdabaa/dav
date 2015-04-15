@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.7.0](#170)
 - [1.6.5](#165)
 - [1.6.4](#164)
 - [1.6.3](#163)
@@ -45,6 +46,10 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.7.0
+
++ Remove lodash, json-stringify-safe, don't expose jsonify
 
 ### 1.6.5
 
