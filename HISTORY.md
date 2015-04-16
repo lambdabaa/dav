@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.7.2](#172)
 - [1.7.0](#170)
 - [1.6.5](#165)
 - [1.6.4](#164)
@@ -46,6 +47,11 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.7.2
+
++ Fix outstanding nodejs compatibility issues
++ Expose dav.version
 
 ### 1.7.0
 

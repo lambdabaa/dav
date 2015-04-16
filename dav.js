@@ -1236,6 +1236,7 @@ var _import3 = _dereq_('./transport');
 var transport = _interopRequireWildcard(_import3);
 
 _dereq_('babel/polyfill');
+var version = _dereq_('../package').version;
 
 var _createAccount = _dereq_('./accounts');
 
@@ -1292,7 +1293,8 @@ exports.debug = _debug2['default'];
 exports.ns = ns;
 exports.request = request;
 exports.transport = transport;
-},{"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./model":7,"./namespace":8,"./request":10,"./sandbox":11,"./transport":13,"babel/polyfill":90,"debug":101}],7:[function(_dereq_,module,exports){
+exports.version = version;
+},{"../package":121,"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./model":7,"./namespace":8,"./request":10,"./sandbox":11,"./transport":13,"babel/polyfill":90,"debug":101}],7:[function(_dereq_,module,exports){
 "use strict";
 
 var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -13102,6 +13104,64 @@ if(typeof _dereq_ == 'function'){
 	exports.XMLReader = XMLReader;
 }
 
+
+},{}],121:[function(_dereq_,module,exports){
+module.exports={
+  "name": "dav",
+  "version": "1.7.2",
+  "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
+  "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
+  "license": "MPL-2.0",
+  "main": "./build/index",
+  "repository": "https://github.com/gaye/dav",
+
+  "browserify": {
+    "transform": ["brfs"]
+  },
+
+  "keywords": [
+    "address book",
+    "calendar",
+    "contacts",
+    "dav",
+    "caldav",
+    "carddav",
+    "webdav",
+    "ical",
+    "vcard",
+    "sync",
+    "rfc 4791",
+    "rfc 6352",
+    "rfc 6578"
+  ],
+
+  "dependencies": {
+    "babel": "5.0.4",
+    "debug": "0.8.1",
+    "handlebars": "2.0.x",
+    "xmldom": "0.1.19",
+    "xmlhttprequest": "1.6.0"
+  },
+
+  "devDependencies": {
+    "brfs": "1.1.1",
+    "browserify": "4.1.5",
+    "chai": "1.9.1",
+    "coveralls": "2.10.0",
+    "doctoc": "0.7.1",
+    "isparta": "3.0.3",
+    "mocha": "1.19.0",
+    "nock": "0.32.3",
+    "sinon": "1.10.0",
+    "tcp-port-used": "0.1.2",
+    "uglify-js": "2.4.14"
+  },
+
+  "scripts": {
+    "prepublish": "make",
+    "test": "make ci"
+  }
+}
 
 },{}]},{},[6])
 (6)

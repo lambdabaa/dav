@@ -1,10 +1,10 @@
 {
   "name": "dav",
-  "version": "1.7.0",
+  "version": "1.7.2",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
-  "main": "./lib/index",
+  "main": "./build/index",
   "repository": "https://github.com/gaye/dav",
 
   "browserify": {
@@ -28,6 +28,7 @@
   ],
 
   "dependencies": {
+    "babel": "5.0.4",
     "debug": "0.8.1",
     "handlebars": "2.0.x",
     "xmldom": "0.1.19",
@@ -35,7 +36,6 @@
   },
 
   "devDependencies": {
-    "babel": "5.0.4",
     "brfs": "1.1.1",
     "browserify": "4.1.5",
     "chai": "1.9.1",
@@ -50,6 +50,7 @@
   },
 
   "scripts": {
+    "prepublish": "make",
     "test": "make ci"
   }
 }
