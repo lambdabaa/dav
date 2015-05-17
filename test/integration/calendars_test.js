@@ -18,7 +18,8 @@ suite('calendars', function() {
 
     let account = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
-      xhr: xhr
+      xhr: xhr,
+      loadObjects: true
     });
 
     let calendar = account.calendars[0];
@@ -176,6 +177,7 @@ suite('calendars', function() {
   test('time-range filtering', async function() {
     let account1 = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
+      loadObjects: true,
       filters: [{
         type: 'comp-filter',
         attrs: { name: 'VCALENDAR' },
@@ -195,6 +197,7 @@ suite('calendars', function() {
 
     let account2 = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
+      loadObjects: true,
       filters: [{
         type: 'comp-filter',
         attrs: { name: 'VCALENDAR' },

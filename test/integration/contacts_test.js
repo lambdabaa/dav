@@ -20,7 +20,8 @@ suite('contacts', function() {
     let account = await dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
-      accountType: 'carddav'
+      accountType: 'carddav',
+      loadObjects: true
     });
 
     let addressBook = account.addressBooks[0];

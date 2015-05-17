@@ -17,7 +17,8 @@ suite('accounts', function() {
     test('caldav', async function() {
       let account = await dav.createAccount({
         server: 'http://127.0.0.1:8888',
-        xhr: xhr
+        xhr: xhr,
+        loadObjects: true
       });
 
       assert.instanceOf(account, dav.Account);
@@ -61,7 +62,8 @@ suite('accounts', function() {
       let account = await dav.createAccount({
         server: 'http://127.0.0.1:8888',
         xhr: xhr,
-        accountType: 'carddav'
+        accountType: 'carddav',
+        loadObjects: true
       });
 
       assert.instanceOf(account, dav.Account);
