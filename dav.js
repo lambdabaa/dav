@@ -13527,7 +13527,7 @@ if(typeof _dereq_ == 'function'){
 },{}],137:[function(_dereq_,module,exports){
 module.exports={
   "name": "dav",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
