@@ -17,7 +17,7 @@ dav.min.js dav.js.map: dav.js node_modules
 
 dav.js: build node_modules
 	./node_modules/.bin/browserify \
-	--standalone dav \
+		--standalone dav \
 		--transform brfs \
 		./build/index.js > ./dav.js
 
