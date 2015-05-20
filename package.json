@@ -50,7 +50,7 @@
   },
 
   "scripts": {
-    "prepublish": "make",
+    "prepublish": "make clean && make",
     "test": "make ci"
   }
 }
