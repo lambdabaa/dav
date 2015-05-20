@@ -13577,7 +13577,6 @@ module.exports={
   },
 
   "scripts": {
-    "prepublish": "make",
     "test": "make ci"
   }
 }

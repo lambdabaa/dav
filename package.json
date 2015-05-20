@@ -50,7 +50,6 @@
   },
 
   "scripts": {
-    "prepublish": "make",
     "test": "make ci"
   }
 }

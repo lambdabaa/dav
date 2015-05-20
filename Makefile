@@ -21,13 +21,12 @@ dav.js: build node_modules
 		--transform brfs \
 		./build/index.js > ./dav.js
 
-build: $(JS) build/template node_modules
+build: $(JS) $(HBS) node_modules
+	rm -rf build/
 	./node_modules/.bin/babel lib \
 		--modules common \
 		--stage 0 \
 		--out-dir build
-
-build/template: $(HBS)
 	mkdir -p build/template
 	find lib/template/ -name "*.hbs" -exec cp {} build/template/ \;
 
