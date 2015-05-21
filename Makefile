@@ -16,10 +16,7 @@ dav.min.js dav.js.map: dav.js node_modules
 		--source-map ./dav.js.map
 
 dav.js: build node_modules
-	./node_modules/.bin/browserify \
-		--transform hbsfy --precompilerOptions --knownHelpers --prop --filter \
-		--standalone dav \
-		./build/index.js > ./dav.js
+	./node_modules/.bin/browserify --standalone dav ./build/index.js > ./dav.js
 
 build: $(JS) $(HBS) node_modules
 	rm -rf build/
@@ -27,8 +24,6 @@ build: $(JS) $(HBS) node_modules
 		--modules common \
 		--out-dir build
 		--stage 3 \
-	mkdir -p build/template
-	cp lib/template/*.hbs build/template
 
 node_modules: package.json
 	npm install

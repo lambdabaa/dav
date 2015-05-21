@@ -25,7 +25,6 @@
 
   "dependencies": {
     "co": "4.5.2",
-    "handlebars": "2.0.x",
     "xmldom": "0.1.19",
     "xmlhttprequest": "1.6.0"
   },
@@ -35,7 +34,6 @@
     "browserify": "4.1.5",
     "chai": "1.9.1",
     "doctoc": "0.7.1",
-    "hbsfy": "2.2.1",
     "mocha": "1.19.0",
     "nock": "0.32.3",
     "sinon": "1.10.0",

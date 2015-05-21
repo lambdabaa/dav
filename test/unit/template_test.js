@@ -1,43 +1,41 @@
 import { assert } from 'chai';
 
-import { filterHelper, propHelper } from '../../lib/template';
+import prop from '../../lib/template/prop';
+import filter from '../../lib/template/filter';
 
-suite('Handlebars helpers', function() {
+suite('template helpers', function() {
   test('comp-filter', function() {
-    let filter = filterHelper({
+    let item = filter({
       type: 'comp-filter',
       attrs: { name: 'VCALENDAR' }
-    })
-    .string;
+    });
 
-    assert.strictEqual(filter, '<c:comp-filter name="VCALENDAR"/>');
+    assert.strictEqual(item, '<c:comp-filter name="VCALENDAR"/>');
   });
 
   test('time-range', function() {
-    let filter = filterHelper({
+    let item = filter({
       type: 'time-range',
       attrs: { start: '20060104T000000Z', end: '20060105T000000Z' }
-    })
-    .string;
+    });
 
     assert.strictEqual(
-      filter,
+      item,
       '<c:time-range start="20060104T000000Z" end="20060105T000000Z"/>'
     );
   });
 
   test('time-range no end', function() {
-    let filter = filterHelper({
+    let item = filter({
       type: 'time-range',
       attrs: { start: '20060104T000000Z' }
-    })
-    .string;
+    });
 
-    assert.strictEqual(filter, '<c:time-range start="20060104T000000Z"/>');
+    assert.strictEqual(item, '<c:time-range start="20060104T000000Z"/>');
   });
 
   test('nested', function() {
-    let filter = filterHelper({
+    let item = filter({
       type: 'comp-filter',
       attrs: { name: 'VCALENDAR' },
       children: [{
@@ -48,26 +46,24 @@ suite('Handlebars helpers', function() {
           attrs: { start: '20060104T000000Z', end: '20060105T000000Z' }
         }]
       }]
-    })
-    .string;
+    });
 
     assert.strictEqual(
-      filter,
-      '<c:comp-filter name="VCALENDAR">' +
-      '<c:comp-filter name="VEVENT">' +
-      '<c:time-range start="20060104T000000Z" end="20060105T000000Z"/>' +
-      '</c:comp-filter>' +
-      '</c:comp-filter>'
+      item.replace(/\s/g, ''),
+      ('<c:comp-filter name="VCALENDAR">' +
+       '<c:comp-filter name="VEVENT">' +
+       '<c:time-range start="20060104T000000Z" end="20060105T000000Z"/>' +
+       '</c:comp-filter>' +
+       '</c:comp-filter>').replace(/\s/g, '')
     );
   });
 
   test('prop', function() {
-    let prop = propHelper({
+    let item = prop({
       name: 'spongebob',
       namespace: 'urn:ietf:params:xml:ns:caldav'
-    })
-    .string;
+    });
 
-    assert.strictEqual(prop, '<c:spongebob />');
+    assert.strictEqual(item, '<c:spongebob />');
   });
 });
