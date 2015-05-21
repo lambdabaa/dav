@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import co from 'co';
 
 import * as ns from '../../../lib/namespace';
 import { Request, calendarQuery } from '../../../lib/request';
@@ -15,7 +16,7 @@ suite('request.calendarQuery', function() {
 
   teardown(() => nockWrapper.cleanAll());
 
-  test('should set depth header', async function() {
+  test('should set depth header', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchHeader('Depth', 1)
       .intercept('/principals/admin/', 'REPORT')
@@ -27,10 +28,10 @@ suite('request.calendarQuery', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should add specified props to report body', async function() {
+  test('should add specified props to report body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody('/principals/admin/', 'REPORT', body => {
         return body.indexOf('<d:catdog />') !== -1;
@@ -41,10 +42,10 @@ suite('request.calendarQuery', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should add specified filters to report body', async function() {
+  test('should add specified filters to report body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody('/principals/admin/', 'REPORT', body => {
         return body.indexOf('<c:comp-filter name="VCALENDAR"/>') !== -1;
@@ -58,10 +59,10 @@ suite('request.calendarQuery', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should add timezone to report body', async function() {
+  test('should add timezone to report body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody('/principals/admin/', 'REPORT', body => {
         let data = '<c:timezone>BEGIN:VTIMEZONE\nEND:VTIMEZONE</c:timezone>';
@@ -74,10 +75,10 @@ suite('request.calendarQuery', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should resolve with appropriate data structure', async function() {
+  test('should resolve with appropriate data structure', co.wrap(function *() {
     nockWrapper('http://127.0.0.1:1337')
       .intercept('/', 'REPORT')
       .reply(200, data.calendarQuery);
@@ -90,7 +91,7 @@ suite('request.calendarQuery', function() {
       filters: [ { type: 'comp', attrs: { name: 'VCALENDAR' } } ]
     });
 
-    let calendars = await xhr.send(req, 'http://127.0.0.1:1337/');
+    let calendars = yield xhr.send(req, 'http://127.0.0.1:1337/');
     assert.lengthOf(calendars, 2);
     calendars.forEach(calendar => {
       assert.typeOf(calendar.href, 'string');
@@ -102,5 +103,5 @@ suite('request.calendarQuery', function() {
       assert.typeOf(calendar.props.calendarData, 'string');
       assert.operator(calendar.props.calendarData.length, '>', 0);
     });
-  });
+  }));
 });

@@ -25,8 +25,8 @@ build: $(JS) $(HBS) node_modules
 	rm -rf build/
 	./node_modules/.bin/babel lib \
 		--modules common \
-		--stage 0 \
 		--out-dir build
+		--stage 3 \
 	mkdir -p build/template
 	cp lib/template/*.hbs build/template
 

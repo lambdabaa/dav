@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import co from 'co';
 
 import { Request, basic } from '../../../lib/request';
 import * as transport from '../../../lib/transport';
@@ -13,7 +14,7 @@ suite('put', function() {
 
   teardown(() => nockWrapper.cleanAll());
 
-  test('should set If-Match header', async function() {
+  test('should set If-Match header', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchHeader('If-Match', '1337')
       .intercept('/', 'PUT')
@@ -25,10 +26,10 @@ suite('put', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should send options data as request body', async function() {
+  test('should send options data as request body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody('/', 'PUT', body => {
         return body === 'Bad hair day!';
@@ -40,10 +41,10 @@ suite('put', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should throw error on bad response', async function() {
+  test('should throw error on bad response', co.wrap(function *() {
     nockWrapper('http://127.0.0.1:1337')
       .intercept('/', 'PUT')
       .delay(1)
@@ -52,11 +53,11 @@ suite('put', function() {
     let req = basic({ method: 'PUT' });
 
     try {
-      await xhr.send(req, 'http://127.0.0.1:1337')
+      yield xhr.send(req, 'http://127.0.0.1:1337')
       assert.fail('request.basic should have thrown an error');
     } catch (error) {
       assert.instanceOf(error, Error);
       assert.include(error.toString(), 'Bad status: 400');
     }
-  });
+  }));
 });

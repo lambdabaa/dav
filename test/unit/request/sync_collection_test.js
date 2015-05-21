@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import co from 'co';
 
 import * as namespace from '../../../lib/namespace';
 import { Request, syncCollection } from '../../../lib/request';
@@ -14,7 +15,7 @@ suite('request.syncCollection', function() {
 
   teardown(() => nockWrapper.cleanAll());
 
-  test('should add props to request body', async function() {
+  test('should add props to request body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody(
         '/principals/admin/default/',
@@ -35,10 +36,10 @@ suite('request.syncCollection', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/default/');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should set sync details in request body', async function() {
+  test('should set sync details in request body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody(
         '/principals/admin/default/',
@@ -59,6 +60,6 @@ suite('request.syncCollection', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/default/');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 });

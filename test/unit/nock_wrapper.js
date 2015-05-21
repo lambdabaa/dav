@@ -2,6 +2,7 @@
  * @fileoverview Decorates nock with some useful utilities.
  */
 import { assert } from 'chai';
+import co from 'co';
 import nock from 'nock';
 
 export function nockWrapper(url) {
@@ -23,15 +24,15 @@ export function nockWrapper(url) {
    * Whether or not an error is thrown in the promise,
    * the mock should have intercepted the request.
    */
-  result.verify = async function(promise) {
+  result.verify = co.wrap(function *(promise) {
     try {
-      await promise;
+      yield promise;
     } catch (error) {
       assert.notInclude(error.toString(), 'ECONNREFUSED');
     } finally {
       result.done();
     }
-  };
+  });
 
   return result;
 }

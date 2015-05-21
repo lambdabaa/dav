@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import co from 'co';
 
 import * as namespace from '../../../lib/namespace';
 import { Request, propfind } from '../../../lib/request';
@@ -15,7 +16,7 @@ suite('request.propfind', function() {
 
   teardown(() => nockWrapper.cleanAll());
 
-  test('should set depth header', async function() {
+  test('should set depth header', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchHeader('Depth', '0')  // Will only get intercepted if Depth => 0.
       .intercept('/', 'PROPFIND')
@@ -27,10 +28,10 @@ suite('request.propfind', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should add specified properties to propfind body', async function() {
+  test('should add specified properties to propfind body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody('/', 'PROPFIND', function(body) {
         return body.indexOf('<d:catdog />') !== -1;
@@ -42,10 +43,10 @@ suite('request.propfind', function() {
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337');
-    await mock.verify(send);
-  });
+    yield mock.verify(send);
+  }));
 
-  test('should resolve with appropriate data structure', async function() {
+  test('should resolve with appropriate data structure', co.wrap(function *() {
     nockWrapper('http://127.0.0.1:1337')
       .intercept('/', 'PROPFIND')
       .reply(200, data.propfind);
@@ -62,7 +63,7 @@ suite('request.propfind', function() {
       depth: 1
     });
 
-    let responses = await xhr.send(req, 'http://127.0.0.1:1337/');
+    let responses = yield xhr.send(req, 'http://127.0.0.1:1337/');
 
     assert.isArray(responses);
     responses.forEach(response => {
@@ -79,5 +80,5 @@ suite('request.propfind', function() {
         assert.include(response.props.components, 'VEVENT');
       }
     });
-  });
+  }));
 });

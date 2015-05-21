@@ -1,4 +1,6 @@
 import { assert } from 'chai';
+import co from 'co';
+
 import data from './data';
 import * as dav from '../../lib';
 
@@ -7,7 +9,7 @@ let debug = require('../../lib/debug')('dav:calendars_test');
 suite('calendars', function() {
   let calendars, xhr;
 
-  setup(async function() {
+  setup(co.wrap(function *() {
     debug('Create account.');
     xhr = new dav.transport.Basic(
       new dav.Credentials({
@@ -16,7 +18,7 @@ suite('calendars', function() {
       })
     );
 
-    let account = await dav.createAccount({
+    let account = yield dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       loadObjects: true
@@ -27,15 +29,15 @@ suite('calendars', function() {
     assert.isArray(objects);
     assert.lengthOf(objects, 0, 'initially 0 calendar objects');
     debug('Create calendar object.');
-    await dav.createCalendarObject(calendar, {
+    yield dav.createCalendarObject(calendar, {
       filename: 'test.ics',
       data: data.bastilleDayParty,
       xhr: xhr
     });
 
-    let synced = await dav.syncCaldavAccount(account, { xhr: xhr });
+    let synced = yield dav.syncCaldavAccount(account, { xhr: xhr });
     calendars = synced.calendars;
-  });
+  }));
 
   test('#createCalendarObject', function() {
     let calendar = calendars[0];
@@ -52,7 +54,7 @@ suite('calendars', function() {
     );
   });
 
-  test('#updateCalendarObject, #sync', async function() {
+  test('#updateCalendarObject, #sync', co.wrap(function *() {
     let calendar = calendars[0];
     let object = calendar.objects[0];
     object.calendarData = object.calendarData.replace(
@@ -60,8 +62,8 @@ suite('calendars', function() {
       'SUMMARY:Happy Hour'
     );
 
-    await dav.updateCalendarObject(object, { xhr: xhr });
-    calendar = await dav.syncCalendar(calendar, {
+    yield dav.updateCalendarObject(object, { xhr: xhr });
+    calendar = yield dav.syncCalendar(calendar, {
       syncMethod: 'basic',
       xhr: xhr
     });
@@ -92,9 +94,9 @@ suite('calendars', function() {
       'http://127.0.0.1:8888/calendars/admin/default/test.ics',
       'update should not change object url'
     );
-  });
+  }));
 
-  test('webdav sync', async function() {
+  test('webdav sync', co.wrap(function *() {
     let calendar = calendars[0];
     let object = calendar.objects[0];
     object.calendarData = object.calendarData.replace(
@@ -110,8 +112,8 @@ suite('calendars', function() {
     assert.typeOf(prevSyncToken, 'string');
     assert.operator(prevSyncToken.length, '>', 0);
 
-    await dav.updateCalendarObject(object, { xhr: xhr });
-    calendar = await dav.syncCalendar(calendar, {
+    yield dav.updateCalendarObject(object, { xhr: xhr });
+    calendar = yield dav.syncCalendar(calendar, {
       syncMethod: 'webdav',
       xhr: xhr
     });
@@ -155,16 +157,16 @@ suite('calendars', function() {
     assert.typeOf(calendar.syncToken, 'string');
     assert.operator(calendar.syncToken.length, '>', 0);
     assert.notStrictEqual(calendar.syncToken, prevSyncToken, 'new token');
-  });
+  }));
 
-  test('#deleteCalendarObject', async function() {
+  test('#deleteCalendarObject', co.wrap(function *() {
     let calendar = calendars[0];
     let objects = calendar.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
     let object = objects[0];
-    await dav.deleteCalendarObject(object, { xhr: xhr });
-    let updated = await dav.syncCalendar(calendar, {
+    yield dav.deleteCalendarObject(object, { xhr: xhr });
+    let updated = yield dav.syncCalendar(calendar, {
       syncMethod: 'basic',
       xhr: xhr
     });
@@ -172,10 +174,10 @@ suite('calendars', function() {
     objects = updated.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 0, 'should be deleted');
-  });
+  }));
 
-  test('time-range filtering', async function() {
-    let account1 = await dav.createAccount({
+  test('time-range filtering', co.wrap(function *() {
+    let account1 = yield dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       loadObjects: true,
       filters: [{
@@ -195,7 +197,7 @@ suite('calendars', function() {
 
     assert.lengthOf(account1.calendars[0].objects, 1, 'in range');
 
-    let account2 = await dav.createAccount({
+    let account2 = yield dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       loadObjects: true,
       filters: [{
@@ -214,10 +216,10 @@ suite('calendars', function() {
     });
 
     assert.lengthOf(account2.calendars[0].objects, 0, 'out of range');
-  });
+  }));
 
-  test('#syncCaldavAccount', async function() {
-    let account = await dav.createAccount({
+  test('#syncCaldavAccount', co.wrap(function *() {
+    let account = yield dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       accountType: 'caldav',
@@ -226,12 +228,12 @@ suite('calendars', function() {
     assert.instanceOf(account, dav.Account);
     assert.notOk(account.calendars);
 
-    account = await dav.syncCaldavAccount(account, { xhr: xhr });
+    account = yield dav.syncCaldavAccount(account, { xhr: xhr });
     assert.instanceOf(account, dav.Account);
     assert.isArray(account.calendars);
     assert.lengthOf(account.calendars, 1);
     let calendar = account.calendars[0];
     assert.instanceOf(calendar, dav.Calendar);
     assert.strictEqual(calendar.displayName, 'default calendar');
-  });
+  }));
 });

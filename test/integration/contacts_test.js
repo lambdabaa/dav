@@ -1,4 +1,6 @@
 import { assert } from 'chai';
+import co from 'co';
+
 import data from './data';
 import * as dav from '../../lib';
 
@@ -7,7 +9,7 @@ let debug = require('../../lib/debug')('dav:contacts_test');
 suite('contacts', function() {
   let addressBooks, xhr;
 
-  setup(async function() {
+  setup(co.wrap(function *() {
     debug('Create account.');
 
     xhr = new dav.transport.Basic(
@@ -17,7 +19,7 @@ suite('contacts', function() {
       })
     );
 
-    let account = await dav.createAccount({
+    let account = yield dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       accountType: 'carddav',
@@ -30,19 +32,19 @@ suite('contacts', function() {
     assert.lengthOf(objects, 0, 'initially 0 address books');
 
     debug('Create vcard.');
-    await dav.createCard(addressBook, {
+    yield dav.createCard(addressBook, {
       filename: 'test.vcf',
       data: data.forrestGump,
       xhr: xhr
     });
 
-    let updated = await dav.syncCarddavAccount(account, {
+    let updated = yield dav.syncCarddavAccount(account, {
       syncMethod: 'basic',
       xhr: xhr
     });
 
     addressBooks = updated.addressBooks;
-  });
+  }));
 
   test('#createCard', function() {
     let addressBook = addressBooks[0];
@@ -67,7 +69,7 @@ suite('contacts', function() {
     );
   });
 
-  test('#updateCard, #sync', async function() {
+  test('#updateCard, #sync', co.wrap(function *() {
     let addressBook = addressBooks[0];
     let object = addressBook.objects[0];
     object.addressData = object.addressData.replace(
@@ -75,8 +77,8 @@ suite('contacts', function() {
       'lieutenantdan@example.com'
     );
 
-    await dav.updateCard(object, { xhr: xhr });
-    let updated = await dav.syncAddressBook(addressBook, {
+    yield dav.updateCard(object, { xhr: xhr });
+    let updated = yield dav.syncAddressBook(addressBook, {
       syncMethod: 'basic',
       xhr: xhr
     });
@@ -112,9 +114,9 @@ suite('contacts', function() {
       'http://127.0.0.1:8888/addressbooks/admin/default/test.vcf',
       'update should not change object url'
     );
-  });
+  }));
 
-  test('webdav sync', async function() {
+  test('webdav sync', co.wrap(function *() {
     let addressBook = addressBooks[0];
     let object = addressBook.objects[0];
     object.addressData = object.addressData.replace(
@@ -130,8 +132,8 @@ suite('contacts', function() {
     assert.typeOf(prevSyncToken, 'string');
     assert.operator(prevSyncToken.length, '>', 0);
 
-    await dav.updateCard(object, { xhr: xhr });
-    let updated = await dav.syncAddressBook(addressBook, {
+    yield dav.updateCard(object, { xhr: xhr });
+    let updated = yield dav.syncAddressBook(addressBook, {
       syncMethod: 'webdav',
       xhr: xhr
     });
@@ -177,16 +179,16 @@ suite('contacts', function() {
     assert.typeOf(addressBook.syncToken, 'string');
     assert.operator(addressBook.syncToken.length, '>', 0);
     assert.notStrictEqual(addressBook.syncToken, prevSyncToken, 'new token');
-  });
+  }));
 
-  test('#deleteCard', async function() {
+  test('#deleteCard', co.wrap(function *() {
     let addressBook = addressBooks[0];
     let objects = addressBook.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 1);
     let object = objects[0];
-    await dav.deleteCard(object, { xhr: xhr });
-    let updated = await dav.syncAddressBook(addressBook, {
+    yield dav.deleteCard(object, { xhr: xhr });
+    let updated = yield dav.syncAddressBook(addressBook, {
       syncMethod: 'basic',
       xhr: xhr
     });
@@ -194,10 +196,10 @@ suite('contacts', function() {
     objects = addressBook.objects;
     assert.isArray(objects);
     assert.lengthOf(objects, 0, 'should be deleted');
-  });
+  }));
 
-  test('#syncCarddavAccount', async function() {
-    let account = await dav.createAccount({
+  test('#syncCarddavAccount', co.wrap(function *() {
+    let account = yield dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       accountType: 'carddav',
@@ -206,12 +208,12 @@ suite('contacts', function() {
 
     assert.instanceOf(account, dav.Account);
     assert.notOk(account.addressBooks);
-    let updated = await dav.syncCarddavAccount(account, { xhr: xhr });
+    let updated = yield dav.syncCarddavAccount(account, { xhr: xhr });
     assert.instanceOf(updated, dav.Account);
     assert.isArray(updated.addressBooks);
     assert.lengthOf(updated.addressBooks, 1);
     let addressBook = addressBooks[0];
     assert.instanceOf(addressBook, dav.AddressBook);
     assert.strictEqual(addressBook.displayName, 'default address book');
-  });
+  }));
 });

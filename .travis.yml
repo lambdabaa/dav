@@ -7,6 +7,6 @@ language: php
 php:
   - "5.4"
 before_install:
-  - "nvm install 0.10"
+  - "nvm install iojs-v1.8.1"
 install: npm install
 script: npm test

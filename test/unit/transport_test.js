@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import co from 'co';
 import nock from 'nock';
 import sinon from 'sinon';
 
@@ -17,7 +18,7 @@ suite('Basic#send', function() {
 
     req = {
       method: 'GET',
-      transformRequest: function() {}
+      transformRequest: xhr => xhr
     };
   });
 
@@ -36,17 +37,18 @@ suite('Basic#send', function() {
     let stub = sinon.stub(req, 'transformRequest');
     xhr.send(req, 'http://127.0.0.1:1337');
     sinon.assert.called(stub);
+    stub.restore();
   });
 
-  test('should send req', async function() {
+  test('should send req', co.wrap(function *() {
     let nockObj = nock('http://127.0.0.1:1337')
       .get('/')
       .reply(200, '200 OK');
 
     assert.notOk(nockObj.isDone());
-    await xhr.send(req, 'http://127.0.0.1:1337');
+    yield xhr.send(req, 'http://127.0.0.1:1337');
     assert.ok(nockObj.isDone());
-  });
+  }));
 
   test('should invoke onerror if error thrown', function(done) {
     nock('http://127.0.0.1:1337')
@@ -62,15 +64,15 @@ suite('Basic#send', function() {
     xhr.send(req, 'http://127.0.0.1:1337');
   });
 
-  test('should return promise that resolves with xhr', async function() {
+  test('should return promise that resolves with xhr', co.wrap(function *() {
     nock('http://127.0.0.1:1337')
       .get('/')
       .reply(200, '200 OK');
 
-    let value = await xhr.send(req, 'http://127.0.0.1:1337');
+    let value = yield xhr.send(req, 'http://127.0.0.1:1337');
     assert.instanceOf(value, XMLHttpRequest);
     assert.strictEqual(value.request.readyState, 4);
-  });
+  }));
 });
 
 suite('OAuth2#send', function() {
@@ -95,7 +97,7 @@ suite('OAuth2#send', function() {
     nock.cleanAll();
   });
 
-  test('should get access token', async function() {
+  test('should get access token', co.wrap(function *() {
     let access = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
@@ -112,7 +114,7 @@ suite('OAuth2#send', function() {
       .matchHeader('Authorization', 'Bearer sosafesosecret')
       .reply(200);
 
-    let response = await xhr.send(req, 'http://127.0.0.1:1337', {
+    let response = yield xhr.send(req, 'http://127.0.0.1:1337', {
       retry: false
     });
 
@@ -122,9 +124,9 @@ suite('OAuth2#send', function() {
     assert.strictEqual(credentials.refreshToken, 'lemonade!!1');
     assert.operator(credentials.expiration, '>', Date.now());
     assert.ok(mock.isDone(), 'should send req with Authorization header');
-  });
+  }));
 
-  test('should refresh access token if expired', async function() {
+  test('should refresh access token if expired', co.wrap(function *() {
     let refresh = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
@@ -144,7 +146,7 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = '1/oPHTPFgECWFPrs7KgHdis24u6Xl4E4EnRrkkiwLfzdk';
     credentials.expiration = Date.now() - 1;
 
-    let response = await xhr.send(req, 'http://127.0.0.1:1337', {
+    let response = yield xhr.send(req, 'http://127.0.0.1:1337', {
       retry: false
     });
 
@@ -154,9 +156,9 @@ suite('OAuth2#send', function() {
     assert.typeOf(credentials.expiration, 'number');
     assert.operator(credentials.expiration, '>', Date.now());
     assert.ok(mock.isDone(), 'should send req with Authorization header');
-  });
+  }));
 
-  test('should use provided access token if not expired', async function() {
+  test('should use provided access token if not expired', co.wrap(function *() {
     let token = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(500);
@@ -170,7 +172,7 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = 'spicy tamales';
     let expiration = credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    let response = await xhr.send(req, 'http://127.0.0.1:1337', {
+    let response = yield xhr.send(req, 'http://127.0.0.1:1337', {
       retry: false
     });
 
@@ -180,9 +182,9 @@ suite('OAuth2#send', function() {
     assert.strictEqual(credentials.refreshToken, 'spicy tamales');
     assert.strictEqual(expiration, credentials.expiration);
     assert.ok(mock.isDone());
-  });
+  }));
 
-  test('should retry if 401', async function() {
+  test('should retry if 401', co.wrap(function *() {
     let refresh = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
@@ -207,7 +209,7 @@ suite('OAuth2#send', function() {
     credentials.refreshToken = 'raspberry pie';
     credentials.expiration = Date.now() + 60 * 60 * 1000;
 
-    let response = await xhr.send(req, 'http://127.0.0.1:1337');
+    let response = yield xhr.send(req, 'http://127.0.0.1:1337');
     assert.instanceOf(response, XMLHttpRequest);
     assert.strictEqual(response.status, 200);
     assert.strictEqual(response.responseText, '200 OK');
@@ -216,9 +218,9 @@ suite('OAuth2#send', function() {
     assert.strictEqual(credentials.accessToken, 'Little Bear');
     assert.operator(credentials.expiration, '>', Date.now());
     assert.ok(authorized.isDone(), 'should then use new access token');
-  });
+  }));
 
-  test('should retry once at most', async function() {
+  test('should retry once at most', co.wrap(function *() {
     let refresh = nock('https://accounts.google.com')
       .post('/o/oauth2/token')
       .reply(
@@ -241,7 +243,7 @@ suite('OAuth2#send', function() {
     let spy = sinon.spy(xhr, 'send');
 
     try {
-      await xhr.send(req, 'http://127.0.0.1:1337')
+      yield xhr.send(req, 'http://127.0.0.1:1337')
       assert.fail('Should have failed on error');
     } catch (error) {
       assert.instanceOf(error, Error);
@@ -250,5 +252,5 @@ suite('OAuth2#send', function() {
       assert.strictEqual(spy.callCount, 2);
       spy.restore();
     }
-  });
+  }));
 });

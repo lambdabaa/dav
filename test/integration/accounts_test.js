@@ -1,4 +1,6 @@
 import { assert } from 'chai';
+import co from 'co';
+
 import * as dav from '../../lib';
 
 suite('accounts', function() {
@@ -14,8 +16,8 @@ suite('accounts', function() {
       );
     });
 
-    test('caldav', async function() {
-      let account = await dav.createAccount({
+    test('caldav', co.wrap(function *() {
+      let account = yield dav.createAccount({
         server: 'http://127.0.0.1:8888',
         xhr: xhr,
         loadObjects: true
@@ -56,10 +58,10 @@ suite('accounts', function() {
       assert.include(calendar.resourcetype, 'calendar');
       assert.typeOf(calendar.syncToken, 'string');
       assert.operator(calendar.syncToken.length, '>', 0);
-    });
+    }));
 
-    test('carddav', async function() {
-      let account = await dav.createAccount({
+    test('carddav', co.wrap(function *() {
+      let account = yield dav.createAccount({
         server: 'http://127.0.0.1:8888',
         xhr: xhr,
         accountType: 'carddav',
@@ -99,10 +101,10 @@ suite('accounts', function() {
       assert.include(addressBook.resourcetype, 'addressbook');
       assert.typeOf(addressBook.syncToken, 'string');
       assert.operator(addressBook.syncToken.length, '>', 0);
-    });
+    }));
 
-    test('without loading collections', async function() {
-      let account = await dav.createAccount({
+    test('without loading collections', co.wrap(function *() {
+      let account = yield dav.createAccount({
         server: 'http://127.0.0.1:8888',
         xhr: xhr,
         accountType: 'caldav',
@@ -126,10 +128,10 @@ suite('accounts', function() {
 
       let calendars = account.calendars;
       assert.notOk(calendars);
-    });
+    }));
 
-    test('without loading objects', async function() {
-      let account = await dav.createAccount({
+    test('without loading objects', co.wrap(function *() {
+      let account = yield dav.createAccount({
         server: 'http://127.0.0.1:8888',
         xhr: xhr,
         accountType: 'caldav',
@@ -170,6 +172,6 @@ suite('accounts', function() {
       assert.include(calendar.resourcetype, 'calendar');
       assert.typeOf(calendar.syncToken, 'string');
       assert.operator(calendar.syncToken.length, '>', 0);
-    });
+    }));
   });
 });
