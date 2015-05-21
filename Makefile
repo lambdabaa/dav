@@ -22,8 +22,8 @@ build: $(JS) $(HBS) node_modules
 	rm -rf build/
 	./node_modules/.bin/babel lib \
 		--modules common \
-		--out-dir build
-		--stage 3 \
+		--out-dir build \
+		--stage 4 \
 
 node_modules: package.json
 	npm install

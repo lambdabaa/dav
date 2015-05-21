@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.7.5](#175)
 - [1.7.4](#174)
 - [1.7.3](#173)
 - [1.7.2](#172)
@@ -49,6 +50,12 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.7.5
+
++ Trimmed the binary size to 128k minified
++ Remove babel polyfill
++ Remove handlebars
 
 ### 1.7.4
 

@@ -4,35 +4,12 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
-- [Directory Structure](#directory-structure)
 - [Under the hood](#under-the-hood)
 - [Running the tests](#running-the-tests)
 - [Publishing a release](#publishing-a-release)
 - [Related Material](#related-material)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-### Directory Structure
-
-```
-lib/                         # Source code
-lib/model/                   # Semantic data structures hydrated from dav data
-lib/parser/                  # Abstractions for parsing server dav responses
-lib/request/                 # Abstractions for creating dav client requests
-lib/template/                # Facilities for generating xml request bodies
-lib/transport/               # Things that authorize and issue requests
-test/                        # Test code
-test/integration/            # End-to-end tests run against a dav server
-test/integration/data/       # Fixture data for integration tests
-test/integration/server/     # Code to bootstrap dav server
-test/unit/                   # Unit tests
-test/unit/data/              # Fixture data for unit tests
-test/unit/model/             # Test cases for model methods
-test/unit/parser/            # Test cases for parsing server dav responses
-test/unit/request/           # Test cases for issuing dav client requests
-test/unit/template/          # Test cases for xml templating helpers
-test/unit/transport/         # Test cases for authorizing and issuing requests
-```
 
 ### Under the hood
 
