@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import data from './data';
 import * as dav from '../../lib';
 
-let debug = require('debug')('dav:contacts_test');
+let debug = require('../../lib/debug')('dav:contacts_test');
 
 suite('contacts', function() {
   let addressBooks, xhr;

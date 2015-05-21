@@ -17,8 +17,8 @@ dav.min.js dav.js.map: dav.js node_modules
 
 dav.js: build node_modules
 	./node_modules/.bin/browserify \
+		--transform hbsfy --precompilerOptions --knownHelpers --prop --filter \
 		--standalone dav \
-		--transform brfs \
 		./build/index.js > ./dav.js
 
 build: $(JS) $(HBS) node_modules
@@ -28,7 +28,7 @@ build: $(JS) $(HBS) node_modules
 		--stage 0 \
 		--out-dir build
 	mkdir -p build/template
-	find lib/template/ -name "*.hbs" -exec cp {} build/template/ \;
+	cp lib/template/*.hbs build/template
 
 node_modules: package.json
 	npm install
@@ -36,17 +36,6 @@ node_modules: package.json
 .PHONY: clean
 clean:
 	rm -rf *.zip SabreDAV build coverage dav.* node_modules test/integration/server/SabreDAV
-
-.PHONY: ci
-ci: test coverage
-
-.PHONY: coverage
-coverage: node_modules test/integration/server/SabreDAV
-	./node_modules/.bin/babel-node ./node_modules/.bin/isparta cover \
-		--report lcovonly \
-		./node_modules/.bin/_mocha
-	cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
-	rm -rf ./coverage
 
 .PHONY: test
 test: test-unit test-integration

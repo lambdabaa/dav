@@ -1,5 +1,7 @@
-dav [![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://travis-ci.org/gaye/dav) [![Coverage Status](https://img.shields.io/coveralls/gaye/dav.svg)](https://coveralls.io/r/gaye/dav)
-=========
+dav
+===
+
+[![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://travis-ci.org/gaye/dav)
 
 WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
 
@@ -42,6 +44,7 @@ WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
     - [dav.ns](#davns)
   - [Example Usage](#example-usage)
     - [Using the lower-level webdav request api](#using-the-lower-level-webdav-request-api)
+- [Debugging](#debugging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -458,3 +461,7 @@ xhr.send(req, 'https://mail.mozilla.com/calendars/123.ics')
 ```
 
 For more example usages, check out the [suite of integration tests](https://github.com/gaye/dav/tree/master/test/integration).
+
+## Debugging
+
+dav can tell you a lot of potentially useful things if you set `dav.debug.enabled = true`.

@@ -4,21 +4,6 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-/**
- * Options:
- *
- *   (String) accountType - one of 'caldav' or 'carddav'. Defaults to 'caldav'.
- *   (Array.<Object>) filters - list of caldav filters to send with request.
- *   (Boolean) loadCollections - whether or not to load dav collections.
- *   (Boolean) loadObjects - whether or not to load dav objects.
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (String) server - some url for server (needn't be base url).
- *   (String) timezone - VTIMEZONE calendar object.
- *   (dav.Transport) xhr - request sender.
- *
- * @return {Promise} a promise that will resolve with a dav.Account object.
- */
 exports.createAccount = createAccount;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -47,7 +32,7 @@ var _request = _dereq_('./request');
 
 var request = _interopRequireWildcard(_request);
 
-var debug = _dereq_('debug')('dav:accounts');
+var debug = _dereq_('./debug')('dav:accounts');
 
 var defaults = {
   accountType: 'caldav',
@@ -199,6 +184,22 @@ function homeUrl(account, options) {
     }
   }, null, this);
 }
+
+/**
+ * Options:
+ *
+ *   (String) accountType - one of 'caldav' or 'carddav'. Defaults to 'caldav'.
+ *   (Array.<Object>) filters - list of caldav filters to send with request.
+ *   (Boolean) loadCollections - whether or not to load dav collections.
+ *   (Boolean) loadObjects - whether or not to load dav objects.
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (String) server - some url for server (needn't be base url).
+ *   (String) timezone - VTIMEZONE calendar object.
+ *   (dav.Transport) xhr - request sender.
+ *
+ * @return {Promise} a promise that will resolve with a dav.Account object.
+ */
+
 function createAccount(options) {
   var account, key, loadCollections, loadObjects, collections;
   return regeneratorRuntime.async(function createAccount$(context$1$0) {
@@ -312,89 +313,18 @@ function createAccount(options) {
 // http redirect.
 
 // If discovery failed, just failover to the provided url.
-},{"./calendars":2,"./contacts":5,"./fuzzy_url_equals":6,"./model":8,"./namespace":9,"./request":11,"debug":117,"url":114}],2:[function(_dereq_,module,exports){
+},{"./calendars":2,"./contacts":5,"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"url":119}],2:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-/**
- * @param {dav.Account} account to fetch calendars for.
- */
 exports.listCalendars = listCalendars;
-
-/**
- * @param {dav.Calendar} calendar the calendar to put the object on.
- * @return {Promise} promise will resolve when the calendar has been created.
- *
- * Options:
- *
- *   (String) data - rfc 5545 VCALENDAR object.
- *   (String) filename - name for the calendar ics file.
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.createCalendarObject = createCalendarObject;
-
-/**
- * @param {dav.CalendarObject} calendarObject updated calendar object.
- * @return {Promise} promise will resolve when the calendar has been updated.
- *
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.updateCalendarObject = updateCalendarObject;
-
-/**
- * @param {dav.CalendarObject} calendarObject target calendar object.
- * @return {Promise} promise will resolve when the calendar has been deleted.
- *
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.deleteCalendarObject = deleteCalendarObject;
-
-/**
- * @param {dav.Calendar} calendar the calendar to fetch objects for.
- *
- * Options:
- *
- *   (Array.<Object>) filters - optional caldav filters.
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.listCalendarObjects = listCalendarObjects;
-
-/**
- * @param {dav.Calendar} calendar the calendar to fetch updates to.
- * @return {Promise} promise will resolve with updated calendar object.
- *
- * Options:
- *
- *   (Array.<Object>) filters - list of caldav filters to send with request.
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
- *       try to do webdav sync and failover to basic sync if rfc 6578 is not
- *       supported by the server.
- *   (String) timezone - VTIMEZONE calendar object.
- *   (dav.Transport) xhr - request sender.
- */
 exports.syncCalendar = syncCalendar;
-
-/**
- * @param {dav.Account} account the account to fetch updates for.
- * @return {Promise} promise will resolve with updated account.
- *
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.syncCaldavAccount = syncCaldavAccount;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -423,7 +353,12 @@ var _webdav = _dereq_('./webdav');
 
 var webdav = _interopRequireWildcard(_webdav);
 
-var debug = _dereq_('debug')('dav:calendars');
+var debug = _dereq_('./debug')('dav:calendars');
+
+/**
+ * @param {dav.Account} account to fetch calendars for.
+ */
+
 function listCalendars(account, options) {
   var req, responses, cals;
   return regeneratorRuntime.async(function listCalendars$(context$1$0) {
@@ -490,19 +425,62 @@ function listCalendars(account, options) {
   }, null, this);
 }
 
+/**
+ * @param {dav.Calendar} calendar the calendar to put the object on.
+ * @return {Promise} promise will resolve when the calendar has been created.
+ *
+ * Options:
+ *
+ *   (String) data - rfc 5545 VCALENDAR object.
+ *   (String) filename - name for the calendar ics file.
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
 function createCalendarObject(calendar, options) {
   var objectUrl = _url2['default'].resolve(calendar.url, options.filename);
   return webdav.createObject(objectUrl, options.data, options);
 }
 
 ;
+
+/**
+ * @param {dav.CalendarObject} calendarObject updated calendar object.
+ * @return {Promise} promise will resolve when the calendar has been updated.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
 function updateCalendarObject(calendarObject, options) {
   return webdav.updateObject(calendarObject.url, calendarObject.calendarData, calendarObject.etag, options);
 }
 
+/**
+ * @param {dav.CalendarObject} calendarObject target calendar object.
+ * @return {Promise} promise will resolve when the calendar has been deleted.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
 function deleteCalendarObject(calendarObject, options) {
   return webdav.deleteObject(calendarObject.url, calendarObject.etag, options);
 }
+
+/**
+ * @param {dav.Calendar} calendar the calendar to fetch objects for.
+ *
+ * Options:
+ *
+ *   (Array.<Object>) filters - optional caldav filters.
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
 
 function listCalendarObjects(calendar, options) {
   var filters, req, responses;
@@ -549,11 +527,36 @@ function listCalendarObjects(calendar, options) {
   }, null, this);
 }
 
+/**
+ * @param {dav.Calendar} calendar the calendar to fetch updates to.
+ * @return {Promise} promise will resolve with updated calendar object.
+ *
+ * Options:
+ *
+ *   (Array.<Object>) filters - list of caldav filters to send with request.
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
+ *       try to do webdav sync and failover to basic sync if rfc 6578 is not
+ *       supported by the server.
+ *   (String) timezone - VTIMEZONE calendar object.
+ *   (dav.Transport) xhr - request sender.
+ */
+
 function syncCalendar(calendar, options) {
   options.basicSync = basicSync;
   options.webdavSync = webdavSync;
   return webdav.syncCollection(calendar, options);
 }
+
+/**
+ * @param {dav.Account} account the account to fetch updates for.
+ * @return {Promise} promise will resolve with updated account.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
 
 function syncCaldavAccount(account) {
   var options = arguments[1] === undefined ? {} : arguments[1];
@@ -696,7 +699,7 @@ function webdavSync(calendar, options) {
     }
   }, null, this);
 }
-},{"./fuzzy_url_equals":6,"./model":8,"./namespace":9,"./request":11,"./webdav":15,"debug":117,"url":114}],3:[function(_dereq_,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":20,"url":119}],3:[function(_dereq_,module,exports){
 /**
  * @fileoverview Camelcase something.
  */
@@ -888,83 +891,18 @@ var Client = (function () {
 })();
 
 exports.Client = Client;
-},{"./accounts":1,"./calendars":2,"./contacts":5,"url":114}],5:[function(_dereq_,module,exports){
+},{"./accounts":1,"./calendars":2,"./contacts":5,"url":119}],5:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-/**
- * @param {dav.Account} account to fetch address books for.
- */
 exports.listAddressBooks = listAddressBooks;
-
-/**
- * @param {dav.AddressBook} addressBook the address book to put the object on.
- * @return {Promise} promise will resolve when the card has been created.
- *
- * Options:
- *
- *   (String) data - vcard object.
- *   (String) filename - name for the address book vcf file.
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.createCard = createCard;
-
-/**
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- */
 exports.listVCards = listVCards;
-
-/**
- * @param {dav.VCard} card updated vcard object.
- * @return {Promise} promise will resolve when the card has been updated.
- *
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.updateCard = updateCard;
-
-/**
- * @param {dav.VCard} card target vcard object.
- * @return {Promise} promise will resolve when the calendar has been deleted.
- *
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.deleteCard = deleteCard;
-
-/**
- * @param {dav.Calendar} calendar the calendar to fetch updates to.
- * @return {Promise} promise will resolve with updated calendar object.
- *
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
- *       try to do webdav sync and failover to basic sync if rfc 6578 is not
- *       supported by the server.
- *   (dav.Transport) xhr - request sender.
- */
 exports.syncAddressBook = syncAddressBook;
-
-/**
- * @param {dav.Account} account the account to fetch updates for.
- * @return {Promise} promise will resolve with updated account.
- *
- * Options:
- *
- *   (dav.Sandbox) sandbox - optional request sandbox.
- *   (dav.Transport) xhr - request sender.
- */
 exports.syncCarddavAccount = syncCarddavAccount;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -993,7 +931,12 @@ var _webdav = _dereq_('./webdav');
 
 var webdav = _interopRequireWildcard(_webdav);
 
-var debug = _dereq_('debug')('dav:contacts');
+var debug = _dereq_('./debug')('dav:contacts');
+
+/**
+ * @param {dav.Account} account to fetch address books for.
+ */
+
 function listAddressBooks(account, options) {
   var req, responses, addressBooks;
   return regeneratorRuntime.async(function listAddressBooks$(context$1$0) {
@@ -1053,10 +996,28 @@ function listAddressBooks(account, options) {
   }, null, this);
 }
 
+/**
+ * @param {dav.AddressBook} addressBook the address book to put the object on.
+ * @return {Promise} promise will resolve when the card has been created.
+ *
+ * Options:
+ *
+ *   (String) data - vcard object.
+ *   (String) filename - name for the address book vcf file.
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
 function createCard(addressBook, options) {
   var objectUrl = _url2['default'].resolve(addressBook.url, options.filename);
   return webdav.createObject(objectUrl, options.data, options);
 }
+
+/**
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ */
 
 function listVCards(addressBook, options) {
   var req, responses;
@@ -1094,19 +1055,62 @@ function listVCards(addressBook, options) {
   }, null, this);
 }
 
+/**
+ * @param {dav.VCard} card updated vcard object.
+ * @return {Promise} promise will resolve when the card has been updated.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
 function updateCard(card, options) {
   return webdav.updateObject(card.url, card.addressData, card.etag, options);
 }
 
+/**
+ * @param {dav.VCard} card target vcard object.
+ * @return {Promise} promise will resolve when the calendar has been deleted.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
 function deleteCard(card, options) {
   return webdav.deleteObject(card.url, card.etag, options);
 }
+
+/**
+ * @param {dav.Calendar} calendar the calendar to fetch updates to.
+ * @return {Promise} promise will resolve with updated calendar object.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (String) syncMethod - either 'basic' or 'webdav'. If unspecified, will
+ *       try to do webdav sync and failover to basic sync if rfc 6578 is not
+ *       supported by the server.
+ *   (dav.Transport) xhr - request sender.
+ */
 
 function syncAddressBook(addressBook, options) {
   options.basicSync = basicSync;
   options.webdavSync = webdavSync;
   return webdav.syncCollection(addressBook, options);
 }
+
+/**
+ * @param {dav.Account} account the account to fetch updates for.
+ * @return {Promise} promise will resolve with updated account.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
 
 function syncCarddavAccount(account) {
   var options = arguments[1] === undefined ? {} : arguments[1];
@@ -1245,7 +1249,24 @@ function webdavSync(addressBook, options) {
     }
   }, null, this);
 }
-},{"./fuzzy_url_equals":6,"./model":8,"./namespace":9,"./request":11,"./webdav":15,"debug":117,"url":114}],6:[function(_dereq_,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":20,"url":119}],6:[function(_dereq_,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = debug;
+
+function debug(topic) {
+  return function (message) {
+    if (debug.enabled) {
+      console.log("[" + topic + "] " + message);
+    }
+  };
+}
+
+module.exports = exports["default"];
+},{}],7:[function(_dereq_,module,exports){
 'use strict';
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -1262,7 +1283,7 @@ function fuzzyIncludes(one, other) {
   return one.indexOf(other) !== -1 || other.charAt(other.length - 1) === '/' && one.indexOf(other.slice(0, -1)) !== -1;
 }
 module.exports = exports['default'];
-},{}],7:[function(_dereq_,module,exports){
+},{}],8:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1275,7 +1296,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _debug = _dereq_('debug');
+var _debug = _dereq_('./debug');
 
 var _debug2 = _interopRequireDefault(_debug);
 
@@ -1350,7 +1371,7 @@ exports.ns = ns;
 exports.request = request;
 exports.transport = transport;
 exports.version = version;
-},{"../package":137,"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./model":8,"./namespace":9,"./request":11,"./sandbox":12,"./transport":14,"babel/polyfill":106,"debug":117}],8:[function(_dereq_,module,exports){
+},{"../package":143,"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./debug":6,"./model":9,"./namespace":10,"./request":12,"./sandbox":13,"./transport":19,"babel/polyfill":111}],9:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1510,7 +1531,7 @@ var VCard = (function (_DAVObject2) {
 })(DAVObject);
 
 exports.VCard = VCard;
-},{}],9:[function(_dereq_,module,exports){
+},{}],10:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1524,7 +1545,7 @@ var CARDDAV = 'urn:ietf:params:xml:ns:carddav';
 exports.CARDDAV = CARDDAV;
 var DAV = 'DAV:';
 exports.DAV = DAV;
-},{}],10:[function(_dereq_,module,exports){
+},{}],11:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1538,7 +1559,7 @@ var _camelize = _dereq_('./camelize');
 
 var _camelize2 = _interopRequireDefault(_camelize);
 
-var debug = _dereq_('debug')('dav:parser');
+var debug = _dereq_('./debug')('dav:parser');
 
 var DOMParser = undefined;
 if (typeof self !== 'undefined' && 'DOMParser' in self) {
@@ -1706,63 +1727,19 @@ function children(node, localName) {
 function child(node, localName) {
   return children(node, localName)[0];
 }
-},{"./camelize":3,"debug":117,"xmldom":134}],11:[function(_dereq_,module,exports){
+},{"./camelize":3,"./debug":6,"xmldom":140}],12:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-/**
- * Options:
- *
- *   (String) depth - optional value for Depth header.
- *   (Array.<Object>) props - list of props to request.
- */
 exports.addressBookQuery = addressBookQuery;
-
-/**
- * Options:
- *
- *   (String) data - put request body.
- *   (String) method - http method.
- *   (String) etag - cached calendar object etag.
- */
 exports.basic = basic;
-
-/**
- * Options:
- *
- *   (String) depth - optional value for Depth header.
- *   (Array.<Object>) filters - list of filters to send with request.
- *   (Array.<Object>) props - list of props to request.
- *   (String) timezone - VTIMEZONE calendar object.
- */
 exports.calendarQuery = calendarQuery;
 exports.collectionQuery = collectionQuery;
-
-/**
- * Options:
- *
- *   (String) depth - optional value for Depth header.
- *   (Array.<Object>) props - list of props to request.
- */
 exports.propfind = propfind;
-
-/**
- * Options:
- *
- *   (String) depth - option value for Depth header.
- *   (Array.<Object>) props - list of props to request.
- *   (Number) syncLevel - indicates scope of the sync report request.
- *   (String) syncToken - synchronization token provided by the server.
- */
 exports.syncCollection = syncCollection;
 exports.mergeProps = mergeProps;
-
-/**
- * Map propstats to props.
- */
 exports.getProps = getProps;
 exports.setRequestHeaders = setRequestHeaders;
 
@@ -1776,9 +1753,24 @@ var _template = _dereq_('./template');
 
 var template = _interopRequireWildcard(_template);
 
+/**
+ * Options:
+ *
+ *   (String) depth - optional value for Depth header.
+ *   (Array.<Object>) props - list of props to request.
+ */
+
 function addressBookQuery(options) {
   return collectionQuery(template.addressBookQuery({ props: options.props || [] }), { depth: options.depth });
 }
+
+/**
+ * Options:
+ *
+ *   (String) data - put request body.
+ *   (String) method - http method.
+ *   (String) etag - cached calendar object etag.
+ */
 
 function basic(options) {
   function transformRequest(xhr) {
@@ -1791,6 +1783,15 @@ function basic(options) {
     transformRequest: transformRequest
   });
 }
+
+/**
+ * Options:
+ *
+ *   (String) depth - optional value for Depth header.
+ *   (Array.<Object>) filters - list of filters to send with request.
+ *   (Array.<Object>) props - list of props to request.
+ *   (String) timezone - VTIMEZONE calendar object.
+ */
 
 function calendarQuery(options) {
   return collectionQuery(template.calendarQuery({
@@ -1820,6 +1821,13 @@ function collectionQuery(requestData, options) {
     transformResponse: transformResponse
   });
 }
+
+/**
+ * Options:
+ *
+ *   (String) depth - optional value for Depth header.
+ *   (Array.<Object>) props - list of props to request.
+ */
 
 function propfind(options) {
   var requestData = template.propfind({ props: options.props });
@@ -1854,6 +1862,15 @@ function propfind(options) {
     transformResponse: transformResponse
   });
 }
+
+/**
+ * Options:
+ *
+ *   (String) depth - option value for Depth header.
+ *   (Array.<Object>) props - list of props to request.
+ *   (Number) syncLevel - indicates scope of the sync report request.
+ *   (String) syncToken - synchronization token provided by the server.
+ */
 
 function syncCollection(options) {
   var requestData = template.syncCollection({
@@ -1916,6 +1933,10 @@ function mergeProps(props) {
   }, {});
 }
 
+/**
+ * Map propstats to props.
+ */
+
 function getProps(propstats) {
   return mergeProps(propstats.map(getProp).filter(function (prop) {
     return prop && typeof prop === 'object';
@@ -1933,7 +1954,7 @@ function setRequestHeaders(request, options) {
     request.setRequestHeader('If-Match', options.etag);
   }
 }
-},{"./parser":10,"./template":13}],12:[function(_dereq_,module,exports){
+},{"./parser":11,"./template":16}],13:[function(_dereq_,module,exports){
 /**
  * @fileoverview Group requests together and then abort as a group.
  *
@@ -1959,7 +1980,7 @@ exports.createSandbox = createSandbox;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var debug = _dereq_('debug')('dav:sandbox');
+var debug = _dereq_('./debug')('dav:sandbox');
 
 var Sandbox = (function () {
   function Sandbox() {
@@ -1992,12 +2013,69 @@ exports.Sandbox = Sandbox;
 function createSandbox() {
   return new Sandbox();
 }
-},{"debug":117}],13:[function(_dereq_,module,exports){
+},{"./debug":6}],14:[function(_dereq_,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = _dereq_('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+  var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "      "
+    + escapeExpression(((helpers.prop || (depth0 && depth0.prop) || helperMissing).call(depth0, depth0, {"name":"prop","hash":{},"data":data})))
+    + "\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "<card:addressbook-query xmlns:card=\"urn:ietf:params:xml:ns:carddav\"\n                        xmlns:d=\"DAV:\">\n  <d:prop>\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.props : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "  </d:prop>\n  <!-- According to http://stackoverflow.com/questions/23742568/google-carddav-api-addressbook-multiget-returns-400-bad-request,\n       Google's CardDAV server requires a filter element. I don't think all addressbook-query calls need a filter in the spec though? -->\n  <card:filter>\n    <card:prop-filter name=\"FN\">\n    </card:prop-filter>\n  </card:filter>\n</card:addressbook-query>\n";
+},"useData":true});
+
+},{"hbsfy/runtime":139}],15:[function(_dereq_,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = _dereq_('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+  var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "      "
+    + escapeExpression(((helpers.prop || (depth0 && depth0.prop) || helperMissing).call(depth0, depth0, {"name":"prop","hash":{},"data":data})))
+    + "\n";
+},"3":function(depth0,helpers,partials,data) {
+  var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "      "
+    + escapeExpression(((helpers.filter || (depth0 && depth0.filter) || helperMissing).call(depth0, depth0, {"name":"filter","hash":{},"data":data})))
+    + "\n";
+},"5":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "    <c:timezone>"
+    + escapeExpression(((helper = (helper = helpers.timezone || (depth0 != null ? depth0.timezone : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"timezone","hash":{},"data":data}) : helper)))
+    + "</c:timezone>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "<c:calendar-query xmlns:c=\"urn:ietf:params:xml:ns:caldav\"\n                  xmlns:cs=\"http://calendarserver.org/ns/\"\n                  xmlns:d=\"DAV:\">\n  <d:prop>\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.props : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "  </d:prop>\n  <c:filter>\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.filters : depth0), {"name":"each","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "  </c:filter>\n";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.timezone : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "</c:calendar-query>\n";
+},"useData":true});
+
+},{"hbsfy/runtime":139}],16:[function(_dereq_,module,exports){
+(function (__dirname){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _hbsfyRuntime = _dereq_('hbsfy/runtime');
+
+var _hbsfyRuntime2 = _interopRequireDefault(_hbsfyRuntime);
+
+var _util = _dereq_('util');
+
+var _namespace = _dereq_('../namespace');
+
+var ns = _interopRequireWildcard(_namespace);
 
 /**
  * @param {Object} filter looks like
@@ -2034,57 +2112,24 @@ Object.defineProperty(exports, '__esModule', {
  *       }]
  *     }
  */
-exports.filterHelper = filterHelper;
-exports.propHelper = propHelper;
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _handlebars = _dereq_('handlebars');
-
-var _handlebars2 = _interopRequireDefault(_handlebars);
-
-var _util = _dereq_('util');
-
-var _namespace = _dereq_('../namespace');
-
-var ns = _interopRequireWildcard(_namespace);
-
-
-
 function filterHelper(filter) {
   if (!filter.children || !filter.children.length) {
-    return new _handlebars2['default'].SafeString((0, _util.format)('<c:%s %s/>', filter.type, formatAttrs(filter.attrs)));
+    return new _hbsfyRuntime2['default'].SafeString((0, _util.format)('<c:%s %s/>', filter.type, formatAttrs(filter.attrs)));
   }
 
   var children = filter.children.map(filterHelper).map(function (safeString) {
     return safeString.string;
   });
 
-  return new _handlebars2['default'].SafeString((0, _util.format)('<c:%s %s>%s</c:%s>', filter.type, formatAttrs(filter.attrs), children, filter.type));
+  return new _hbsfyRuntime2['default'].SafeString((0, _util.format)('<c:%s %s>%s</c:%s>', filter.type, formatAttrs(filter.attrs), children, filter.type));
 }
-
-_handlebars2['default'].registerHelper('filter', filterHelper);
+exports.filterHelper = filterHelper;
 
 function propHelper(prop) {
-  return new _handlebars2['default'].SafeString((0, _util.format)('<%s:%s />', xmlnsPrefix(prop.namespace), prop.name));
+  return new _hbsfyRuntime2['default'].SafeString((0, _util.format)('<%s:%s />', xmlnsPrefix(prop.namespace), prop.name));
 }
+exports.propHelper = propHelper;
 
-_handlebars2['default'].registerHelper('prop', propHelper);
-
-var addressBookQuery = _handlebars2['default'].compile("<card:addressbook-query xmlns:card=\"urn:ietf:params:xml:ns:carddav\"\n                        xmlns:d=\"DAV:\">\n  <d:prop>\n    {{#each props}}\n      {{prop this}}\n    {{/each}}\n  </d:prop>\n  <!-- According to http://stackoverflow.com/questions/23742568/google-carddav-api-addressbook-multiget-returns-400-bad-request,\n       Google's CardDAV server requires a filter element. I don't think all addressbook-query calls need a filter in the spec though? -->\n  <card:filter>\n    <card:prop-filter name=\"FN\">\n    </card:prop-filter>\n  </card:filter>\n</card:addressbook-query>\n");
-
-exports.addressBookQuery = addressBookQuery;
-var calendarQuery = _handlebars2['default'].compile("<c:calendar-query xmlns:c=\"urn:ietf:params:xml:ns:caldav\"\n                  xmlns:cs=\"http://calendarserver.org/ns/\"\n                  xmlns:d=\"DAV:\">\n  <d:prop>\n    {{#each props}}\n      {{prop this}}\n    {{/each}}\n  </d:prop>\n  <c:filter>\n    {{#each filters}}\n      {{filter this}}\n    {{/each}}\n  </c:filter>\n  {{#if timezone}}\n    <c:timezone>{{timezone}}</c:timezone>\n  {{/if}}\n</c:calendar-query>\n");
-
-exports.calendarQuery = calendarQuery;
-var propfind = _handlebars2['default'].compile("<d:propfind xmlns:c=\"urn:ietf:params:xml:ns:caldav\"\n            xmlns:card=\"urn:ietf:params:xml:ns:carddav\"\n            xmlns:cs=\"http://calendarserver.org/ns/\"\n            xmlns:d=\"DAV:\">\n  <d:prop>\n    {{#each props}}\n      {{prop this}}\n    {{/each}}\n  </d:prop>\n</d:propfind>\n");
-
-exports.propfind = propfind;
-var syncCollection = _handlebars2['default'].compile("<d:sync-collection xmlns:c=\"urn:ietf:params:xml:ns:caldav\"\n                   xmlns:card=\"urn:ietf:params:xml:ns:carddav\"\n                   xmlns:d=\"DAV:\">\n  <d:sync-level>{{syncLevel}}</d:sync-level>\n  <d:sync-token>{{syncToken}}</d:sync-token>\n  <d:prop>\n    {{#each props}}\n      {{prop this}}\n    {{/each}}\n  </d:prop>\n</d:sync-collection>\n");
-
-exports.syncCollection = syncCollection;
 function formatAttrs(attrs) {
   if (typeof attrs !== 'object') {
     return '';
@@ -2109,7 +2154,66 @@ function xmlnsPrefix(namespace) {
       throw new Error('Unrecognized xmlns ' + namespace);
   }
 }
-},{"../namespace":9,"handlebars":133,"util":116}],14:[function(_dereq_,module,exports){
+
+_hbsfyRuntime2['default'].registerHelper('filter', filterHelper);
+_hbsfyRuntime2['default'].registerHelper('prop', propHelper);
+
+try {
+  exports.addressBookQuery = _dereq_('./address_book_query.hbs');
+  exports.calendarQuery = _dereq_('./calendar_query.hbs');
+  exports.propfind = _dereq_('./propfind.hbs');
+  exports.syncCollection = _dereq_('./sync_collection.hbs');
+} catch (error) {
+  (function () {
+    // Absurd hacks to make unit tests work.
+    var Handlebars = _dereq_('handlebars');
+    var camelize = _dereq_('../camelize');
+    var fs = _dereq_('fs');
+
+    Handlebars.registerHelper('filter', filterHelper);
+    Handlebars.registerHelper('prop', propHelper);
+
+    ['address_book_query', 'calendar_query', 'propfind', 'sync_collection'].forEach(function (templateName) {
+      exports[camelize(templateName)] = Handlebars.compile(fs.readFileSync('' + __dirname + '/' + templateName + '.hbs', 'utf-8'));
+    });
+  })();
+}
+}).call(this,"/template")
+},{"../camelize":3,"../namespace":10,"./address_book_query.hbs":14,"./calendar_query.hbs":15,"./propfind.hbs":17,"./sync_collection.hbs":18,"fs":112,"handlebars":137,"hbsfy/runtime":139,"util":121}],17:[function(_dereq_,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = _dereq_('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+  var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "      "
+    + escapeExpression(((helpers.prop || (depth0 && depth0.prop) || helperMissing).call(depth0, depth0, {"name":"prop","hash":{},"data":data})))
+    + "\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "<d:propfind xmlns:c=\"urn:ietf:params:xml:ns:caldav\"\n            xmlns:card=\"urn:ietf:params:xml:ns:carddav\"\n            xmlns:cs=\"http://calendarserver.org/ns/\"\n            xmlns:d=\"DAV:\">\n  <d:prop>\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.props : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "  </d:prop>\n</d:propfind>\n";
+},"useData":true});
+
+},{"hbsfy/runtime":139}],18:[function(_dereq_,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = _dereq_('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
+  var helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "      "
+    + escapeExpression(((helpers.prop || (depth0 && depth0.prop) || helperMissing).call(depth0, depth0, {"name":"prop","hash":{},"data":data})))
+    + "\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<d:sync-collection xmlns:c=\"urn:ietf:params:xml:ns:caldav\"\n                   xmlns:card=\"urn:ietf:params:xml:ns:carddav\"\n                   xmlns:d=\"DAV:\">\n  <d:sync-level>"
+    + escapeExpression(((helper = (helper = helpers.syncLevel || (depth0 != null ? depth0.syncLevel : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"syncLevel","hash":{},"data":data}) : helper)))
+    + "</d:sync-level>\n  <d:sync-token>"
+    + escapeExpression(((helper = (helper = helpers.syncToken || (depth0 != null ? depth0.syncToken : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"syncToken","hash":{},"data":data}) : helper)))
+    + "</d:sync-token>\n  <d:prop>\n";
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.props : depth0), {"name":"each","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "  </d:prop>\n</d:sync-collection>\n";
+},"useData":true});
+
+},{"hbsfy/runtime":139}],19:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2354,7 +2458,7 @@ function access(credentials, options) {
         return context$1$0.abrupt('return', context$1$0.sent);
 
       case 8:
-        return context$1$0.abrupt('return', Promise.resolve(credentials.accessToken));
+        return context$1$0.abrupt('return', credentials.accessToken);
 
       case 9:
       case 'end':
@@ -2442,25 +2546,16 @@ function refreshAccessToken(credentials, options) {
     }
   }, null, this);
 }
-},{"./xmlhttprequest":16,"querystring":113}],15:[function(_dereq_,module,exports){
+},{"./xmlhttprequest":21,"querystring":118}],20:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-/**
- * @param {String} objectUrl url for webdav object.
- * @param {String} objectData webdav object data.
- */
 exports.createObject = createObject;
 exports.updateObject = updateObject;
 exports.deleteObject = deleteObject;
 exports.syncCollection = syncCollection;
-
-/**
- * @param {dav.DAVCollection} collection to fetch report set for.
- */
 exports.supportedReportSet = supportedReportSet;
 exports.isCollectionDirty = isCollectionDirty;
 
@@ -2480,7 +2575,13 @@ var _request = _dereq_('./request');
 
 var request = _interopRequireWildcard(_request);
 
-var debug = _dereq_('debug')('dav:webdav');
+var debug = _dereq_('./debug')('dav:webdav');
+
+/**
+ * @param {String} objectUrl url for webdav object.
+ * @param {String} objectData webdav object data.
+ */
+
 function createObject(objectUrl, objectData, options) {
   var req = request.basic({ method: 'PUT', data: objectData });
   return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
@@ -2514,6 +2615,10 @@ function syncCollection(collection, options) {
     return options.basicSync(collection, options);
   }
 }
+
+/**
+ * @param {dav.DAVCollection} collection to fetch report set for.
+ */
 
 function supportedReportSet(collection, options) {
   var req, response;
@@ -2592,7 +2697,7 @@ function isCollectionDirty(collection, options) {
     }
   }, null, this);
 }
-},{"./fuzzy_url_equals":6,"./namespace":9,"./request":11,"debug":117}],16:[function(_dereq_,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./namespace":10,"./request":12}],21:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2603,7 +2708,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var debug = _dereq_('debug')('dav:xmlhttprequest');
+var debug = _dereq_('./debug')('dav:xmlhttprequest');
 
 var Native = undefined;
 if (typeof self !== 'undefined' && 'XMLHttpRequest' in self) {
@@ -2716,7 +2821,7 @@ var XMLHttpRequest = (function () {
 
 exports['default'] = XMLHttpRequest;
 module.exports = exports['default'];
-},{"debug":117}],17:[function(_dereq_,module,exports){
+},{"./debug":6}],22:[function(_dereq_,module,exports){
 (function (global){
 "use strict";
 
@@ -2729,7 +2834,7 @@ if (global._babelPolyfill) {
 }
 global._babelPolyfill = true;
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"core-js/shim":103,"regenerator/runtime":104}],18:[function(_dereq_,module,exports){
+},{"core-js/shim":108,"regenerator/runtime":109}],23:[function(_dereq_,module,exports){
 // false -> Array#indexOf
 // true  -> Array#includes
 var $ = _dereq_('./$');
@@ -2747,7 +2852,7 @@ module.exports = function(IS_INCLUDES){
     } return !IS_INCLUDES && -1;
   };
 };
-},{"./$":38}],19:[function(_dereq_,module,exports){
+},{"./$":43}],24:[function(_dereq_,module,exports){
 // 0 -> Array#forEach
 // 1 -> Array#map
 // 2 -> Array#filter
@@ -2788,7 +2893,7 @@ module.exports = function(TYPE){
     return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
   };
 };
-},{"./$":38,"./$.ctx":27}],20:[function(_dereq_,module,exports){
+},{"./$":43,"./$.ctx":32}],25:[function(_dereq_,module,exports){
 var $ = _dereq_('./$');
 function assert(condition, msg1, msg2){
   if(!condition)throw TypeError(msg2 ? msg1 + msg2 : msg1);
@@ -2807,7 +2912,7 @@ assert.inst = function(it, Constructor, name){
   return it;
 };
 module.exports = assert;
-},{"./$":38}],21:[function(_dereq_,module,exports){
+},{"./$":43}],26:[function(_dereq_,module,exports){
 var $        = _dereq_('./$')
   , enumKeys = _dereq_('./$.enum-keys');
 // 19.1.2.1 Object.assign(target, source, ...)
@@ -2827,7 +2932,7 @@ module.exports = Object.assign || function assign(target, source){
   }
   return T;
 };
-},{"./$":38,"./$.enum-keys":30}],22:[function(_dereq_,module,exports){
+},{"./$":43,"./$.enum-keys":35}],27:[function(_dereq_,module,exports){
 var $        = _dereq_('./$')
   , TAG      = _dereq_('./$.wks')('toStringTag')
   , toString = {}.toString;
@@ -2843,7 +2948,7 @@ cof.set = function(it, tag, stat){
   if(it && !$.has(it = stat ? it : it.prototype, TAG))$.hide(it, TAG, tag);
 };
 module.exports = cof;
-},{"./$":38,"./$.wks":54}],23:[function(_dereq_,module,exports){
+},{"./$":43,"./$.wks":59}],28:[function(_dereq_,module,exports){
 'use strict';
 var $        = _dereq_('./$')
   , ctx      = _dereq_('./$.ctx')
@@ -3000,7 +3105,7 @@ module.exports = {
     }, IS_MAP ? 'entries' : 'values' , !IS_MAP, true);
   }
 };
-},{"./$":38,"./$.assert":20,"./$.ctx":27,"./$.for-of":31,"./$.iter":37,"./$.iter-define":35,"./$.mix":40,"./$.uid":52}],24:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.ctx":32,"./$.for-of":36,"./$.iter":42,"./$.iter-define":40,"./$.mix":45,"./$.uid":57}],29:[function(_dereq_,module,exports){
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var $def  = _dereq_('./$.def')
   , forOf = _dereq_('./$.for-of');
@@ -3013,7 +3118,7 @@ module.exports = function(NAME){
     }
   });
 };
-},{"./$.def":28,"./$.for-of":31}],25:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.for-of":36}],30:[function(_dereq_,module,exports){
 'use strict';
 var $         = _dereq_('./$')
   , safe      = _dereq_('./$.uid').safe
@@ -3098,7 +3203,7 @@ module.exports = {
   WEAK: WEAK,
   ID: ID
 };
-},{"./$":38,"./$.array-methods":19,"./$.assert":20,"./$.for-of":31,"./$.mix":40,"./$.uid":52}],26:[function(_dereq_,module,exports){
+},{"./$":43,"./$.array-methods":24,"./$.assert":25,"./$.for-of":36,"./$.mix":45,"./$.uid":57}],31:[function(_dereq_,module,exports){
 'use strict';
 var $     = _dereq_('./$')
   , $def  = _dereq_('./$.def')
@@ -3166,7 +3271,7 @@ module.exports = function(NAME, methods, common, IS_MAP, IS_WEAK){
 
   return C;
 };
-},{"./$":38,"./$.assert":20,"./$.cof":22,"./$.def":28,"./$.for-of":31,"./$.iter":37,"./$.iter-detect":36,"./$.mix":40,"./$.redef":43,"./$.species":46}],27:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.cof":27,"./$.def":33,"./$.for-of":36,"./$.iter":42,"./$.iter-detect":41,"./$.mix":45,"./$.redef":48,"./$.species":51}],32:[function(_dereq_,module,exports){
 // Optional / simple context binding
 var assertFunction = _dereq_('./$.assert').fn;
 module.exports = function(fn, that, length){
@@ -3186,7 +3291,7 @@ module.exports = function(fn, that, length){
       return fn.apply(that, arguments);
     };
 };
-},{"./$.assert":20}],28:[function(_dereq_,module,exports){
+},{"./$.assert":25}],33:[function(_dereq_,module,exports){
 var $          = _dereq_('./$')
   , global     = $.g
   , core       = $.core
@@ -3229,7 +3334,7 @@ function $def(type, name, source){
   }
 }
 module.exports = $def;
-},{"./$":38,"./$.redef":43}],29:[function(_dereq_,module,exports){
+},{"./$":43,"./$.redef":48}],34:[function(_dereq_,module,exports){
 var $        = _dereq_('./$')
   , document = $.g.document
   , isObject = $.isObject
@@ -3238,7 +3343,7 @@ var $        = _dereq_('./$')
 module.exports = function(it){
   return is ? document.createElement(it) : {};
 };
-},{"./$":38}],30:[function(_dereq_,module,exports){
+},{"./$":43}],35:[function(_dereq_,module,exports){
 var $ = _dereq_('./$');
 module.exports = function(it){
   var keys       = $.getKeys(it)
@@ -3249,7 +3354,7 @@ module.exports = function(it){
   });
   return keys;
 };
-},{"./$":38}],31:[function(_dereq_,module,exports){
+},{"./$":43}],36:[function(_dereq_,module,exports){
 var ctx  = _dereq_('./$.ctx')
   , get  = _dereq_('./$.iter').get
   , call = _dereq_('./$.iter-call');
@@ -3263,13 +3368,13 @@ module.exports = function(iterable, entries, fn, that){
     }
   }
 };
-},{"./$.ctx":27,"./$.iter":37,"./$.iter-call":34}],32:[function(_dereq_,module,exports){
+},{"./$.ctx":32,"./$.iter":42,"./$.iter-call":39}],37:[function(_dereq_,module,exports){
 module.exports = function($){
   $.FW   = true;
   $.path = $.g;
   return $;
 };
-},{}],33:[function(_dereq_,module,exports){
+},{}],38:[function(_dereq_,module,exports){
 // Fast apply
 // http://jsperf.lnkit.com/fast-apply/5
 module.exports = function(fn, args, that){
@@ -3289,7 +3394,7 @@ module.exports = function(fn, args, that){
                       : fn.call(that, args[0], args[1], args[2], args[3], args[4]);
   } return              fn.apply(that, args);
 };
-},{}],34:[function(_dereq_,module,exports){
+},{}],39:[function(_dereq_,module,exports){
 var assertObject = _dereq_('./$.assert').obj;
 function close(iterator){
   var ret = iterator['return'];
@@ -3305,7 +3410,7 @@ function call(iterator, fn, value, entries){
 }
 call.close = close;
 module.exports = call;
-},{"./$.assert":20}],35:[function(_dereq_,module,exports){
+},{"./$.assert":25}],40:[function(_dereq_,module,exports){
 var $def            = _dereq_('./$.def')
   , $redef          = _dereq_('./$.redef')
   , $               = _dereq_('./$')
@@ -3356,7 +3461,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE)
     } else $def($def.P + $def.F * $iter.BUGGY, NAME, methods);
   }
 };
-},{"./$":38,"./$.cof":22,"./$.def":28,"./$.iter":37,"./$.redef":43,"./$.wks":54}],36:[function(_dereq_,module,exports){
+},{"./$":43,"./$.cof":27,"./$.def":33,"./$.iter":42,"./$.redef":48,"./$.wks":59}],41:[function(_dereq_,module,exports){
 var SYMBOL_ITERATOR = _dereq_('./$.wks')('iterator')
   , SAFE_CLOSING    = false;
 try {
@@ -3376,7 +3481,7 @@ module.exports = function(exec){
   } catch(e){ /* empty */ }
   return safe;
 };
-},{"./$.wks":54}],37:[function(_dereq_,module,exports){
+},{"./$.wks":59}],42:[function(_dereq_,module,exports){
 'use strict';
 var $                 = _dereq_('./$')
   , cof               = _dereq_('./$.cof')
@@ -3418,7 +3523,7 @@ module.exports = {
     cof.set(Constructor, NAME + ' Iterator');
   }
 };
-},{"./$":38,"./$.assert":20,"./$.cof":22,"./$.wks":54}],38:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.cof":27,"./$.wks":59}],43:[function(_dereq_,module,exports){
 'use strict';
 var global = typeof self != 'undefined' ? self : Function('return this')()
   , core   = {}
@@ -3518,7 +3623,7 @@ var $ = module.exports = _dereq_('./$.fw')({
 /* eslint-disable no-undef */
 if(typeof __e != 'undefined')__e = core;
 if(typeof __g != 'undefined')__g = global;
-},{"./$.fw":32}],39:[function(_dereq_,module,exports){
+},{"./$.fw":37}],44:[function(_dereq_,module,exports){
 var $ = _dereq_('./$');
 module.exports = function(object, el){
   var O      = $.toObject(object)
@@ -3528,13 +3633,13 @@ module.exports = function(object, el){
     , key;
   while(length > index)if(O[key = keys[index++]] === el)return key;
 };
-},{"./$":38}],40:[function(_dereq_,module,exports){
+},{"./$":43}],45:[function(_dereq_,module,exports){
 var $redef = _dereq_('./$.redef');
 module.exports = function(target, src){
   for(var key in src)$redef(target, key, src[key]);
   return target;
 };
-},{"./$.redef":43}],41:[function(_dereq_,module,exports){
+},{"./$.redef":48}],46:[function(_dereq_,module,exports){
 var $            = _dereq_('./$')
   , assertObject = _dereq_('./$.assert').obj;
 module.exports = function ownKeys(it){
@@ -3543,7 +3648,7 @@ module.exports = function ownKeys(it){
     , getSymbols = $.getSymbols;
   return getSymbols ? keys.concat(getSymbols(it)) : keys;
 };
-},{"./$":38,"./$.assert":20}],42:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25}],47:[function(_dereq_,module,exports){
 'use strict';
 var $      = _dereq_('./$')
   , invoke = _dereq_('./$.invoke')
@@ -3567,7 +3672,7 @@ module.exports = function(/* ...pargs */){
     return invoke(fn, args, that);
   };
 };
-},{"./$":38,"./$.assert":20,"./$.invoke":33}],43:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.invoke":38}],48:[function(_dereq_,module,exports){
 var $   = _dereq_('./$')
   , tpl = String({}.hasOwnProperty)
   , SRC = _dereq_('./$.uid').safe('src')
@@ -3597,7 +3702,7 @@ $.core.inspectSource = function(it){
 };
 
 module.exports = $redef;
-},{"./$":38,"./$.uid":52}],44:[function(_dereq_,module,exports){
+},{"./$":43,"./$.uid":57}],49:[function(_dereq_,module,exports){
 'use strict';
 module.exports = function(regExp, replace, isStatic){
   var replacer = replace === Object(replace) ? function(part){
@@ -3607,7 +3712,7 @@ module.exports = function(regExp, replace, isStatic){
     return String(isStatic ? it : this).replace(regExp, replacer);
   };
 };
-},{}],45:[function(_dereq_,module,exports){
+},{}],50:[function(_dereq_,module,exports){
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
 var $      = _dereq_('./$')
@@ -3633,7 +3738,7 @@ module.exports = {
     : undefined),
   check: check
 };
-},{"./$":38,"./$.assert":20,"./$.ctx":27}],46:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.ctx":32}],51:[function(_dereq_,module,exports){
 var $       = _dereq_('./$')
   , SPECIES = _dereq_('./$.wks')('species');
 module.exports = function(C){
@@ -3642,7 +3747,7 @@ module.exports = function(C){
     get: $.that
   });
 };
-},{"./$":38,"./$.wks":54}],47:[function(_dereq_,module,exports){
+},{"./$":43,"./$.wks":59}],52:[function(_dereq_,module,exports){
 // true  -> String#at
 // false -> String#codePointAt
 var $ = _dereq_('./$');
@@ -3660,7 +3765,7 @@ module.exports = function(TO_STRING){
         : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./$":38}],48:[function(_dereq_,module,exports){
+},{"./$":43}],53:[function(_dereq_,module,exports){
 // http://wiki.ecmascript.org/doku.php?id=strawman:string_padding
 var $      = _dereq_('./$')
   , repeat = _dereq_('./$.string-repeat');
@@ -3693,7 +3798,7 @@ module.exports = function(that, minLength, fillChar, left){
   // 11. Return a String made from S, followed by sFillVal.
   return left ? sFillVal.concat(S) : S.concat(sFillVal);
 };
-},{"./$":38,"./$.string-repeat":49}],49:[function(_dereq_,module,exports){
+},{"./$":43,"./$.string-repeat":54}],54:[function(_dereq_,module,exports){
 'use strict';
 var $ = _dereq_('./$');
 
@@ -3705,7 +3810,7 @@ module.exports = function repeat(count){
   for(;n > 0; (n >>>= 1) && (str += str))if(n & 1)res += str;
   return res;
 };
-},{"./$":38}],50:[function(_dereq_,module,exports){
+},{"./$":43}],55:[function(_dereq_,module,exports){
 'use strict';
 var $      = _dereq_('./$')
   , ctx    = _dereq_('./$.ctx')
@@ -3787,7 +3892,7 @@ module.exports = {
   set:   setTask,
   clear: clearTask
 };
-},{"./$":38,"./$.cof":22,"./$.ctx":27,"./$.dom-create":29,"./$.invoke":33}],51:[function(_dereq_,module,exports){
+},{"./$":43,"./$.cof":27,"./$.ctx":32,"./$.dom-create":34,"./$.invoke":38}],56:[function(_dereq_,module,exports){
 module.exports = function(exec){
   try {
     exec();
@@ -3796,14 +3901,14 @@ module.exports = function(exec){
     return true;
   }
 };
-},{}],52:[function(_dereq_,module,exports){
+},{}],57:[function(_dereq_,module,exports){
 var sid = 0;
 function uid(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++sid + Math.random()).toString(36));
 }
 uid.safe = _dereq_('./$').g.Symbol || uid;
 module.exports = uid;
-},{"./$":38}],53:[function(_dereq_,module,exports){
+},{"./$":43}],58:[function(_dereq_,module,exports){
 // 22.1.3.31 Array.prototype[@@unscopables]
 var $           = _dereq_('./$')
   , UNSCOPABLES = _dereq_('./$.wks')('unscopables');
@@ -3811,14 +3916,14 @@ if($.FW && !(UNSCOPABLES in []))$.hide(Array.prototype, UNSCOPABLES, {});
 module.exports = function(key){
   if($.FW)[][UNSCOPABLES][key] = true;
 };
-},{"./$":38,"./$.wks":54}],54:[function(_dereq_,module,exports){
+},{"./$":43,"./$.wks":59}],59:[function(_dereq_,module,exports){
 var global = _dereq_('./$').g
   , store  = {};
 module.exports = function(name){
   return store[name] || (store[name] =
     global.Symbol && global.Symbol[name] || _dereq_('./$.uid').safe('Symbol.' + name));
 };
-},{"./$":38,"./$.uid":52}],55:[function(_dereq_,module,exports){
+},{"./$":43,"./$.uid":57}],60:[function(_dereq_,module,exports){
 var $                = _dereq_('./$')
   , cel              = _dereq_('./$.dom-create')
   , cof              = _dereq_('./$.cof')
@@ -4124,7 +4229,7 @@ if(classof(function(){ return arguments; }()) == 'Object')cof.classof = function
   var tag = classof(it);
   return tag == 'Object' && isFunction(it.callee) ? 'Arguments' : tag;
 };
-},{"./$":38,"./$.array-includes":18,"./$.array-methods":19,"./$.assert":20,"./$.cof":22,"./$.def":28,"./$.dom-create":29,"./$.invoke":33,"./$.replacer":44,"./$.throws":51,"./$.uid":52}],56:[function(_dereq_,module,exports){
+},{"./$":43,"./$.array-includes":23,"./$.array-methods":24,"./$.assert":25,"./$.cof":27,"./$.def":33,"./$.dom-create":34,"./$.invoke":38,"./$.replacer":49,"./$.throws":56,"./$.uid":57}],61:[function(_dereq_,module,exports){
 'use strict';
 var $       = _dereq_('./$')
   , $def    = _dereq_('./$.def')
@@ -4154,7 +4259,7 @@ $def($def.P, 'Array', {
   }
 });
 _dereq_('./$.unscope')('copyWithin');
-},{"./$":38,"./$.def":28,"./$.unscope":53}],57:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33,"./$.unscope":58}],62:[function(_dereq_,module,exports){
 'use strict';
 var $       = _dereq_('./$')
   , $def    = _dereq_('./$.def')
@@ -4172,7 +4277,7 @@ $def($def.P, 'Array', {
   }
 });
 _dereq_('./$.unscope')('fill');
-},{"./$":38,"./$.def":28,"./$.unscope":53}],58:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33,"./$.unscope":58}],63:[function(_dereq_,module,exports){
 'use strict';
 // 22.1.3.9 Array.prototype.findIndex(predicate, thisArg = undefined)
 var KEY    = 'findIndex'
@@ -4187,7 +4292,7 @@ $def($def.P + $def.F * forced, 'Array', {
   }
 });
 _dereq_('./$.unscope')(KEY);
-},{"./$.array-methods":19,"./$.def":28,"./$.unscope":53}],59:[function(_dereq_,module,exports){
+},{"./$.array-methods":24,"./$.def":33,"./$.unscope":58}],64:[function(_dereq_,module,exports){
 'use strict';
 // 22.1.3.8 Array.prototype.find(predicate, thisArg = undefined)
 var KEY    = 'find'
@@ -4202,7 +4307,7 @@ $def($def.P + $def.F * forced, 'Array', {
   }
 });
 _dereq_('./$.unscope')(KEY);
-},{"./$.array-methods":19,"./$.def":28,"./$.unscope":53}],60:[function(_dereq_,module,exports){
+},{"./$.array-methods":24,"./$.def":33,"./$.unscope":58}],65:[function(_dereq_,module,exports){
 var $     = _dereq_('./$')
   , ctx   = _dereq_('./$.ctx')
   , $def  = _dereq_('./$.def')
@@ -4235,7 +4340,7 @@ $def($def.S + $def.F * !_dereq_('./$.iter-detect')(function(iter){ Array.from(it
     return result;
   }
 });
-},{"./$":38,"./$.ctx":27,"./$.def":28,"./$.iter":37,"./$.iter-call":34,"./$.iter-detect":36}],61:[function(_dereq_,module,exports){
+},{"./$":43,"./$.ctx":32,"./$.def":33,"./$.iter":42,"./$.iter-call":39,"./$.iter-detect":41}],66:[function(_dereq_,module,exports){
 var $          = _dereq_('./$')
   , setUnscope = _dereq_('./$.unscope')
   , ITER       = _dereq_('./$.uid').safe('iter')
@@ -4270,7 +4375,7 @@ Iterators.Arguments = Iterators.Array;
 setUnscope('keys');
 setUnscope('values');
 setUnscope('entries');
-},{"./$":38,"./$.iter":37,"./$.iter-define":35,"./$.uid":52,"./$.unscope":53}],62:[function(_dereq_,module,exports){
+},{"./$":43,"./$.iter":42,"./$.iter-define":40,"./$.uid":57,"./$.unscope":58}],67:[function(_dereq_,module,exports){
 var $def = _dereq_('./$.def');
 $def($def.S, 'Array', {
   // 22.1.2.3 Array.of( ...items)
@@ -4284,9 +4389,9 @@ $def($def.S, 'Array', {
     return result;
   }
 });
-},{"./$.def":28}],63:[function(_dereq_,module,exports){
+},{"./$.def":33}],68:[function(_dereq_,module,exports){
 _dereq_('./$.species')(Array);
-},{"./$.species":46}],64:[function(_dereq_,module,exports){
+},{"./$.species":51}],69:[function(_dereq_,module,exports){
 var $             = _dereq_('./$')
   , HAS_INSTANCE  = _dereq_('./$.wks')('hasInstance')
   , FunctionProto = Function.prototype;
@@ -4298,7 +4403,7 @@ if(!(HAS_INSTANCE in FunctionProto))$.setDesc(FunctionProto, HAS_INSTANCE, {valu
   while(O = $.getProto(O))if(this.prototype === O)return true;
   return false;
 }});
-},{"./$":38,"./$.wks":54}],65:[function(_dereq_,module,exports){
+},{"./$":43,"./$.wks":59}],70:[function(_dereq_,module,exports){
 'use strict';
 var $    = _dereq_('./$')
   , NAME = 'name'
@@ -4317,7 +4422,7 @@ NAME in FunctionProto || $.FW && $.DESC && setDesc(FunctionProto, NAME, {
     $.has(this, NAME) || setDesc(this, NAME, $.desc(0, value));
   }
 });
-},{"./$":38}],66:[function(_dereq_,module,exports){
+},{"./$":43}],71:[function(_dereq_,module,exports){
 'use strict';
 var strong = _dereq_('./$.collection-strong');
 
@@ -4333,7 +4438,7 @@ _dereq_('./$.collection')('Map', {
     return strong.def(this, key === 0 ? 0 : key, value);
   }
 }, strong, true);
-},{"./$.collection":26,"./$.collection-strong":23}],67:[function(_dereq_,module,exports){
+},{"./$.collection":31,"./$.collection-strong":28}],72:[function(_dereq_,module,exports){
 var Infinity = 1 / 0
   , $def  = _dereq_('./$.def')
   , E     = Math.E
@@ -4456,7 +4561,7 @@ $def($def.S, 'Math', {
     return (it > 0 ? floor : ceil)(it);
   }
 });
-},{"./$.def":28}],68:[function(_dereq_,module,exports){
+},{"./$.def":33}],73:[function(_dereq_,module,exports){
 'use strict';
 var $          = _dereq_('./$')
   , isObject   = $.isObject
@@ -4501,7 +4606,7 @@ if($.FW && !($Number('0o1') && $Number('0b1'))){
   proto.constructor = $Number;
   _dereq_('./$.redef')($.g, NUMBER, $Number);
 }
-},{"./$":38,"./$.redef":43}],69:[function(_dereq_,module,exports){
+},{"./$":43,"./$.redef":48}],74:[function(_dereq_,module,exports){
 var $     = _dereq_('./$')
   , $def  = _dereq_('./$.def')
   , abs   = Math.abs
@@ -4537,11 +4642,11 @@ $def($def.S, 'Number', {
   // 20.1.2.13 Number.parseInt(string, radix)
   parseInt: parseInt
 });
-},{"./$":38,"./$.def":28}],70:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33}],75:[function(_dereq_,module,exports){
 // 19.1.3.1 Object.assign(target, source)
 var $def = _dereq_('./$.def');
 $def($def.S, 'Object', {assign: _dereq_('./$.assign')});
-},{"./$.assign":21,"./$.def":28}],71:[function(_dereq_,module,exports){
+},{"./$.assign":26,"./$.def":33}],76:[function(_dereq_,module,exports){
 // 19.1.3.10 Object.is(value1, value2)
 var $def = _dereq_('./$.def');
 $def($def.S, 'Object', {
@@ -4549,11 +4654,11 @@ $def($def.S, 'Object', {
     return x === y ? x !== 0 || 1 / x === 1 / y : x != x && y != y;
   }
 });
-},{"./$.def":28}],72:[function(_dereq_,module,exports){
+},{"./$.def":33}],77:[function(_dereq_,module,exports){
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
 var $def = _dereq_('./$.def');
 $def($def.S, 'Object', {setPrototypeOf: _dereq_('./$.set-proto').set});
-},{"./$.def":28,"./$.set-proto":45}],73:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.set-proto":50}],78:[function(_dereq_,module,exports){
 var $        = _dereq_('./$')
   , $def     = _dereq_('./$.def')
   , isObject = $.isObject
@@ -4592,7 +4697,7 @@ $.each.call(('freeze,seal,preventExtensions,isFrozen,isSealed,isExtensible,' +
   }
   $def($def.S + $def.F * forced, 'Object', method);
 });
-},{"./$":38,"./$.def":28}],74:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33}],79:[function(_dereq_,module,exports){
 'use strict';
 // 19.1.3.6 Object.prototype.toString()
 var cof = _dereq_('./$.cof')
@@ -4603,7 +4708,7 @@ if(_dereq_('./$').FW && cof(tmp) != 'z'){
     return '[object ' + cof.classof(this) + ']';
   }, true);
 }
-},{"./$":38,"./$.cof":22,"./$.redef":43,"./$.wks":54}],75:[function(_dereq_,module,exports){
+},{"./$":43,"./$.cof":27,"./$.redef":48,"./$.wks":59}],80:[function(_dereq_,module,exports){
 'use strict';
 var $        = _dereq_('./$')
   , ctx      = _dereq_('./$.ctx')
@@ -4833,7 +4938,7 @@ $def($def.S + $def.F * !(useNative && _dereq_('./$.iter-detect')(function(iter){
     });
   }
 });
-},{"./$":38,"./$.assert":20,"./$.cof":22,"./$.ctx":27,"./$.def":28,"./$.for-of":31,"./$.iter-detect":36,"./$.mix":40,"./$.set-proto":45,"./$.species":46,"./$.task":50,"./$.uid":52,"./$.wks":54}],76:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.cof":27,"./$.ctx":32,"./$.def":33,"./$.for-of":36,"./$.iter-detect":41,"./$.mix":45,"./$.set-proto":50,"./$.species":51,"./$.task":55,"./$.uid":57,"./$.wks":59}],81:[function(_dereq_,module,exports){
 var $         = _dereq_('./$')
   , $def      = _dereq_('./$.def')
   , setProto  = _dereq_('./$.set-proto')
@@ -4979,7 +5084,7 @@ $def($def.S + $def.F * buggyEnumerate, 'Reflect', {
 });
 
 $def($def.S, 'Reflect', reflect);
-},{"./$":38,"./$.assert":20,"./$.def":28,"./$.iter":37,"./$.own-keys":41,"./$.set-proto":45,"./$.uid":52,"./$.wks":54}],77:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.def":33,"./$.iter":42,"./$.own-keys":46,"./$.set-proto":50,"./$.uid":57,"./$.wks":59}],82:[function(_dereq_,module,exports){
 var $       = _dereq_('./$')
   , cof     = _dereq_('./$.cof')
   , $RegExp = $.g.RegExp
@@ -5023,7 +5128,7 @@ if($.FW && $.DESC){
   });
 }
 _dereq_('./$.species')($RegExp);
-},{"./$":38,"./$.cof":22,"./$.redef":43,"./$.replacer":44,"./$.species":46}],78:[function(_dereq_,module,exports){
+},{"./$":43,"./$.cof":27,"./$.redef":48,"./$.replacer":49,"./$.species":51}],83:[function(_dereq_,module,exports){
 'use strict';
 var strong = _dereq_('./$.collection-strong');
 
@@ -5034,7 +5139,7 @@ _dereq_('./$.collection')('Set', {
     return strong.def(this, value = value === 0 ? 0 : value, value);
   }
 }, strong);
-},{"./$.collection":26,"./$.collection-strong":23}],79:[function(_dereq_,module,exports){
+},{"./$.collection":31,"./$.collection-strong":28}],84:[function(_dereq_,module,exports){
 'use strict';
 var $def = _dereq_('./$.def')
   , $at  = _dereq_('./$.string-at')(false);
@@ -5044,7 +5149,7 @@ $def($def.P, 'String', {
     return $at(this, pos);
   }
 });
-},{"./$.def":28,"./$.string-at":47}],80:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.string-at":52}],85:[function(_dereq_,module,exports){
 'use strict';
 var $    = _dereq_('./$')
   , cof  = _dereq_('./$.cof')
@@ -5064,7 +5169,7 @@ $def($def.P + $def.F * !_dereq_('./$.throws')(function(){ 'q'.endsWith(/./); }),
     return that.slice(end - searchString.length, end) === searchString;
   }
 });
-},{"./$":38,"./$.cof":22,"./$.def":28,"./$.throws":51}],81:[function(_dereq_,module,exports){
+},{"./$":43,"./$.cof":27,"./$.def":33,"./$.throws":56}],86:[function(_dereq_,module,exports){
 var $def    = _dereq_('./$.def')
   , toIndex = _dereq_('./$').toIndex
   , fromCharCode = String.fromCharCode
@@ -5088,7 +5193,7 @@ $def($def.S + $def.F * (!!$fromCodePoint && $fromCodePoint.length != 1), 'String
     } return res.join('');
   }
 });
-},{"./$":38,"./$.def":28}],82:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33}],87:[function(_dereq_,module,exports){
 'use strict';
 var $    = _dereq_('./$')
   , cof  = _dereq_('./$.cof')
@@ -5101,7 +5206,7 @@ $def($def.P, 'String', {
     return !!~String($.assertDefined(this)).indexOf(searchString, arguments[1]);
   }
 });
-},{"./$":38,"./$.cof":22,"./$.def":28}],83:[function(_dereq_,module,exports){
+},{"./$":43,"./$.cof":27,"./$.def":33}],88:[function(_dereq_,module,exports){
 var set   = _dereq_('./$').set
   , $at   = _dereq_('./$.string-at')(true)
   , ITER  = _dereq_('./$.uid').safe('iter')
@@ -5122,7 +5227,7 @@ _dereq_('./$.iter-define')(String, 'String', function(iterated){
   iter.i += point.length;
   return step(0, point);
 });
-},{"./$":38,"./$.iter":37,"./$.iter-define":35,"./$.string-at":47,"./$.uid":52}],84:[function(_dereq_,module,exports){
+},{"./$":43,"./$.iter":42,"./$.iter-define":40,"./$.string-at":52,"./$.uid":57}],89:[function(_dereq_,module,exports){
 var $    = _dereq_('./$')
   , $def = _dereq_('./$.def');
 
@@ -5140,14 +5245,14 @@ $def($def.S, 'String', {
     } return res.join('');
   }
 });
-},{"./$":38,"./$.def":28}],85:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33}],90:[function(_dereq_,module,exports){
 var $def = _dereq_('./$.def');
 
 $def($def.P, 'String', {
   // 21.1.3.13 String.prototype.repeat(count)
   repeat: _dereq_('./$.string-repeat')
 });
-},{"./$.def":28,"./$.string-repeat":49}],86:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.string-repeat":54}],91:[function(_dereq_,module,exports){
 'use strict';
 var $    = _dereq_('./$')
   , cof  = _dereq_('./$.cof')
@@ -5164,7 +5269,7 @@ $def($def.P + $def.F * !_dereq_('./$.throws')(function(){ 'q'.startsWith(/./); }
     return that.slice(index, index + searchString.length) === searchString;
   }
 });
-},{"./$":38,"./$.cof":22,"./$.def":28,"./$.throws":51}],87:[function(_dereq_,module,exports){
+},{"./$":43,"./$.cof":27,"./$.def":33,"./$.throws":56}],92:[function(_dereq_,module,exports){
 'use strict';
 // ECMAScript 6 symbols shim
 var $        = _dereq_('./$')
@@ -5334,7 +5439,7 @@ setTag($Symbol, 'Symbol');
 setTag(Math, 'Math', true);
 // 24.3.3 JSON[@@toStringTag]
 setTag($.g.JSON, 'JSON', true);
-},{"./$":38,"./$.assert":20,"./$.cof":22,"./$.def":28,"./$.enum-keys":30,"./$.keyof":39,"./$.redef":43,"./$.uid":52,"./$.wks":54}],88:[function(_dereq_,module,exports){
+},{"./$":43,"./$.assert":25,"./$.cof":27,"./$.def":33,"./$.enum-keys":35,"./$.keyof":44,"./$.redef":48,"./$.uid":57,"./$.wks":59}],93:[function(_dereq_,module,exports){
 'use strict';
 var $         = _dereq_('./$')
   , weak      = _dereq_('./$.collection-weak')
@@ -5376,7 +5481,7 @@ if($.FW && new WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
     });
   });
 }
-},{"./$":38,"./$.collection":26,"./$.collection-weak":25,"./$.redef":43}],89:[function(_dereq_,module,exports){
+},{"./$":43,"./$.collection":31,"./$.collection-weak":30,"./$.redef":48}],94:[function(_dereq_,module,exports){
 'use strict';
 var weak = _dereq_('./$.collection-weak');
 
@@ -5387,7 +5492,7 @@ _dereq_('./$.collection')('WeakSet', {
     return weak.def(this, value, true);
   }
 }, weak, false, true);
-},{"./$.collection":26,"./$.collection-weak":25}],90:[function(_dereq_,module,exports){
+},{"./$.collection":31,"./$.collection-weak":30}],95:[function(_dereq_,module,exports){
 // https://github.com/domenic/Array.prototype.includes
 var $def      = _dereq_('./$.def')
   , $includes = _dereq_('./$.array-includes')(true);
@@ -5397,10 +5502,10 @@ $def($def.P, 'Array', {
   }
 });
 _dereq_('./$.unscope')('includes');
-},{"./$.array-includes":18,"./$.def":28,"./$.unscope":53}],91:[function(_dereq_,module,exports){
+},{"./$.array-includes":23,"./$.def":33,"./$.unscope":58}],96:[function(_dereq_,module,exports){
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 _dereq_('./$.collection-to-json')('Map');
-},{"./$.collection-to-json":24}],92:[function(_dereq_,module,exports){
+},{"./$.collection-to-json":29}],97:[function(_dereq_,module,exports){
 // https://gist.github.com/WebReflection/9353781
 var $       = _dereq_('./$')
   , $def    = _dereq_('./$.def')
@@ -5416,7 +5521,7 @@ $def($def.S, 'Object', {
     return result;
   }
 });
-},{"./$":38,"./$.def":28,"./$.own-keys":41}],93:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33,"./$.own-keys":46}],98:[function(_dereq_,module,exports){
 // http://goo.gl/XkBrjD
 var $    = _dereq_('./$')
   , $def = _dereq_('./$.def');
@@ -5437,16 +5542,16 @@ $def($def.S, 'Object', {
   values:  createObjectToArray(false),
   entries: createObjectToArray(true)
 });
-},{"./$":38,"./$.def":28}],94:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33}],99:[function(_dereq_,module,exports){
 // https://gist.github.com/kangax/9698100
 var $def = _dereq_('./$.def');
 $def($def.S, 'RegExp', {
   escape: _dereq_('./$.replacer')(/([\\\-[\]{}()*+?.,^$|])/g, '\\$1', true)
 });
-},{"./$.def":28,"./$.replacer":44}],95:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.replacer":49}],100:[function(_dereq_,module,exports){
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 _dereq_('./$.collection-to-json')('Set');
-},{"./$.collection-to-json":24}],96:[function(_dereq_,module,exports){
+},{"./$.collection-to-json":29}],101:[function(_dereq_,module,exports){
 // https://github.com/mathiasbynens/String.prototype.at
 'use strict';
 var $def = _dereq_('./$.def')
@@ -5456,7 +5561,7 @@ $def($def.P, 'String', {
     return $at(this, pos);
   }
 });
-},{"./$.def":28,"./$.string-at":47}],97:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.string-at":52}],102:[function(_dereq_,module,exports){
 'use strict';
 var $def = _dereq_('./$.def')
   , $pad = _dereq_('./$.string-pad');
@@ -5465,7 +5570,7 @@ $def($def.P, 'String', {
     return $pad(this, n, arguments[1], true);
   }
 });
-},{"./$.def":28,"./$.string-pad":48}],98:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.string-pad":53}],103:[function(_dereq_,module,exports){
 'use strict';
 var $def = _dereq_('./$.def')
   , $pad = _dereq_('./$.string-pad');
@@ -5474,7 +5579,7 @@ $def($def.P, 'String', {
     return $pad(this, n, arguments[1], false);
   }
 });
-},{"./$.def":28,"./$.string-pad":48}],99:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.string-pad":53}],104:[function(_dereq_,module,exports){
 // JavaScript 1.6 / Strawman array statics shim
 var $       = _dereq_('./$')
   , $def    = _dereq_('./$.def')
@@ -5491,7 +5596,7 @@ setStatics('indexOf,every,some,forEach,map,filter,find,findIndex,includes', 3);
 setStatics('join,slice,concat,push,splice,unshift,sort,lastIndexOf,' +
            'reduce,reduceRight,copyWithin,fill,turn');
 $def($def.S, 'Array', statics);
-},{"./$":38,"./$.ctx":27,"./$.def":28}],100:[function(_dereq_,module,exports){
+},{"./$":43,"./$.ctx":32,"./$.def":33}],105:[function(_dereq_,module,exports){
 _dereq_('./es6.array.iterator');
 var $           = _dereq_('./$')
   , Iterators   = _dereq_('./$.iter').Iterators
@@ -5502,14 +5607,14 @@ if($.FW && NodeList && !(ITERATOR in NodeList.prototype)){
   $.hide(NodeList.prototype, ITERATOR, ArrayValues);
 }
 Iterators.NodeList = ArrayValues;
-},{"./$":38,"./$.iter":37,"./$.wks":54,"./es6.array.iterator":61}],101:[function(_dereq_,module,exports){
+},{"./$":43,"./$.iter":42,"./$.wks":59,"./es6.array.iterator":66}],106:[function(_dereq_,module,exports){
 var $def  = _dereq_('./$.def')
   , $task = _dereq_('./$.task');
 $def($def.G + $def.B, {
   setImmediate:   $task.set,
   clearImmediate: $task.clear
 });
-},{"./$.def":28,"./$.task":50}],102:[function(_dereq_,module,exports){
+},{"./$.def":33,"./$.task":55}],107:[function(_dereq_,module,exports){
 // ie9- setTimeout & setInterval additional parameters fix
 var $         = _dereq_('./$')
   , $def      = _dereq_('./$.def')
@@ -5530,7 +5635,7 @@ $def($def.G + $def.B + $def.F * MSIE, {
   setTimeout:  wrap($.g.setTimeout),
   setInterval: wrap($.g.setInterval)
 });
-},{"./$":38,"./$.def":28,"./$.invoke":33,"./$.partial":42}],103:[function(_dereq_,module,exports){
+},{"./$":43,"./$.def":33,"./$.invoke":38,"./$.partial":47}],108:[function(_dereq_,module,exports){
 _dereq_('./modules/es5');
 _dereq_('./modules/es6.symbol');
 _dereq_('./modules/es6.object.assign');
@@ -5581,7 +5686,7 @@ _dereq_('./modules/web.immediate');
 _dereq_('./modules/web.dom.iterable');
 module.exports = _dereq_('./modules/$').core;
 
-},{"./modules/$":38,"./modules/es5":55,"./modules/es6.array.copy-within":56,"./modules/es6.array.fill":57,"./modules/es6.array.find":59,"./modules/es6.array.find-index":58,"./modules/es6.array.from":60,"./modules/es6.array.iterator":61,"./modules/es6.array.of":62,"./modules/es6.array.species":63,"./modules/es6.function.has-instance":64,"./modules/es6.function.name":65,"./modules/es6.map":66,"./modules/es6.math":67,"./modules/es6.number.constructor":68,"./modules/es6.number.statics":69,"./modules/es6.object.assign":70,"./modules/es6.object.is":71,"./modules/es6.object.set-prototype-of":72,"./modules/es6.object.statics-accept-primitives":73,"./modules/es6.object.to-string":74,"./modules/es6.promise":75,"./modules/es6.reflect":76,"./modules/es6.regexp":77,"./modules/es6.set":78,"./modules/es6.string.code-point-at":79,"./modules/es6.string.ends-with":80,"./modules/es6.string.from-code-point":81,"./modules/es6.string.includes":82,"./modules/es6.string.iterator":83,"./modules/es6.string.raw":84,"./modules/es6.string.repeat":85,"./modules/es6.string.starts-with":86,"./modules/es6.symbol":87,"./modules/es6.weak-map":88,"./modules/es6.weak-set":89,"./modules/es7.array.includes":90,"./modules/es7.map.to-json":91,"./modules/es7.object.get-own-property-descriptors":92,"./modules/es7.object.to-array":93,"./modules/es7.regexp.escape":94,"./modules/es7.set.to-json":95,"./modules/es7.string.at":96,"./modules/es7.string.lpad":97,"./modules/es7.string.rpad":98,"./modules/js.array.statics":99,"./modules/web.dom.iterable":100,"./modules/web.immediate":101,"./modules/web.timers":102}],104:[function(_dereq_,module,exports){
+},{"./modules/$":43,"./modules/es5":60,"./modules/es6.array.copy-within":61,"./modules/es6.array.fill":62,"./modules/es6.array.find":64,"./modules/es6.array.find-index":63,"./modules/es6.array.from":65,"./modules/es6.array.iterator":66,"./modules/es6.array.of":67,"./modules/es6.array.species":68,"./modules/es6.function.has-instance":69,"./modules/es6.function.name":70,"./modules/es6.map":71,"./modules/es6.math":72,"./modules/es6.number.constructor":73,"./modules/es6.number.statics":74,"./modules/es6.object.assign":75,"./modules/es6.object.is":76,"./modules/es6.object.set-prototype-of":77,"./modules/es6.object.statics-accept-primitives":78,"./modules/es6.object.to-string":79,"./modules/es6.promise":80,"./modules/es6.reflect":81,"./modules/es6.regexp":82,"./modules/es6.set":83,"./modules/es6.string.code-point-at":84,"./modules/es6.string.ends-with":85,"./modules/es6.string.from-code-point":86,"./modules/es6.string.includes":87,"./modules/es6.string.iterator":88,"./modules/es6.string.raw":89,"./modules/es6.string.repeat":90,"./modules/es6.string.starts-with":91,"./modules/es6.symbol":92,"./modules/es6.weak-map":93,"./modules/es6.weak-set":94,"./modules/es7.array.includes":95,"./modules/es7.map.to-json":96,"./modules/es7.object.get-own-property-descriptors":97,"./modules/es7.object.to-array":98,"./modules/es7.regexp.escape":99,"./modules/es7.set.to-json":100,"./modules/es7.string.at":101,"./modules/es7.string.lpad":102,"./modules/es7.string.rpad":103,"./modules/js.array.statics":104,"./modules/web.dom.iterable":105,"./modules/web.immediate":106,"./modules/web.timers":107}],109:[function(_dereq_,module,exports){
 (function (global){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -6149,15 +6254,15 @@ module.exports = _dereq_('./modules/$').core;
 );
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],105:[function(_dereq_,module,exports){
+},{}],110:[function(_dereq_,module,exports){
 module.exports = _dereq_("./lib/babel/polyfill");
 
-},{"./lib/babel/polyfill":17}],106:[function(_dereq_,module,exports){
+},{"./lib/babel/polyfill":22}],111:[function(_dereq_,module,exports){
 module.exports = _dereq_("babel-core/polyfill");
 
-},{"babel-core/polyfill":105}],107:[function(_dereq_,module,exports){
+},{"babel-core/polyfill":110}],112:[function(_dereq_,module,exports){
 
-},{}],108:[function(_dereq_,module,exports){
+},{}],113:[function(_dereq_,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -6182,7 +6287,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],109:[function(_dereq_,module,exports){
+},{}],114:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -6247,7 +6352,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],110:[function(_dereq_,module,exports){
+},{}],115:[function(_dereq_,module,exports){
 (function (global){
 /*! http://mths.be/punycode v1.2.4 by @mathias */
 ;(function(root) {
@@ -6758,7 +6863,7 @@ process.chdir = function (dir) {
 }(this));
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],111:[function(_dereq_,module,exports){
+},{}],116:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6844,7 +6949,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],112:[function(_dereq_,module,exports){
+},{}],117:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6931,13 +7036,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],113:[function(_dereq_,module,exports){
+},{}],118:[function(_dereq_,module,exports){
 'use strict';
 
 exports.decode = exports.parse = _dereq_('./decode');
 exports.encode = exports.stringify = _dereq_('./encode');
 
-},{"./decode":111,"./encode":112}],114:[function(_dereq_,module,exports){
+},{"./decode":116,"./encode":117}],119:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -7646,14 +7751,14 @@ function isNullOrUndefined(arg) {
   return  arg == null;
 }
 
-},{"punycode":110,"querystring":113}],115:[function(_dereq_,module,exports){
+},{"punycode":115,"querystring":118}],120:[function(_dereq_,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],116:[function(_dereq_,module,exports){
+},{}],121:[function(_dereq_,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -8243,146 +8348,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,_dereq_("FWaASH"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":115,"FWaASH":109,"inherits":108}],117:[function(_dereq_,module,exports){
-
-/**
- * Expose `debug()` as the module.
- */
-
-module.exports = debug;
-
-/**
- * Create a debugger with the given `name`.
- *
- * @param {String} name
- * @return {Type}
- * @api public
- */
-
-function debug(name) {
-  if (!debug.enabled(name)) return function(){};
-
-  return function(fmt){
-    fmt = coerce(fmt);
-
-    var curr = new Date;
-    var ms = curr - (debug[name] || curr);
-    debug[name] = curr;
-
-    fmt = name
-      + ' '
-      + fmt
-      + ' +' + debug.humanize(ms);
-
-    // This hackery is required for IE8
-    // where `console.log` doesn't have 'apply'
-    window.console
-      && console.log
-      && Function.prototype.apply.call(console.log, console, arguments);
-  }
-}
-
-/**
- * The currently active debug mode names.
- */
-
-debug.names = [];
-debug.skips = [];
-
-/**
- * Enables a debug mode by name. This can include modes
- * separated by a colon and wildcards.
- *
- * @param {String} name
- * @api public
- */
-
-debug.enable = function(name) {
-  try {
-    localStorage.debug = name;
-  } catch(e){}
-
-  var split = (name || '').split(/[\s,]+/)
-    , len = split.length;
-
-  for (var i = 0; i < len; i++) {
-    name = split[i].replace('*', '.*?');
-    if (name[0] === '-') {
-      debug.skips.push(new RegExp('^' + name.substr(1) + '$'));
-    }
-    else {
-      debug.names.push(new RegExp('^' + name + '$'));
-    }
-  }
-};
-
-/**
- * Disable debug output.
- *
- * @api public
- */
-
-debug.disable = function(){
-  debug.enable('');
-};
-
-/**
- * Humanize the given `ms`.
- *
- * @param {Number} m
- * @return {String}
- * @api private
- */
-
-debug.humanize = function(ms) {
-  var sec = 1000
-    , min = 60 * 1000
-    , hour = 60 * min;
-
-  if (ms >= hour) return (ms / hour).toFixed(1) + 'h';
-  if (ms >= min) return (ms / min).toFixed(1) + 'm';
-  if (ms >= sec) return (ms / sec | 0) + 's';
-  return ms + 'ms';
-};
-
-/**
- * Returns true if the given mode name is enabled, false otherwise.
- *
- * @param {String} name
- * @return {Boolean}
- * @api public
- */
-
-debug.enabled = function(name) {
-  for (var i = 0, len = debug.skips.length; i < len; i++) {
-    if (debug.skips[i].test(name)) {
-      return false;
-    }
-  }
-  for (var i = 0, len = debug.names.length; i < len; i++) {
-    if (debug.names[i].test(name)) {
-      return true;
-    }
-  }
-  return false;
-};
-
-/**
- * Coerce `val`.
- */
-
-function coerce(val) {
-  if (val instanceof Error) return val.stack || val.message;
-  return val;
-}
-
-// persist
-
-try {
-  if (window.localStorage) debug.enable(localStorage.debug);
-} catch(e){}
-
-},{}],118:[function(_dereq_,module,exports){
+},{"./support/isBuffer":120,"FWaASH":114,"inherits":113}],122:[function(_dereq_,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var Handlebars = _dereq_("./handlebars.runtime")["default"];
@@ -8422,7 +8388,7 @@ Handlebars.create = create;
 Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
-},{"./handlebars.runtime":119,"./handlebars/compiler/ast":121,"./handlebars/compiler/base":122,"./handlebars/compiler/compiler":123,"./handlebars/compiler/javascript-compiler":125}],119:[function(_dereq_,module,exports){
+},{"./handlebars.runtime":123,"./handlebars/compiler/ast":125,"./handlebars/compiler/base":126,"./handlebars/compiler/compiler":127,"./handlebars/compiler/javascript-compiler":129}],123:[function(_dereq_,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = _dereq_("./handlebars/base");
@@ -8458,7 +8424,7 @@ Handlebars.create = create;
 Handlebars['default'] = Handlebars;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":120,"./handlebars/exception":129,"./handlebars/runtime":130,"./handlebars/safe-string":131,"./handlebars/utils":132}],120:[function(_dereq_,module,exports){
+},{"./handlebars/base":124,"./handlebars/exception":133,"./handlebars/runtime":134,"./handlebars/safe-string":135,"./handlebars/utils":136}],124:[function(_dereq_,module,exports){
 "use strict";
 var Utils = _dereq_("./utils");
 var Exception = _dereq_("./exception")["default"];
@@ -8690,7 +8656,7 @@ var createFrame = function(object) {
   return frame;
 };
 exports.createFrame = createFrame;
-},{"./exception":129,"./utils":132}],121:[function(_dereq_,module,exports){
+},{"./exception":133,"./utils":136}],125:[function(_dereq_,module,exports){
 "use strict";
 var Exception = _dereq_("../exception")["default"];
 
@@ -8905,7 +8871,7 @@ var AST = {
 // Must be exported as an object rather than the root of the module as the jison lexer
 // most modify the object to operate properly.
 exports["default"] = AST;
-},{"../exception":129}],122:[function(_dereq_,module,exports){
+},{"../exception":133}],126:[function(_dereq_,module,exports){
 "use strict";
 var parser = _dereq_("./parser")["default"];
 var AST = _dereq_("./ast")["default"];
@@ -8927,7 +8893,7 @@ function parse(input) {
 }
 
 exports.parse = parse;
-},{"../utils":132,"./ast":121,"./helpers":124,"./parser":126}],123:[function(_dereq_,module,exports){
+},{"../utils":136,"./ast":125,"./helpers":128,"./parser":130}],127:[function(_dereq_,module,exports){
 "use strict";
 var Exception = _dereq_("../exception")["default"];
 var isArray = _dereq_("../utils").isArray;
@@ -9380,7 +9346,7 @@ exports.compile = compile;function argEquals(a, b) {
     return true;
   }
 }
-},{"../exception":129,"../utils":132}],124:[function(_dereq_,module,exports){
+},{"../exception":133,"../utils":136}],128:[function(_dereq_,module,exports){
 "use strict";
 var Exception = _dereq_("../exception")["default"];
 
@@ -9568,7 +9534,7 @@ function omitLeft(statements, i, multiple) {
   current.leftStripped = current.string !== original;
   return current.leftStripped;
 }
-},{"../exception":129}],125:[function(_dereq_,module,exports){
+},{"../exception":133}],129:[function(_dereq_,module,exports){
 "use strict";
 var COMPILER_REVISION = _dereq_("../base").COMPILER_REVISION;
 var REVISION_CHANGES = _dereq_("../base").REVISION_CHANGES;
@@ -10533,7 +10499,7 @@ JavaScriptCompiler.isValidJavaScriptVariableName = function(name) {
 };
 
 exports["default"] = JavaScriptCompiler;
-},{"../base":120,"../exception":129}],126:[function(_dereq_,module,exports){
+},{"../base":124,"../exception":133}],130:[function(_dereq_,module,exports){
 "use strict";
 /* jshint ignore:start */
 /* istanbul ignore next */
@@ -11034,7 +11000,7 @@ function Parser () { this.yy = {}; }Parser.prototype = parser;parser.Parser = Pa
 return new Parser;
 })();exports["default"] = handlebars;
 /* jshint ignore:end */
-},{}],127:[function(_dereq_,module,exports){
+},{}],131:[function(_dereq_,module,exports){
 "use strict";
 var Visitor = _dereq_("./visitor")["default"];
 
@@ -11176,7 +11142,7 @@ PrintVisitor.prototype.content = function(content) {
 PrintVisitor.prototype.comment = function(comment) {
   return this.pad("{{! '" + comment.comment + "' }}");
 };
-},{"./visitor":128}],128:[function(_dereq_,module,exports){
+},{"./visitor":132}],132:[function(_dereq_,module,exports){
 "use strict";
 function Visitor() {}
 
@@ -11189,7 +11155,7 @@ Visitor.prototype = {
 };
 
 exports["default"] = Visitor;
-},{}],129:[function(_dereq_,module,exports){
+},{}],133:[function(_dereq_,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -11218,7 +11184,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],130:[function(_dereq_,module,exports){
+},{}],134:[function(_dereq_,module,exports){
 "use strict";
 var Utils = _dereq_("./utils");
 var Exception = _dereq_("./exception")["default"];
@@ -11412,7 +11378,7 @@ exports.noop = noop;function initData(context, data) {
   }
   return data;
 }
-},{"./base":120,"./exception":129,"./utils":132}],131:[function(_dereq_,module,exports){
+},{"./base":124,"./exception":133,"./utils":136}],135:[function(_dereq_,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -11424,7 +11390,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],132:[function(_dereq_,module,exports){
+},{}],136:[function(_dereq_,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = _dereq_("./safe-string")["default"];
@@ -11513,7 +11479,7 @@ exports.isEmpty = isEmpty;function appendContextPath(contextPath, id) {
 }
 
 exports.appendContextPath = appendContextPath;
-},{"./safe-string":131}],133:[function(_dereq_,module,exports){
+},{"./safe-string":135}],137:[function(_dereq_,module,exports){
 // USAGE:
 // var handlebars = require('handlebars');
 
@@ -11541,7 +11507,15 @@ if (typeof _dereq_ !== 'undefined' && _dereq_.extensions) {
   _dereq_.extensions[".hbs"] = extension;
 }
 
-},{"../dist/cjs/handlebars":118,"../dist/cjs/handlebars/compiler/printer":127,"../dist/cjs/handlebars/compiler/visitor":128,"fs":107}],134:[function(_dereq_,module,exports){
+},{"../dist/cjs/handlebars":122,"../dist/cjs/handlebars/compiler/printer":131,"../dist/cjs/handlebars/compiler/visitor":132,"fs":112}],138:[function(_dereq_,module,exports){
+// Create a simple path alias to allow browserify to resolve
+// the runtime on a supported path.
+module.exports = _dereq_('./dist/cjs/handlebars.runtime');
+
+},{"./dist/cjs/handlebars.runtime":123}],139:[function(_dereq_,module,exports){
+module.exports = _dereq_("handlebars/runtime")["default"];
+
+},{"handlebars/runtime":138}],140:[function(_dereq_,module,exports){
 function DOMParser(options){
 	this.options = options ||{locator:{}};
 	
@@ -11798,7 +11772,7 @@ if(typeof _dereq_ == 'function'){
 	exports.DOMParser = DOMParser;
 }
 
-},{"./dom":135,"./sax":136}],135:[function(_dereq_,module,exports){
+},{"./dom":141,"./sax":142}],141:[function(_dereq_,module,exports){
 /*
  * DOM Level 2
  * Object DOMException
@@ -12938,7 +12912,7 @@ if(typeof _dereq_ == 'function'){
 	exports.XMLSerializer = XMLSerializer;
 }
 
-},{}],136:[function(_dereq_,module,exports){
+},{}],142:[function(_dereq_,module,exports){
 //[4]   	NameStartChar	   ::=   	":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
 //[4a]   	NameChar	   ::=   	NameStartChar | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
 //[5]   	Name	   ::=   	NameStartChar (NameChar)*
@@ -13524,19 +13498,15 @@ if(typeof _dereq_ == 'function'){
 }
 
 
-},{}],137:[function(_dereq_,module,exports){
+},{}],143:[function(_dereq_,module,exports){
 module.exports={
   "name": "dav",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
   "main": "./build/index",
   "repository": "https://github.com/gaye/dav",
-
-  "browserify": {
-    "transform": ["brfs"]
-  },
 
   "keywords": [
     "address book",
@@ -13555,20 +13525,17 @@ module.exports={
   ],
 
   "dependencies": {
-    "babel": "5.0.4",
-    "debug": "0.8.1",
+    "babel": "5.2.1",
     "handlebars": "2.0.x",
     "xmldom": "0.1.19",
     "xmlhttprequest": "1.6.0"
   },
 
   "devDependencies": {
-    "brfs": "1.1.1",
     "browserify": "4.1.5",
     "chai": "1.9.1",
-    "coveralls": "2.10.0",
     "doctoc": "0.7.1",
-    "isparta": "3.0.3",
+    "hbsfy": "2.2.1",
     "mocha": "1.19.0",
     "nock": "0.32.3",
     "sinon": "1.10.0",
@@ -13577,10 +13544,10 @@ module.exports={
   },
 
   "scripts": {
-    "test": "make ci"
+    "test": "make test"
   }
 }
 
-},{}]},{},[7])
-(7)
+},{}]},{},[8])
+(8)
 });

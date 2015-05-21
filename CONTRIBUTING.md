@@ -69,7 +69,7 @@ Things to note:
 2. If there are changes to the public api, document them in the README. Then regenerate the `README.md` table of contents with `make toc`.
 3. Add a new entry to `HISTORY.md` with the new version number and a description of the changeset. Regenerate the `HISTORY.md` table of contents with `make toc`.
 4. Commit the changes to `package.json`, `HISTORY.md`, and (perhaps) `README.md`. Push to GitHub.
-5. Run `npm publish`.
+5. Run `make && npm publish`.
 6. Create a new GitHub release named `v.{MAJOR}.{MINOR}.{PATCH}` with a description of the changeset. Upload the freshly generated zipball `dav.zip`.
 
 ### Related Material
