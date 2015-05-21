@@ -16,14 +16,16 @@ dav.min.js dav.js.map: dav.js node_modules
 		--source-map ./dav.js.map
 
 dav.js: build node_modules
-	./node_modules/.bin/browserify --standalone dav ./build/index.js > ./dav.js
+	rm -rf dav.js /tmp/dav.js
+	./node_modules/.bin/browserify --standalone dav ./build/index.js > /tmp/dav.js
+	cat lib/polyfill/*.js /tmp/dav.js > dav.js
 
 build: $(JS) $(HBS) node_modules
 	rm -rf build/
 	./node_modules/.bin/babel lib \
 		--modules common \
 		--out-dir build \
-		--stage 4 \
+		--stage 4
 
 node_modules: package.json
 	npm install
