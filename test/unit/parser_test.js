@@ -11,7 +11,7 @@ suite('parser.multistatus', function() {
         href: '/',
         propstat: [{
           prop: {
-            currentUserPrincipal: '/principals/admin/'
+            currentUserPrincipal: '/principals/admin@domain.tld/'
           },
           status: 'HTTP/1.1 200 OK'
         }]

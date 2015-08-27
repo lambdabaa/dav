@@ -4,7 +4,7 @@
     <d:propstat>
       <d:prop>
         <d:current-user-principal>
-          <d:href>/principals/admin/</d:href>
+          <d:href>/principals/admin%40domain.tld/</d:href>
         </d:current-user-principal>
       </d:prop>
       <d:status>HTTP/1.1 200 OK</d:status>
