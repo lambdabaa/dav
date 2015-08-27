@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.7.7](#177)
 - [1.7.6](#176)
 - [1.7.5](#175)
 - [1.7.4](#174)
@@ -51,6 +52,10 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.7.7
+
++ Parser processes href and currentUserPrincipal elements
 
 ### 1.7.6
 
