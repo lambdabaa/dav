@@ -622,40 +622,40 @@ if (!Object.assign) {
   typeof window === "object" ? window :
   typeof self === "object" ? self : this
 );
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.dav=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.dav = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _co = _dereq_('co');
+var _co = require('co');
 
 var _co2 = _interopRequireDefault(_co);
 
-var _url = _dereq_('url');
+var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
-var _calendars = _dereq_('./calendars');
+var _calendars = require('./calendars');
 
-var _contacts = _dereq_('./contacts');
+var _contacts = require('./contacts');
 
-var _fuzzy_url_equals = _dereq_('./fuzzy_url_equals');
+var _fuzzy_url_equals = require('./fuzzy_url_equals');
 
 var _fuzzy_url_equals2 = _interopRequireDefault(_fuzzy_url_equals);
 
-var _model = _dereq_('./model');
+var _model = require('./model');
 
-var _namespace = _dereq_('./namespace');
+var _namespace = require('./namespace');
 
 var ns = _interopRequireWildcard(_namespace);
 
-var _request = _dereq_('./request');
+var _request = require('./request');
 
 var request = _interopRequireWildcard(_request);
 
-var debug = _dereq_('./debug')('dav:accounts');
+var debug = require('./debug')('dav:accounts');
 
 var defaults = {
   accountType: 'caldav',
@@ -678,7 +678,9 @@ var serviceDiscovery = _co2['default'].wrap(regeneratorRuntime.mark(function cal
 
         endpoint = _url2['default'].parse(account.server);
 
-        endpoint.protocol = endpoint.protocol || 'http';uri = _url2['default'].format({
+        endpoint.protocol = endpoint.protocol || 'http'; // TODO(gareth) https?
+
+        uri = _url2['default'].format({
           protocol: endpoint.protocol,
           host: endpoint.host,
           pathname: '/.well-known/' + options.accountType
@@ -934,10 +936,9 @@ exports.createAccount = _co2['default'].wrap(regeneratorRuntime.mark(function ca
     }
   }, callee$0$0, this);
 }));
-// TODO(gareth) https?
 
 // http redirect.
-},{"./calendars":2,"./contacts":5,"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"co":29,"url":28}],2:[function(_dereq_,module,exports){
+},{"./calendars":2,"./contacts":5,"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"co":29,"url":28}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -952,33 +953,35 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _co = _dereq_('co');
+var _co = require('co');
 
 var _co2 = _interopRequireDefault(_co);
 
-var _url = _dereq_('url');
+var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
-var _fuzzy_url_equals = _dereq_('./fuzzy_url_equals');
+var _fuzzy_url_equals = require('./fuzzy_url_equals');
 
 var _fuzzy_url_equals2 = _interopRequireDefault(_fuzzy_url_equals);
 
-var _model = _dereq_('./model');
+var _model = require('./model');
 
-var _namespace = _dereq_('./namespace');
+var _namespace = require('./namespace');
 
 var ns = _interopRequireWildcard(_namespace);
 
-var _request = _dereq_('./request');
+var _request = require('./request');
 
 var request = _interopRequireWildcard(_request);
 
-var _webdav = _dereq_('./webdav');
+var _webdav = require('./webdav');
 
 var webdav = _interopRequireWildcard(_webdav);
 
-var debug = _dereq_('./debug')('dav:calendars');
+var debug = require('./debug')('dav:calendars');
+
+var ICAL_OBJS = new Set(['VEVENT', 'VTODO', 'VJOURNAL', 'VFREEBUSY', 'VTIMEZONE', 'VALARM']);
 
 /**
  * @param {dav.Account} account to fetch calendars for.
@@ -1003,9 +1006,11 @@ var listCalendars = _co2['default'].wrap(regeneratorRuntime.mark(function callee
 
         debug('Found ' + responses.length + ' calendars.');
         cals = responses.filter(function (res) {
-          // We only want the calendar object if it does events.
-          var components = res.props.supportedCalendarComponentSet;
-          return components && components.indexOf('VEVENT') !== -1;
+          // We only want the calendar if it contains iCalendar objects.
+          var components = res.props.supportedCalendarComponentSet || [];
+          return components.reduce(function (hasObjs, component) {
+            return hasObjs || ICAL_OBJS.has(component);
+          }, false);
         }).map(function (res) {
           debug('Found calendar ' + res.props.displayname + ',\n             props: ' + JSON.stringify(res.props));
           return new _model.Calendar({
@@ -1183,7 +1188,7 @@ function syncCalendar(calendar, options) {
  *   (dav.Transport) xhr - request sender.
  */
 var syncCaldavAccount = _co2['default'].wrap(regeneratorRuntime.mark(function callee$0$0(account) {
-  var options = arguments[1] === undefined ? {} : arguments[1];
+  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
   var cals;
   return regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -1324,7 +1329,7 @@ var webdavSync = _co2['default'].wrap(regeneratorRuntime.mark(function callee$0$
     }
   }, callee$0$0, this);
 }));
-},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":22,"co":29,"url":28}],3:[function(_dereq_,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":22,"co":29,"url":28}],3:[function(require,module,exports){
 /**
  * @fileoverview Camelcase something.
  */
@@ -1336,7 +1341,7 @@ Object.defineProperty(exports, '__esModule', {
 exports['default'] = camelize;
 
 function camelize(str) {
-  var delimiter = arguments[1] === undefined ? '_' : arguments[1];
+  var delimiter = arguments.length <= 1 || arguments[1] === undefined ? '_' : arguments[1];
 
   var words = str.split(delimiter);
   return [words[0]].concat(words.slice(1).map(function (word) {
@@ -1345,7 +1350,7 @@ function camelize(str) {
 }
 
 module.exports = exports['default'];
-},{}],4:[function(_dereq_,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1360,19 +1365,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _url = _dereq_('url');
+var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
-var _accounts = _dereq_('./accounts');
+var _accounts = require('./accounts');
 
 var accounts = _interopRequireWildcard(_accounts);
 
-var _calendars = _dereq_('./calendars');
+var _calendars = require('./calendars');
 
 var calendars = _interopRequireWildcard(_calendars);
 
-var _contacts = _dereq_('./contacts');
+var _contacts = require('./contacts');
 
 var contacts = _interopRequireWildcard(_contacts);
 
@@ -1386,7 +1391,7 @@ var contacts = _interopRequireWildcard(_contacts);
 
 var Client = (function () {
   function Client(xhr) {
-    var options = arguments[1] === undefined ? {} : arguments[1];
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     _classCallCheck(this, Client);
 
@@ -1399,21 +1404,21 @@ var Client = (function () {
     this._contacts = contacts;
   }
 
+  /**
+   * @param {dav.Request} req - dav request.
+   * @param {String} uri - where to send request.
+   * @return {Promise} a promise that will be resolved with an xhr request
+   *     after its readyState is 4 or the result of applying an optional
+   *     request `transformResponse` function to the xhr object after its
+   *     readyState is 4.
+   *
+   * Options:
+   *
+   *   (Object) sandbox - optional request sandbox.
+   */
+
   _createClass(Client, [{
     key: 'send',
-
-    /**
-     * @param {dav.Request} req - dav request.
-     * @param {String} uri - where to send request.
-     * @return {Promise} a promise that will be resolved with an xhr request
-     *     after its readyState is 4 or the result of applying an optional
-     *     request `transformResponse` function to the xhr object after its
-     *     readyState is 4.
-     *
-     * Options:
-     *
-     *   (Object) sandbox - optional request sandbox.
-     */
     value: function send(req, uri, options) {
       if (this.baseUrl) {
         var urlObj = _url2['default'].parse(uri);
@@ -1425,7 +1430,7 @@ var Client = (function () {
   }, {
     key: 'createAccount',
     value: function createAccount() {
-      var options = arguments[0] === undefined ? {} : arguments[0];
+      var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       options.xhr = options.xhr || this.xhr;
       return accounts.createAccount(options);
@@ -1433,7 +1438,7 @@ var Client = (function () {
   }, {
     key: 'createCalendarObject',
     value: function createCalendarObject(calendar) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return calendars.createCalendarObject(calendar, options);
@@ -1441,7 +1446,7 @@ var Client = (function () {
   }, {
     key: 'updateCalendarObject',
     value: function updateCalendarObject(calendarObject) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return calendars.updateCalendarObject(calendarObject, options);
@@ -1449,7 +1454,7 @@ var Client = (function () {
   }, {
     key: 'deleteCalendarObject',
     value: function deleteCalendarObject(calendarObject) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return calendars.deleteCalendarObject(calendarObject, options);
@@ -1457,7 +1462,7 @@ var Client = (function () {
   }, {
     key: 'syncCalendar',
     value: function syncCalendar(calendar) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return calendars.syncCalendar(calendar, options);
@@ -1465,7 +1470,7 @@ var Client = (function () {
   }, {
     key: 'syncCaldavAccount',
     value: function syncCaldavAccount(account) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return calendars.syncCaldavAccount(account, options);
@@ -1473,7 +1478,7 @@ var Client = (function () {
   }, {
     key: 'createCard',
     value: function createCard(addressBook) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return contacts.createCard(addressBook, options);
@@ -1481,7 +1486,7 @@ var Client = (function () {
   }, {
     key: 'updateCard',
     value: function updateCard(card) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return contacts.updateCard(card, options);
@@ -1489,7 +1494,7 @@ var Client = (function () {
   }, {
     key: 'deleteCard',
     value: function deleteCard(card) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return contacts.deleteCard(card, options);
@@ -1497,7 +1502,7 @@ var Client = (function () {
   }, {
     key: 'syncAddressBook',
     value: function syncAddressBook(addressBook) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return contacts.syncAddressBook(addressBook, options);
@@ -1505,7 +1510,7 @@ var Client = (function () {
   }, {
     key: 'syncCarddavAccount',
     value: function syncCarddavAccount(account) {
-      var options = arguments[1] === undefined ? {} : arguments[1];
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
       options.xhr = options.xhr || this.xhr;
       return contacts.syncCarddavAccount(account, options);
@@ -1516,7 +1521,7 @@ var Client = (function () {
 })();
 
 exports.Client = Client;
-},{"./accounts":1,"./calendars":2,"./contacts":5,"url":28}],5:[function(_dereq_,module,exports){
+},{"./accounts":1,"./calendars":2,"./contacts":5,"url":28}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1531,33 +1536,33 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _co = _dereq_('co');
+var _co = require('co');
 
 var _co2 = _interopRequireDefault(_co);
 
-var _url = _dereq_('url');
+var _url = require('url');
 
 var _url2 = _interopRequireDefault(_url);
 
-var _fuzzy_url_equals = _dereq_('./fuzzy_url_equals');
+var _fuzzy_url_equals = require('./fuzzy_url_equals');
 
 var _fuzzy_url_equals2 = _interopRequireDefault(_fuzzy_url_equals);
 
-var _model = _dereq_('./model');
+var _model = require('./model');
 
-var _namespace = _dereq_('./namespace');
+var _namespace = require('./namespace');
 
 var ns = _interopRequireWildcard(_namespace);
 
-var _request = _dereq_('./request');
+var _request = require('./request');
 
 var request = _interopRequireWildcard(_request);
 
-var _webdav = _dereq_('./webdav');
+var _webdav = require('./webdav');
 
 var webdav = _interopRequireWildcard(_webdav);
 
-var debug = _dereq_('./debug')('dav:contacts');
+var debug = require('./debug')('dav:contacts');
 
 /**
  * @param {dav.Account} account to fetch address books for.
@@ -1738,7 +1743,7 @@ function syncAddressBook(addressBook, options) {
  *   (dav.Transport) xhr - request sender.
  */
 var syncCarddavAccount = _co2['default'].wrap(regeneratorRuntime.mark(function callee$0$0(account) {
-  var options = arguments[1] === undefined ? {} : arguments[1];
+  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
   var addressBooks;
   return regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -1875,7 +1880,7 @@ var webdavSync = _co2['default'].wrap(regeneratorRuntime.mark(function callee$0$
     }
   }, callee$0$0, this);
 }));
-},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":22,"co":29,"url":28}],6:[function(_dereq_,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":22,"co":29,"url":28}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1892,7 +1897,7 @@ function debug(topic) {
 }
 
 module.exports = exports["default"];
-},{}],7:[function(_dereq_,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -1909,12 +1914,14 @@ function fuzzyIncludes(one, other) {
   return one.indexOf(other) !== -1 || other.charAt(other.length - 1) === '/' && one.indexOf(other.slice(0, -1)) !== -1;
 }
 module.exports = exports['default'];
-},{}],8:[function(_dereq_,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+function _interopExportWildcard(obj, defaults) { var newObj = defaults({}, obj); delete newObj['default']; return newObj; }
 
 function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
 
@@ -1922,23 +1929,23 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _debug = _dereq_('./debug');
+var _debug = require('./debug');
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _namespace = _dereq_('./namespace');
+var _namespace = require('./namespace');
 
 var ns = _interopRequireWildcard(_namespace);
 
-var _request = _dereq_('./request');
+var _request = require('./request');
 
 var request = _interopRequireWildcard(_request);
 
-var _transport = _dereq_('./transport');
+var _transport = require('./transport');
 
 var transport = _interopRequireWildcard(_transport);
 
-var _package = _dereq_('../package');
+var _package = require('../package');
 
 Object.defineProperty(exports, 'version', {
   enumerable: true,
@@ -1947,7 +1954,7 @@ Object.defineProperty(exports, 'version', {
   }
 });
 
-var _accounts = _dereq_('./accounts');
+var _accounts = require('./accounts');
 
 Object.defineProperty(exports, 'createAccount', {
   enumerable: true,
@@ -1956,11 +1963,11 @@ Object.defineProperty(exports, 'createAccount', {
   }
 });
 
-var _calendars = _dereq_('./calendars');
+var _calendars = require('./calendars');
 
-_defaults(exports, _interopRequireWildcard(_calendars));
+_defaults(exports, _interopExportWildcard(_calendars, _defaults));
 
-var _client = _dereq_('./client');
+var _client = require('./client');
 
 Object.defineProperty(exports, 'Client', {
   enumerable: true,
@@ -1969,13 +1976,13 @@ Object.defineProperty(exports, 'Client', {
   }
 });
 
-var _contacts = _dereq_('./contacts');
+var _contacts = require('./contacts');
 
-_defaults(exports, _interopRequireWildcard(_contacts));
+_defaults(exports, _interopExportWildcard(_contacts, _defaults));
 
-var _model = _dereq_('./model');
+var _model = require('./model');
 
-_defaults(exports, _interopRequireWildcard(_model));
+_defaults(exports, _interopExportWildcard(_model, _defaults));
 
 Object.defineProperty(exports, 'Request', {
   enumerable: true,
@@ -1984,7 +1991,7 @@ Object.defineProperty(exports, 'Request', {
   }
 });
 
-var _sandbox = _dereq_('./sandbox');
+var _sandbox = require('./sandbox');
 
 Object.defineProperty(exports, 'Sandbox', {
   enumerable: true,
@@ -2002,16 +2009,16 @@ exports.debug = _debug2['default'];
 exports.ns = ns;
 exports.request = request;
 exports.transport = transport;
-},{"../package":33,"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./debug":6,"./model":9,"./namespace":10,"./request":12,"./sandbox":13,"./transport":21}],9:[function(_dereq_,module,exports){
+},{"../package":33,"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./debug":6,"./model":9,"./namespace":10,"./request":12,"./sandbox":13,"./transport":21}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2027,9 +2034,7 @@ var Account = function Account(options) {
     calendars: null,
     addressBooks: null
   }, options);
-};
-
-exports.Account = Account;
+}
 
 /**
  * Options:
@@ -2044,6 +2049,9 @@ exports.Account = Account;
  *   (String) refreshToken - oauth refresh token.
  *   (Number) expiration - unix time for access token expiration.
  */
+;
+
+exports.Account = Account;
 
 var Credentials = function Credentials(options) {
   _classCallCheck(this, Credentials);
@@ -2084,13 +2092,13 @@ var DAVCollection = function DAVCollection(options) {
 exports.DAVCollection = DAVCollection;
 
 var AddressBook = (function (_DAVCollection) {
+  _inherits(AddressBook, _DAVCollection);
+
   function AddressBook(options) {
     _classCallCheck(this, AddressBook);
 
     _get(Object.getPrototypeOf(AddressBook.prototype), "constructor", this).call(this, options);
   }
-
-  _inherits(AddressBook, _DAVCollection);
 
   return AddressBook;
 })(DAVCollection);
@@ -2098,6 +2106,8 @@ var AddressBook = (function (_DAVCollection) {
 exports.AddressBook = AddressBook;
 
 var Calendar = (function (_DAVCollection2) {
+  _inherits(Calendar, _DAVCollection2);
+
   function Calendar(options) {
     _classCallCheck(this, Calendar);
 
@@ -2107,8 +2117,6 @@ var Calendar = (function (_DAVCollection2) {
       timezone: null
     }, options);
   }
-
-  _inherits(Calendar, _DAVCollection2);
 
   return Calendar;
 })(DAVCollection);
@@ -2128,6 +2136,8 @@ var DAVObject = function DAVObject(options) {
 exports.DAVObject = DAVObject;
 
 var CalendarObject = (function (_DAVObject) {
+  _inherits(CalendarObject, _DAVObject);
+
   function CalendarObject(options) {
     _classCallCheck(this, CalendarObject);
 
@@ -2138,14 +2148,14 @@ var CalendarObject = (function (_DAVObject) {
     }, options);
   }
 
-  _inherits(CalendarObject, _DAVObject);
-
   return CalendarObject;
 })(DAVObject);
 
 exports.CalendarObject = CalendarObject;
 
 var VCard = (function (_DAVObject2) {
+  _inherits(VCard, _DAVObject2);
+
   function VCard(options) {
     _classCallCheck(this, VCard);
 
@@ -2156,13 +2166,11 @@ var VCard = (function (_DAVObject2) {
     }, options);
   }
 
-  _inherits(VCard, _DAVObject2);
-
   return VCard;
 })(DAVObject);
 
 exports.VCard = VCard;
-},{}],10:[function(_dereq_,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2176,7 +2184,7 @@ var CARDDAV = 'urn:ietf:params:xml:ns:carddav';
 exports.CARDDAV = CARDDAV;
 var DAV = 'DAV:';
 exports.DAV = DAV;
-},{}],11:[function(_dereq_,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2186,11 +2194,11 @@ exports.multistatus = multistatus;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _camelize = _dereq_('./camelize');
+var _camelize = require('./camelize');
 
 var _camelize2 = _interopRequireDefault(_camelize);
 
-var debug = _dereq_('./debug')('dav:parser');
+var debug = require('./debug')('dav:parser');
 
 var DOMParser = undefined;
 if (typeof self !== 'undefined' && 'DOMParser' in self) {
@@ -2198,7 +2206,7 @@ if (typeof self !== 'undefined' && 'DOMParser' in self) {
   DOMParser = self.DOMParser;
 } else {
   // nodejs or web worker
-  DOMParser = _dereq_('xmldom').DOMParser;
+  DOMParser = require('xmldom').DOMParser;
 }
 
 function multistatus(string) {
@@ -2217,7 +2225,7 @@ var traverse = {
 
   // { propstat: [x, y, z] }
   response: function response(node) {
-    return complex(node, { propstat: true });
+    return complex(node, { propstat: true, href: false });
   },
 
   // { prop: x }
@@ -2234,7 +2242,8 @@ var traverse = {
     return complex(node, {
       resourcetype: false,
       supportedCalendarComponentSet: false,
-      supportedReportSet: false
+      supportedReportSet: false,
+      currentUserPrincipal: false
     });
   },
 
@@ -2267,6 +2276,14 @@ var traverse = {
     return childNodes(node).map(function (childNode) {
       return childNode.localName;
     });
+  },
+
+  href: function href(node) {
+    return decodeURIComponent(childNodes(node)[0].nodeValue);
+  },
+
+  currentUserPrincipal: function currentUserPrincipal(node) {
+    return complex(node, { href: false }, 'href');
   }
 };
 
@@ -2358,7 +2375,7 @@ function children(node, localName) {
 function child(node, localName) {
   return children(node, localName)[0];
 }
-},{"./camelize":3,"./debug":6,"xmldom":30}],12:[function(_dereq_,module,exports){
+},{"./camelize":3,"./debug":6,"xmldom":30}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2378,9 +2395,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _parser = _dereq_('./parser');
+var _parser = require('./parser');
 
-var _template = _dereq_('./template');
+var _template = require('./template');
 
 var template = _interopRequireWildcard(_template);
 
@@ -2532,7 +2549,7 @@ function syncCollection(options) {
 }
 
 var Request = function Request() {
-  var options = arguments[0] === undefined ? {} : arguments[0];
+  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
   _classCallCheck(this, Request);
 
@@ -2585,7 +2602,7 @@ function setRequestHeaders(request, options) {
     request.setRequestHeader('If-Match', options.etag);
   }
 }
-},{"./parser":11,"./template":17}],13:[function(_dereq_,module,exports){
+},{"./parser":11,"./template":17}],13:[function(require,module,exports){
 /**
  * @fileoverview Group requests together and then abort as a group.
  *
@@ -2611,7 +2628,7 @@ exports.createSandbox = createSandbox;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var debug = _dereq_('./debug')('dav:sandbox');
+var debug = require('./debug')('dav:sandbox');
 
 var Sandbox = (function () {
   function Sandbox() {
@@ -2644,7 +2661,7 @@ exports.Sandbox = Sandbox;
 function createSandbox() {
   return new Sandbox();
 }
-},{"./debug":6}],14:[function(_dereq_,module,exports){
+},{"./debug":6}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2654,7 +2671,7 @@ exports['default'] = addressBookQuery;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _prop = _dereq_('./prop');
+var _prop = require('./prop');
 
 var _prop2 = _interopRequireDefault(_prop);
 
@@ -2663,7 +2680,7 @@ function addressBookQuery(object) {
 }
 
 module.exports = exports['default'];
-},{"./prop":18}],15:[function(_dereq_,module,exports){
+},{"./prop":18}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2673,11 +2690,11 @@ exports['default'] = calendarQuery;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _filter = _dereq_('./filter');
+var _filter = require('./filter');
 
 var _filter2 = _interopRequireDefault(_filter);
 
-var _prop = _dereq_('./prop');
+var _prop = require('./prop');
 
 var _prop2 = _interopRequireDefault(_prop);
 
@@ -2686,7 +2703,7 @@ function calendarQuery(object) {
 }
 
 module.exports = exports['default'];
-},{"./filter":16,"./prop":18}],16:[function(_dereq_,module,exports){
+},{"./filter":16,"./prop":18}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2709,18 +2726,18 @@ function formatAttrs(attrs) {
   }
 
   return Object.keys(attrs).map(function (attr) {
-    return '' + attr + '="' + attrs[attr] + '"';
+    return attr + '="' + attrs[attr] + '"';
   }).join(' ');
 }
 module.exports = exports['default'];
-},{}],17:[function(_dereq_,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
-exports.addressBookQuery = _dereq_('./address_book_query');
-exports.calendarQuery = _dereq_('./calendar_query');
-exports.propfind = _dereq_('./propfind');
-exports.syncCollection = _dereq_('./sync_collection');
-},{"./address_book_query":14,"./calendar_query":15,"./propfind":19,"./sync_collection":20}],18:[function(_dereq_,module,exports){
+exports.addressBookQuery = require('./address_book_query');
+exports.calendarQuery = require('./calendar_query');
+exports.propfind = require('./propfind');
+exports.syncCollection = require('./sync_collection');
+},{"./address_book_query":14,"./calendar_query":15,"./propfind":19,"./sync_collection":20}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2730,7 +2747,7 @@ exports['default'] = prop;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var _namespace = _dereq_('../namespace');
+var _namespace = require('../namespace');
 
 var ns = _interopRequireWildcard(_namespace);
 
@@ -2789,7 +2806,7 @@ function xmlnsPrefix(namespace) {
   }
 }
 module.exports = exports['default'];
-},{"../namespace":10}],19:[function(_dereq_,module,exports){
+},{"../namespace":10}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2799,7 +2816,7 @@ exports['default'] = propfind;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _prop = _dereq_('./prop');
+var _prop = require('./prop');
 
 var _prop2 = _interopRequireDefault(_prop);
 
@@ -2808,7 +2825,7 @@ function propfind(object) {
 }
 
 module.exports = exports['default'];
-},{"./prop":18}],20:[function(_dereq_,module,exports){
+},{"./prop":18}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2818,7 +2835,7 @@ exports['default'] = syncCollection;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _prop = _dereq_('./prop');
+var _prop = require('./prop');
 
 var _prop2 = _interopRequireDefault(_prop);
 
@@ -2827,32 +2844,32 @@ function syncCollection(object) {
 }
 
 module.exports = exports['default'];
-},{"./prop":18}],21:[function(_dereq_,module,exports){
+},{"./prop":18}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _co = _dereq_('co');
+var _co = require('co');
 
 var _co2 = _interopRequireDefault(_co);
 
-var _querystring = _dereq_('querystring');
+var _querystring = require('querystring');
 
 var _querystring2 = _interopRequireDefault(_querystring);
 
-var _xmlhttprequest = _dereq_('./xmlhttprequest');
+var _xmlhttprequest = require('./xmlhttprequest');
 
 var _xmlhttprequest2 = _interopRequireDefault(_xmlhttprequest);
 
@@ -2867,19 +2884,19 @@ var Transport = (function () {
     this.credentials = credentials || null;
   }
 
+  /**
+   * @param {dav.Request} request object with request info.
+   * @return {Promise} a promise that will be resolved with an xhr request after
+   *     its readyState is 4 or the result of applying an optional request
+   *     `transformResponse` function to the xhr object after its readyState is 4.
+   *
+   * Options:
+   *
+   *   (Object) sandbox - optional request sandbox.
+   */
+
   _createClass(Transport, [{
     key: 'send',
-
-    /**
-     * @param {dav.Request} request object with request info.
-     * @return {Promise} a promise that will be resolved with an xhr request after
-     *     its readyState is 4 or the result of applying an optional request
-     *     `transformResponse` function to the xhr object after its readyState is 4.
-     *
-     * Options:
-     *
-     *   (Object) sandbox - optional request sandbox.
-     */
     value: function send() {}
   }]);
 
@@ -2889,6 +2906,8 @@ var Transport = (function () {
 exports.Transport = Transport;
 
 var Basic = (function (_Transport) {
+  _inherits(Basic, _Transport);
+
   /**
    * @param {dav.Credentials} credentials user authorization.
    */
@@ -2899,7 +2918,9 @@ var Basic = (function (_Transport) {
     _get(Object.getPrototypeOf(Basic.prototype), 'constructor', this).call(this, credentials);
   }
 
-  _inherits(Basic, _Transport);
+  /**
+   * @param {dav.Credentials} credentials user authorization.
+   */
 
   _createClass(Basic, [{
     key: 'send',
@@ -2916,7 +2937,8 @@ var Basic = (function (_Transport) {
               xhr = new _xmlhttprequest2['default']();
 
               if (sandbox) sandbox.add(xhr);
-              xhr.open(request.method, url, true, /* async */this.credentials.username, this.credentials.password);
+              xhr.open(request.method, url, true, /* async */
+              this.credentials.username, this.credentials.password);
 
               if (transformRequest) transformRequest(xhr);
 
@@ -2954,23 +2976,23 @@ var Basic = (function (_Transport) {
 
 exports.Basic = Basic;
 
-/**
- * @param {dav.Credentials} credentials user authorization.
- */
-
 var OAuth2 = (function (_Transport2) {
+  _inherits(OAuth2, _Transport2);
+
   function OAuth2(credentials) {
     _classCallCheck(this, OAuth2);
 
     _get(Object.getPrototypeOf(OAuth2.prototype), 'constructor', this).call(this, credentials);
   }
 
-  _inherits(OAuth2, _Transport2);
+  /**
+   * @return {Promise} promise that will resolve with access token.
+   */
 
   _createClass(OAuth2, [{
     key: 'send',
     value: function send(request, url) {
-      var options = arguments[2] === undefined ? {} : arguments[2];
+      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
       return (0, _co2['default'])(regeneratorRuntime.mark(function callee$2$0() {
         var sandbox, transformRequest, transformResponse, onerror, result, xhr, token;
@@ -3041,10 +3063,6 @@ var OAuth2 = (function (_Transport2) {
 })(Transport);
 
 exports.OAuth2 = OAuth2;
-
-/**
- * @return {Promise} promise that will resolve with access token.
- */
 function access(credentials, options) {
   if (!credentials.accessToken) {
     return getAccessToken(credentials, options);
@@ -3136,7 +3154,7 @@ var refreshAccessToken = _co2['default'].wrap(regeneratorRuntime.mark(function c
     }
   }, callee$0$0, this);
 }));
-},{"./xmlhttprequest":23,"co":29,"querystring":27}],22:[function(_dereq_,module,exports){
+},{"./xmlhttprequest":23,"co":29,"querystring":27}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3151,23 +3169,23 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _co = _dereq_('co');
+var _co = require('co');
 
 var _co2 = _interopRequireDefault(_co);
 
-var _fuzzy_url_equals = _dereq_('./fuzzy_url_equals');
+var _fuzzy_url_equals = require('./fuzzy_url_equals');
 
 var _fuzzy_url_equals2 = _interopRequireDefault(_fuzzy_url_equals);
 
-var _namespace = _dereq_('./namespace');
+var _namespace = require('./namespace');
 
 var ns = _interopRequireWildcard(_namespace);
 
-var _request = _dereq_('./request');
+var _request = require('./request');
 
 var request = _interopRequireWildcard(_request);
 
-var debug = _dereq_('./debug')('dav:webdav');
+var debug = require('./debug')('dav:webdav');
 
 /**
  * @param {String} objectUrl url for webdav object.
@@ -3290,7 +3308,7 @@ var isCollectionDirty = _co2['default'].wrap(regeneratorRuntime.mark(function ca
   }, callee$0$0, this);
 }));
 exports.isCollectionDirty = isCollectionDirty;
-},{"./debug":6,"./fuzzy_url_equals":7,"./namespace":10,"./request":12,"co":29}],23:[function(_dereq_,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./namespace":10,"./request":12,"co":29}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3301,7 +3319,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var debug = _dereq_('./debug')('dav:xmlhttprequest');
+var debug = require('./debug')('dav:xmlhttprequest');
 
 var Native = undefined;
 if (typeof self !== 'undefined' && 'XMLHttpRequest' in self) {
@@ -3309,7 +3327,7 @@ if (typeof self !== 'undefined' && 'XMLHttpRequest' in self) {
 } else {
   // Trick browserify into not loading XMLHttpRequest polyfill
   // since it is available in the platform (including web workers)
-  Native = _dereq_(false || 'xmlhttprequest').XMLHttpRequest;
+  Native = require(false || 'xmlhttprequest').XMLHttpRequest;
 }
 
 /**
@@ -3387,8 +3405,8 @@ var XMLHttpRequest = (function () {
       return new Promise(function (resolve, reject) {
         request.onreadystatechange = function () {
           if (request.readyState !== 4 /* done */) {
-            return;
-          }
+              return;
+            }
 
           if (request.status < 200 || request.status >= 400) {
             return reject(new Error('Bad status: ' + request.status));
@@ -3414,17 +3432,22 @@ var XMLHttpRequest = (function () {
 
 exports['default'] = XMLHttpRequest;
 module.exports = exports['default'];
-},{"./debug":6}],24:[function(_dereq_,module,exports){
+},{"./debug":6}],24:[function(require,module,exports){
 (function (global){
-/*! http://mths.be/punycode v1.2.4 by @mathias */
+/*! https://mths.be/punycode v1.3.2 by @mathias */
 ;(function(root) {
 
 	/** Detect free variables */
-	var freeExports = typeof exports == 'object' && exports;
+	var freeExports = typeof exports == 'object' && exports &&
+		!exports.nodeType && exports;
 	var freeModule = typeof module == 'object' && module &&
-		module.exports == freeExports && module;
+		!module.nodeType && module;
 	var freeGlobal = typeof global == 'object' && global;
-	if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal) {
+	if (
+		freeGlobal.global === freeGlobal ||
+		freeGlobal.window === freeGlobal ||
+		freeGlobal.self === freeGlobal
+	) {
 		root = freeGlobal;
 	}
 
@@ -3450,8 +3473,8 @@ module.exports = exports['default'];
 
 	/** Regular expressions */
 	regexPunycode = /^xn--/,
-	regexNonASCII = /[^ -~]/, // unprintable ASCII chars + non-ASCII chars
-	regexSeparators = /\x2E|\u3002|\uFF0E|\uFF61/g, // RFC 3490 separators
+	regexNonASCII = /[^\x20-\x7E]/, // unprintable ASCII chars + non-ASCII chars
+	regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g, // RFC 3490 separators
 
 	/** Error messages */
 	errors = {
@@ -3490,23 +3513,37 @@ module.exports = exports['default'];
 	 */
 	function map(array, fn) {
 		var length = array.length;
+		var result = [];
 		while (length--) {
-			array[length] = fn(array[length]);
+			result[length] = fn(array[length]);
 		}
-		return array;
+		return result;
 	}
 
 	/**
-	 * A simple `Array#map`-like wrapper to work with domain name strings.
+	 * A simple `Array#map`-like wrapper to work with domain name strings or email
+	 * addresses.
 	 * @private
-	 * @param {String} domain The domain name.
+	 * @param {String} domain The domain name or email address.
 	 * @param {Function} callback The function that gets called for every
 	 * character.
 	 * @returns {Array} A new string of characters returned by the callback
 	 * function.
 	 */
 	function mapDomain(string, fn) {
-		return map(string.split(regexSeparators), fn).join('.');
+		var parts = string.split('@');
+		var result = '';
+		if (parts.length > 1) {
+			// In email addresses, only the domain name should be punycoded. Leave
+			// the local part (i.e. everything up to `@`) intact.
+			result = parts[0] + '@';
+			string = parts[1];
+		}
+		// Avoid `split(regex)` for IE8 compatibility. See #17.
+		string = string.replace(regexSeparators, '\x2E');
+		var labels = string.split('.');
+		var encoded = map(labels, fn).join('.');
+		return result + encoded;
 	}
 
 	/**
@@ -3516,7 +3553,7 @@ module.exports = exports['default'];
 	 * UCS-2 exposes as separate characters) into a single code point,
 	 * matching UTF-16.
 	 * @see `punycode.ucs2.encode`
-	 * @see <http://mathiasbynens.be/notes/javascript-encoding>
+	 * @see <https://mathiasbynens.be/notes/javascript-encoding>
 	 * @memberOf punycode.ucs2
 	 * @name decode
 	 * @param {String} string The Unicode input string (UCS-2).
@@ -3725,8 +3762,8 @@ module.exports = exports['default'];
 	}
 
 	/**
-	 * Converts a string of Unicode symbols to a Punycode string of ASCII-only
-	 * symbols.
+	 * Converts a string of Unicode symbols (e.g. a domain name label) to a
+	 * Punycode string of ASCII-only symbols.
 	 * @memberOf punycode
 	 * @param {String} input The string of Unicode symbols.
 	 * @returns {String} The resulting Punycode string of ASCII-only symbols.
@@ -3839,17 +3876,18 @@ module.exports = exports['default'];
 	}
 
 	/**
-	 * Converts a Punycode string representing a domain name to Unicode. Only the
-	 * Punycoded parts of the domain name will be converted, i.e. it doesn't
-	 * matter if you call it on a string that has already been converted to
-	 * Unicode.
+	 * Converts a Punycode string representing a domain name or an email address
+	 * to Unicode. Only the Punycoded parts of the input will be converted, i.e.
+	 * it doesn't matter if you call it on a string that has already been
+	 * converted to Unicode.
 	 * @memberOf punycode
-	 * @param {String} domain The Punycode domain name to convert to Unicode.
+	 * @param {String} input The Punycoded domain name or email address to
+	 * convert to Unicode.
 	 * @returns {String} The Unicode representation of the given Punycode
 	 * string.
 	 */
-	function toUnicode(domain) {
-		return mapDomain(domain, function(string) {
+	function toUnicode(input) {
+		return mapDomain(input, function(string) {
 			return regexPunycode.test(string)
 				? decode(string.slice(4).toLowerCase())
 				: string;
@@ -3857,15 +3895,18 @@ module.exports = exports['default'];
 	}
 
 	/**
-	 * Converts a Unicode string representing a domain name to Punycode. Only the
-	 * non-ASCII parts of the domain name will be converted, i.e. it doesn't
-	 * matter if you call it with a domain that's already in ASCII.
+	 * Converts a Unicode string representing a domain name or an email address to
+	 * Punycode. Only the non-ASCII parts of the domain name will be converted,
+	 * i.e. it doesn't matter if you call it with a domain that's already in
+	 * ASCII.
 	 * @memberOf punycode
-	 * @param {String} domain The domain name to convert, as a Unicode string.
-	 * @returns {String} The Punycode representation of the given domain name.
+	 * @param {String} input The domain name or email address to convert, as a
+	 * Unicode string.
+	 * @returns {String} The Punycode representation of the given domain name or
+	 * email address.
 	 */
-	function toASCII(domain) {
-		return mapDomain(domain, function(string) {
+	function toASCII(input) {
+		return mapDomain(input, function(string) {
 			return regexNonASCII.test(string)
 				? 'xn--' + encode(string)
 				: string;
@@ -3881,11 +3922,11 @@ module.exports = exports['default'];
 		 * @memberOf punycode
 		 * @type String
 		 */
-		'version': '1.2.4',
+		'version': '1.3.2',
 		/**
 		 * An object of methods to convert from JavaScript's internal character
 		 * representation (UCS-2) to Unicode code points, and back.
-		 * @see <http://mathiasbynens.be/notes/javascript-encoding>
+		 * @see <https://mathiasbynens.be/notes/javascript-encoding>
 		 * @memberOf punycode
 		 * @type Object
 		 */
@@ -3910,8 +3951,8 @@ module.exports = exports['default'];
 		define('punycode', function() {
 			return punycode;
 		});
-	} else if (freeExports && !freeExports.nodeType) {
-		if (freeModule) { // in Node.js or RingoJS v0.8.0+
+	} else if (freeExports && freeModule) {
+		if (module.exports == freeExports) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = punycode;
 		} else { // in Narwhal or RingoJS v0.7.0-
 			for (key in punycode) {
@@ -3924,8 +3965,8 @@ module.exports = exports['default'];
 
 }(this));
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],25:[function(_dereq_,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],25:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4011,7 +4052,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],26:[function(_dereq_,module,exports){
+},{}],26:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4098,13 +4139,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],27:[function(_dereq_,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
-exports.decode = exports.parse = _dereq_('./decode');
-exports.encode = exports.stringify = _dereq_('./encode');
+exports.decode = exports.parse = require('./decode');
+exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":25,"./encode":26}],28:[function(_dereq_,module,exports){
+},{"./decode":25,"./encode":26}],28:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4126,7 +4167,7 @@ exports.encode = exports.stringify = _dereq_('./encode');
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-var punycode = _dereq_('punycode');
+var punycode = require('punycode');
 
 exports.parse = urlParse;
 exports.resolve = urlResolve;
@@ -4198,7 +4239,7 @@ var protocolPattern = /^([a-z0-9.+-]+:)/i,
       'gopher:': true,
       'file:': true
     },
-    querystring = _dereq_('querystring');
+    querystring = require('querystring');
 
 function urlParse(url, parseQueryString, slashesDenoteHost) {
   if (url && isObject(url) && url instanceof Url) return url;
@@ -4813,7 +4854,7 @@ function isNullOrUndefined(arg) {
   return  arg == null;
 }
 
-},{"punycode":24,"querystring":27}],29:[function(_dereq_,module,exports){
+},{"punycode":24,"querystring":27}],29:[function(require,module,exports){
 
 /**
  * slice() reference.
@@ -4858,12 +4899,13 @@ co.wrap = function (fn) {
 
 function co(gen) {
   var ctx = this;
+  var args = slice.call(arguments, 1)
 
   // we wrap everything in a promise to avoid promise chaining,
   // which leads to memory leak errors.
   // see https://github.com/tj/co/issues/180
   return new Promise(function(resolve, reject) {
-    if (typeof gen === 'function') gen = gen.call(ctx);
+    if (typeof gen === 'function') gen = gen.apply(ctx, args);
     if (!gen || typeof gen.next !== 'function') return resolve(gen);
 
     onFulfilled();
@@ -5051,7 +5093,7 @@ function isObject(val) {
   return Object == val.constructor;
 }
 
-},{}],30:[function(_dereq_,module,exports){
+},{}],30:[function(require,module,exports){
 function DOMParser(options){
 	this.options = options ||{locator:{}};
 	
@@ -5301,14 +5343,14 @@ function appendElement (hander,node) {
     }
 }//appendChild and setAttributeNS are preformance key
 
-if(typeof _dereq_ == 'function'){
-	var XMLReader = _dereq_('./sax').XMLReader;
-	var DOMImplementation = exports.DOMImplementation = _dereq_('./dom').DOMImplementation;
-	exports.XMLSerializer = _dereq_('./dom').XMLSerializer ;
+if(typeof require == 'function'){
+	var XMLReader = require('./sax').XMLReader;
+	var DOMImplementation = exports.DOMImplementation = require('./dom').DOMImplementation;
+	exports.XMLSerializer = require('./dom').XMLSerializer ;
 	exports.DOMParser = DOMParser;
 }
 
-},{"./dom":31,"./sax":32}],31:[function(_dereq_,module,exports){
+},{"./dom":31,"./sax":32}],31:[function(require,module,exports){
 /*
  * DOM Level 2
  * Object DOMException
@@ -6443,12 +6485,12 @@ try{
 }catch(e){//ie8
 }
 
-if(typeof _dereq_ == 'function'){
+if(typeof require == 'function'){
 	exports.DOMImplementation = DOMImplementation;
 	exports.XMLSerializer = XMLSerializer;
 }
 
-},{}],32:[function(_dereq_,module,exports){
+},{}],32:[function(require,module,exports){
 //[4]   	NameStartChar	   ::=   	":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
 //[4a]   	NameChar	   ::=   	NameStartChar | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
 //[5]   	Name	   ::=   	NameStartChar (NameChar)*
@@ -7029,21 +7071,20 @@ function split(source,start){
 	}
 }
 
-if(typeof _dereq_ == 'function'){
+if(typeof require == 'function'){
 	exports.XMLReader = XMLReader;
 }
 
 
-},{}],33:[function(_dereq_,module,exports){
+},{}],33:[function(require,module,exports){
 module.exports={
   "name": "dav",
-  "version": "1.7.5",
+  "version": "1.7.7",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
   "main": "./dav.js",
   "repository": "https://github.com/gaye/dav",
-
   "keywords": [
     "address book",
     "calendar",
@@ -7059,30 +7100,26 @@ module.exports={
     "rfc 6352",
     "rfc 6578"
   ],
-
   "dependencies": {
-    "co": "4.5.2",
-    "xmldom": "0.1.19",
-    "xmlhttprequest": "1.6.0"
+    "co": "^4.6.0",
+    "xmldom": "^0.1.19",
+    "xmlhttprequest": "^1.7.0"
   },
-
   "devDependencies": {
-    "babel": "5.2.1",
-    "browserify": "4.1.5",
-    "chai": "1.9.1",
-    "doctoc": "0.7.1",
-    "mocha": "1.19.0",
-    "nock": "0.32.3",
-    "sinon": "1.10.0",
-    "tcp-port-used": "0.1.2",
-    "uglify-js": "2.4.14"
+    "babel": "^5.8.23",
+    "browserify": "^11.0.1",
+    "chai": "^3.2.0",
+    "doctoc": "^0.15.0",
+    "mocha": "^2.3.2",
+    "nock": "^2.10.0",
+    "sinon": "^1.16.1",
+    "tcp-port-used": "^0.1.2",
+    "uglify-js": "^2.4.24"
   },
-
   "scripts": {
     "test": "make test"
   }
 }
 
-},{}]},{},[8])
-(8)
+},{}]},{},[8])(8)
 });
