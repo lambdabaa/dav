@@ -6,7 +6,6 @@
   "license": "MPL-2.0",
   "main": "./dav.js",
   "repository": "https://github.com/gaye/dav",
-
   "keywords": [
     "address book",
     "calendar",
@@ -22,25 +21,22 @@
     "rfc 6352",
     "rfc 6578"
   ],
-
   "dependencies": {
-    "co": "4.5.2",
-    "xmldom": "0.1.19",
-    "xmlhttprequest": "1.6.0"
+    "co": "^4.6.0",
+    "xmldom": "^0.1.19",
+    "xmlhttprequest": "^1.7.0"
   },
-
   "devDependencies": {
-    "babel": "5.2.1",
-    "browserify": "4.1.5",
-    "chai": "1.9.1",
-    "doctoc": "0.7.1",
-    "mocha": "1.19.0",
-    "nock": "0.32.3",
-    "sinon": "1.10.0",
-    "tcp-port-used": "0.1.2",
-    "uglify-js": "2.4.14"
+    "babel": "^5.8.23",
+    "browserify": "^11.0.1",
+    "chai": "^3.2.0",
+    "doctoc": "^0.15.0",
+    "mocha": "^2.3.2",
+    "nock": "^2.10.0",
+    "sinon": "^1.16.1",
+    "tcp-port-used": "^0.1.2",
+    "uglify-js": "^2.4.24"
   },
-
   "scripts": {
     "test": "make test"
   }
