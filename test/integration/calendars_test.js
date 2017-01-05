@@ -54,7 +54,7 @@ suite('calendars', function() {
     );
   });
 
-  test('#updateCalendarObject, #sync', co.wrap(function *() {
+  test.skip('#updateCalendarObject, #sync', co.wrap(function *() {
     let calendar = calendars[0];
     let object = calendar.objects[0];
     object.calendarData = object.calendarData.replace(
@@ -96,7 +96,7 @@ suite('calendars', function() {
     );
   }));
 
-  test('webdav sync', co.wrap(function *() {
+  test.skip('webdav sync', co.wrap(function *() {
     let calendar = calendars[0];
     let object = calendar.objects[0];
     object.calendarData = object.calendarData.replace(
