@@ -1,7 +1,7 @@
 dav
 ===
 
-[![Build Status](https://travis-ci.org/gaye/dav.png?branch=master)](https://travis-ci.org/gaye/dav)
+[![Build Status](https://travis-ci.org/lambdabaa/dav.png?branch=master)](https://travis-ci.org/gaye/dav)
 
 WebDAV, CalDAV, and CardDAV client for nodejs and the browser.
 
