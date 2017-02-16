@@ -938,7 +938,7 @@ exports.createAccount = _co2['default'].wrap(regeneratorRuntime.mark(function ca
 }));
 
 // http redirect.
-},{"./calendars":2,"./contacts":5,"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"co":29,"url":28}],2:[function(require,module,exports){
+},{"./calendars":2,"./contacts":5,"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"co":26,"url":31}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1329,7 +1329,7 @@ var webdavSync = _co2['default'].wrap(regeneratorRuntime.mark(function callee$0$
     }
   }, callee$0$0, this);
 }));
-},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":22,"co":29,"url":28}],3:[function(require,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":24,"co":26,"url":31}],3:[function(require,module,exports){
 /**
  * @fileoverview Camelcase something.
  */
@@ -1476,6 +1476,30 @@ var Client = (function () {
       return calendars.syncCaldavAccount(account, options);
     }
   }, {
+    key: 'createAddressBook',
+    value: function createAddressBook() {
+      var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      options.xhr = options.xhr || this.xhr;
+      return contacts.createAddressBook(options);
+    }
+  }, {
+    key: 'deleteAddressBook',
+    value: function deleteAddressBook(addressBook) {
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+      options.xhr = options.xhr || this.xhr;
+      return contacts.deleteAddressBook(addressBook, options);
+    }
+  }, {
+    key: 'renameAddressBook',
+    value: function renameAddressBook(addressBook) {
+      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+      options.xhr = options.xhr || this.xhr;
+      return contacts.renameAddressBook(addressBook, options);
+    }
+  }, {
     key: 'createCard',
     value: function createCard(addressBook) {
       var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -1521,12 +1545,15 @@ var Client = (function () {
 })();
 
 exports.Client = Client;
-},{"./accounts":1,"./calendars":2,"./contacts":5,"url":28}],5:[function(require,module,exports){
+},{"./accounts":1,"./calendars":2,"./contacts":5,"url":31}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.createAddressBook = createAddressBook;
+exports.deleteAddressBook = deleteAddressBook;
+exports.renameAddressBook = renameAddressBook;
 exports.createCard = createCard;
 exports.updateCard = updateCard;
 exports.deleteCard = deleteCard;
@@ -1627,6 +1654,54 @@ var listAddressBooks = _co2['default'].wrap(regeneratorRuntime.mark(function cal
 }));
 
 exports.listAddressBooks = listAddressBooks;
+/**
+ * @return {Promise} promise will resolve when the addressBook has been created.
+ *
+ * Options:
+ *
+ *   (String) url
+ *   (String) displayName - name for the address book.
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
+function createAddressBook(options) {
+  var collectionUrl = _url2['default'].resolve(options.url, options.displayName);
+  options.props = [{ name: 'resourcetype', namespace: ns.DAV, children: [{ name: 'collection', namespace: ns.DAV }, { name: 'addressbook', namespace: ns.CARDDAV }]
+  }, { name: 'displayname', value: options.displayName, namespace: ns.DAV }];
+  return webdav.createCollection(collectionUrl, options);
+}
+
+/**
+ * @param {dav.AddressBook} addressBook the address book to be deleted.
+ * @return {Promise} promise will resolve when the addressBook has been deleted.
+ *
+ * Options:
+ *
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
+function deleteAddressBook(addressBook, options) {
+  return webdav.deleteCollection(addressBook.url, options);
+}
+
+/**
+ * @param {dav.AddressBook} addressBook the address book to be renamed.
+ * @return {Promise} promise will resolve when the addressBook has been renamed.
+ *
+ * Options:
+ *
+ *   (String) displayName - new name for the address book.
+ *   (dav.Sandbox) sandbox - optional request sandbox.
+ *   (dav.Transport) xhr - request sender.
+ */
+
+function renameAddressBook(addressBook, options) {
+  options.props = [{ name: 'displayname', value: options.displayName, namespace: ns.DAV }];
+  return webdav.updateProperties(addressBook.url, options);
+}
+
 /**
  * @param {dav.AddressBook} addressBook the address book to put the object on.
  * @return {Promise} promise will resolve when the card has been created.
@@ -1880,7 +1955,7 @@ var webdavSync = _co2['default'].wrap(regeneratorRuntime.mark(function callee$0$
     }
   }, callee$0$0, this);
 }));
-},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":22,"co":29,"url":28}],6:[function(require,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./model":9,"./namespace":10,"./request":12,"./webdav":24,"co":26,"url":31}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2009,14 +2084,14 @@ exports.debug = _debug2['default'];
 exports.ns = ns;
 exports.request = request;
 exports.transport = transport;
-},{"../package":33,"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./debug":6,"./model":9,"./namespace":10,"./request":12,"./sandbox":13,"./transport":21}],9:[function(require,module,exports){
+},{"../package":35,"./accounts":1,"./calendars":2,"./client":4,"./contacts":5,"./debug":6,"./model":9,"./namespace":10,"./request":12,"./sandbox":13,"./transport":23}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -2375,7 +2450,7 @@ function children(node, localName) {
 function child(node, localName) {
   return children(node, localName)[0];
 }
-},{"./camelize":3,"./debug":6,"xmldom":30}],12:[function(require,module,exports){
+},{"./camelize":3,"./debug":6,"xmldom":32}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2385,6 +2460,8 @@ exports.addressBookQuery = addressBookQuery;
 exports.basic = basic;
 exports.calendarQuery = calendarQuery;
 exports.collectionQuery = collectionQuery;
+exports.mkcol = mkcol;
+exports.proppatch = proppatch;
 exports.propfind = propfind;
 exports.syncCollection = syncCollection;
 exports.mergeProps = mergeProps;
@@ -2467,6 +2544,34 @@ function collectionQuery(requestData, options) {
     requestData: requestData,
     transformRequest: transformRequest,
     transformResponse: transformResponse
+  });
+}
+
+function mkcol(options) {
+  var requestData = template.mkcol({ props: options.props });
+
+  function transformRequest(xhr) {
+    setRequestHeaders(xhr, options);
+  }
+
+  return new Request({
+    method: 'MKCOL',
+    requestData: requestData,
+    transformRequest: transformRequest
+  });
+}
+
+function proppatch(options) {
+  var requestData = template.proppatch({ props: options.props });
+
+  function transformRequest(xhr) {
+    setRequestHeaders(xhr, options);
+  }
+
+  return new Request({
+    method: 'PROPPATCH',
+    requestData: requestData,
+    transformRequest: transformRequest
   });
 }
 
@@ -2601,6 +2706,14 @@ function setRequestHeaders(request, options) {
   if ('etag' in options) {
     request.setRequestHeader('If-Match', options.etag);
   }
+
+  if ('destination' in options) {
+    request.setRequestHeader('Destination', options.destination);
+  }
+
+  if ('overwrite' in options) {
+    request.setRequestHeader('Overwrite', options.overwrite);
+  }
 }
 },{"./parser":11,"./template":17}],13:[function(require,module,exports){
 /**
@@ -2680,7 +2793,7 @@ function addressBookQuery(object) {
 }
 
 module.exports = exports['default'];
-},{"./prop":18}],15:[function(require,module,exports){
+},{"./prop":19}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2703,7 +2816,7 @@ function calendarQuery(object) {
 }
 
 module.exports = exports['default'];
-},{"./filter":16,"./prop":18}],16:[function(require,module,exports){
+},{"./filter":16,"./prop":19}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2737,7 +2850,28 @@ exports.addressBookQuery = require('./address_book_query');
 exports.calendarQuery = require('./calendar_query');
 exports.propfind = require('./propfind');
 exports.syncCollection = require('./sync_collection');
-},{"./address_book_query":14,"./calendar_query":15,"./propfind":19,"./sync_collection":20}],18:[function(require,module,exports){
+exports.mkcol = require('./mkcol');
+exports.proppatch = require('./proppatch');
+},{"./address_book_query":14,"./calendar_query":15,"./mkcol":18,"./propfind":20,"./proppatch":21,"./sync_collection":22}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = mkcol;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+function mkcol(object) {
+  return '<d:mkcol xmlns:c="urn:ietf:params:xml:ns:caldav"\n              xmlns:card="urn:ietf:params:xml:ns:carddav"\n              xmlns:cs="http://calendarserver.org/ns/"\n              xmlns:d="DAV:">\n    <d:set>\n      <d:prop>\n        ' + object.props.map(_prop2['default']) + '\n      </d:prop>\n    </d:set>\n  </d:mkcol>';
+}
+
+module.exports = exports['default'];
+},{"./prop":19}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2788,7 +2922,15 @@ var ns = _interopRequireWildcard(_namespace);
  */
 
 function prop(item) {
-  return '<' + xmlnsPrefix(item.namespace) + ':' + item.name + ' />';
+  if (!item.children || !item.children.length) {
+    if (typeof item.value === "undefined") {
+      return '<' + xmlnsPrefix(item.namespace) + ':' + item.name + ' />';
+    }
+    return '<' + xmlnsPrefix(item.namespace) + ':' + item.name + '>' + item.value + '</' + xmlnsPrefix(item.namespace) + ':' + item.name + '>';
+  }
+
+  var children = item.children.map(prop);
+  return '<' + xmlnsPrefix(item.namespace) + ':' + item.name + '>\n            ' + children + '\n          </' + xmlnsPrefix(item.namespace) + ':' + item.name + '>';
 }
 
 function xmlnsPrefix(namespace) {
@@ -2806,7 +2948,7 @@ function xmlnsPrefix(namespace) {
   }
 }
 module.exports = exports['default'];
-},{"../namespace":10}],19:[function(require,module,exports){
+},{"../namespace":10}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2825,7 +2967,26 @@ function propfind(object) {
 }
 
 module.exports = exports['default'];
-},{"./prop":18}],20:[function(require,module,exports){
+},{"./prop":19}],21:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = proppatch;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _prop = require('./prop');
+
+var _prop2 = _interopRequireDefault(_prop);
+
+function proppatch(object) {
+  return '<d:propertyupdate xmlns:c="urn:ietf:params:xml:ns:caldav"\n              xmlns:card="urn:ietf:params:xml:ns:carddav"\n              xmlns:cs="http://calendarserver.org/ns/"\n              xmlns:d="DAV:">\n    <d:set>\n      <d:prop>\n        ' + object.props.map(_prop2['default']) + '\n      </d:prop>\n    </d:set>\n  </d:propertyupdate>';
+}
+
+module.exports = exports['default'];
+},{"./prop":19}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2844,14 +3005,14 @@ function syncCollection(object) {
 }
 
 module.exports = exports['default'];
-},{"./prop":18}],21:[function(require,module,exports){
+},{"./prop":19}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -3154,7 +3315,7 @@ var refreshAccessToken = _co2['default'].wrap(regeneratorRuntime.mark(function c
     }
   }, callee$0$0, this);
 }));
-},{"./xmlhttprequest":23,"co":29,"querystring":27}],22:[function(require,module,exports){
+},{"./xmlhttprequest":25,"co":26,"querystring":30}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3164,6 +3325,10 @@ exports.createObject = createObject;
 exports.updateObject = updateObject;
 exports.deleteObject = deleteObject;
 exports.syncCollection = syncCollection;
+exports.updateProperties = updateProperties;
+exports.createCollection = createCollection;
+exports.deleteCollection = deleteCollection;
+exports.moveCollection = moveCollection;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -3224,6 +3389,30 @@ function syncCollection(collection, options) {
     debug('basic sync.');
     return options.basicSync(collection, options);
   }
+}
+
+function updateProperties(objectUrl, options) {
+  var req = request.proppatch({
+    props: options.props
+  });
+  return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
+}
+
+function createCollection(collectionUrl, options) {
+  var req = request.mkcol({
+    props: options.props
+  });
+  return options.xhr.send(req, collectionUrl, { sandbox: options.sandbox });
+}
+
+function deleteCollection(collectionUrl, options) {
+  var req = request.basic({ method: 'DELETE', data: objectData });
+  return options.xhr.send(req, collectionUrl, { sandbox: options.sandbox });
+}
+
+function moveCollection(collectionUrl, options) {
+  var req = request.basic({ method: 'MOVE', overwrite: 'F', destination: options.destination, data: objectData });
+  return options.xhr.send(req, collectionUrl, { sandbox: options.sandbox });
 }
 
 /**
@@ -3308,7 +3497,7 @@ var isCollectionDirty = _co2['default'].wrap(regeneratorRuntime.mark(function ca
   }, callee$0$0, this);
 }));
 exports.isCollectionDirty = isCollectionDirty;
-},{"./debug":6,"./fuzzy_url_equals":7,"./namespace":10,"./request":12,"co":29}],23:[function(require,module,exports){
+},{"./debug":6,"./fuzzy_url_equals":7,"./namespace":10,"./request":12,"co":26}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3432,9 +3621,248 @@ var XMLHttpRequest = (function () {
 
 exports['default'] = XMLHttpRequest;
 module.exports = exports['default'];
-},{"./debug":6}],24:[function(require,module,exports){
+},{"./debug":6}],26:[function(require,module,exports){
+
+/**
+ * slice() reference.
+ */
+
+var slice = Array.prototype.slice;
+
+/**
+ * Expose `co`.
+ */
+
+module.exports = co['default'] = co.co = co;
+
+/**
+ * Wrap the given generator `fn` into a
+ * function that returns a promise.
+ * This is a separate function so that
+ * every `co()` call doesn't create a new,
+ * unnecessary closure.
+ *
+ * @param {GeneratorFunction} fn
+ * @return {Function}
+ * @api public
+ */
+
+co.wrap = function (fn) {
+  createPromise.__generatorFunction__ = fn;
+  return createPromise;
+  function createPromise() {
+    return co.call(this, fn.apply(this, arguments));
+  }
+};
+
+/**
+ * Execute the generator function or a generator
+ * and return a promise.
+ *
+ * @param {Function} fn
+ * @return {Promise}
+ * @api public
+ */
+
+function co(gen) {
+  var ctx = this;
+  var args = slice.call(arguments, 1)
+
+  // we wrap everything in a promise to avoid promise chaining,
+  // which leads to memory leak errors.
+  // see https://github.com/tj/co/issues/180
+  return new Promise(function(resolve, reject) {
+    if (typeof gen === 'function') gen = gen.apply(ctx, args);
+    if (!gen || typeof gen.next !== 'function') return resolve(gen);
+
+    onFulfilled();
+
+    /**
+     * @param {Mixed} res
+     * @return {Promise}
+     * @api private
+     */
+
+    function onFulfilled(res) {
+      var ret;
+      try {
+        ret = gen.next(res);
+      } catch (e) {
+        return reject(e);
+      }
+      next(ret);
+    }
+
+    /**
+     * @param {Error} err
+     * @return {Promise}
+     * @api private
+     */
+
+    function onRejected(err) {
+      var ret;
+      try {
+        ret = gen.throw(err);
+      } catch (e) {
+        return reject(e);
+      }
+      next(ret);
+    }
+
+    /**
+     * Get the next value in the generator,
+     * return a promise.
+     *
+     * @param {Object} ret
+     * @return {Promise}
+     * @api private
+     */
+
+    function next(ret) {
+      if (ret.done) return resolve(ret.value);
+      var value = toPromise.call(ctx, ret.value);
+      if (value && isPromise(value)) return value.then(onFulfilled, onRejected);
+      return onRejected(new TypeError('You may only yield a function, promise, generator, array, or object, '
+        + 'but the following object was passed: "' + String(ret.value) + '"'));
+    }
+  });
+}
+
+/**
+ * Convert a `yield`ed value into a promise.
+ *
+ * @param {Mixed} obj
+ * @return {Promise}
+ * @api private
+ */
+
+function toPromise(obj) {
+  if (!obj) return obj;
+  if (isPromise(obj)) return obj;
+  if (isGeneratorFunction(obj) || isGenerator(obj)) return co.call(this, obj);
+  if ('function' == typeof obj) return thunkToPromise.call(this, obj);
+  if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
+  if (isObject(obj)) return objectToPromise.call(this, obj);
+  return obj;
+}
+
+/**
+ * Convert a thunk to a promise.
+ *
+ * @param {Function}
+ * @return {Promise}
+ * @api private
+ */
+
+function thunkToPromise(fn) {
+  var ctx = this;
+  return new Promise(function (resolve, reject) {
+    fn.call(ctx, function (err, res) {
+      if (err) return reject(err);
+      if (arguments.length > 2) res = slice.call(arguments, 1);
+      resolve(res);
+    });
+  });
+}
+
+/**
+ * Convert an array of "yieldables" to a promise.
+ * Uses `Promise.all()` internally.
+ *
+ * @param {Array} obj
+ * @return {Promise}
+ * @api private
+ */
+
+function arrayToPromise(obj) {
+  return Promise.all(obj.map(toPromise, this));
+}
+
+/**
+ * Convert an object of "yieldables" to a promise.
+ * Uses `Promise.all()` internally.
+ *
+ * @param {Object} obj
+ * @return {Promise}
+ * @api private
+ */
+
+function objectToPromise(obj){
+  var results = new obj.constructor();
+  var keys = Object.keys(obj);
+  var promises = [];
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var promise = toPromise.call(this, obj[key]);
+    if (promise && isPromise(promise)) defer(promise, key);
+    else results[key] = obj[key];
+  }
+  return Promise.all(promises).then(function () {
+    return results;
+  });
+
+  function defer(promise, key) {
+    // predefine the key in the result
+    results[key] = undefined;
+    promises.push(promise.then(function (res) {
+      results[key] = res;
+    }));
+  }
+}
+
+/**
+ * Check if `obj` is a promise.
+ *
+ * @param {Object} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isPromise(obj) {
+  return 'function' == typeof obj.then;
+}
+
+/**
+ * Check if `obj` is a generator.
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isGenerator(obj) {
+  return 'function' == typeof obj.next && 'function' == typeof obj.throw;
+}
+
+/**
+ * Check if `obj` is a generator function.
+ *
+ * @param {Mixed} obj
+ * @return {Boolean}
+ * @api private
+ */
+function isGeneratorFunction(obj) {
+  var constructor = obj.constructor;
+  if (!constructor) return false;
+  if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) return true;
+  return isGenerator(constructor.prototype);
+}
+
+/**
+ * Check for plain object.
+ *
+ * @param {Mixed} val
+ * @return {Boolean}
+ * @api private
+ */
+
+function isObject(val) {
+  return Object == val.constructor;
+}
+
+},{}],27:[function(require,module,exports){
 (function (global){
-/*! https://mths.be/punycode v1.3.2 by @mathias */
+/*! https://mths.be/punycode v1.4.0 by @mathias */
 ;(function(root) {
 
 	/** Detect free variables */
@@ -3500,7 +3928,7 @@ module.exports = exports['default'];
 	 * @returns {Error} Throws a `RangeError` with the applicable error message.
 	 */
 	function error(type) {
-		throw RangeError(errors[type]);
+		throw new RangeError(errors[type]);
 	}
 
 	/**
@@ -3647,7 +4075,7 @@ module.exports = exports['default'];
 
 	/**
 	 * Bias adaptation function as per section 3.4 of RFC 3492.
-	 * http://tools.ietf.org/html/rfc3492#section-3.4
+	 * https://tools.ietf.org/html/rfc3492#section-3.4
 	 * @private
 	 */
 	function adapt(delta, numPoints, firstTime) {
@@ -3952,21 +4380,24 @@ module.exports = exports['default'];
 			return punycode;
 		});
 	} else if (freeExports && freeModule) {
-		if (module.exports == freeExports) { // in Node.js or RingoJS v0.8.0+
+		if (module.exports == freeExports) {
+			// in Node.js, io.js, or RingoJS v0.8.0+
 			freeModule.exports = punycode;
-		} else { // in Narwhal or RingoJS v0.7.0-
+		} else {
+			// in Narwhal or RingoJS v0.7.0-
 			for (key in punycode) {
 				punycode.hasOwnProperty(key) && (freeExports[key] = punycode[key]);
 			}
 		}
-	} else { // in Rhino or a web browser
+	} else {
+		// in Rhino or a web browser
 		root.punycode = punycode;
 	}
 
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],25:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4052,7 +4483,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4139,13 +4570,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":25,"./encode":26}],28:[function(require,module,exports){
+},{"./decode":28,"./encode":29}],31:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4854,246 +5285,7 @@ function isNullOrUndefined(arg) {
   return  arg == null;
 }
 
-},{"punycode":24,"querystring":27}],29:[function(require,module,exports){
-
-/**
- * slice() reference.
- */
-
-var slice = Array.prototype.slice;
-
-/**
- * Expose `co`.
- */
-
-module.exports = co['default'] = co.co = co;
-
-/**
- * Wrap the given generator `fn` into a
- * function that returns a promise.
- * This is a separate function so that
- * every `co()` call doesn't create a new,
- * unnecessary closure.
- *
- * @param {GeneratorFunction} fn
- * @return {Function}
- * @api public
- */
-
-co.wrap = function (fn) {
-  createPromise.__generatorFunction__ = fn;
-  return createPromise;
-  function createPromise() {
-    return co.call(this, fn.apply(this, arguments));
-  }
-};
-
-/**
- * Execute the generator function or a generator
- * and return a promise.
- *
- * @param {Function} fn
- * @return {Promise}
- * @api public
- */
-
-function co(gen) {
-  var ctx = this;
-  var args = slice.call(arguments, 1)
-
-  // we wrap everything in a promise to avoid promise chaining,
-  // which leads to memory leak errors.
-  // see https://github.com/tj/co/issues/180
-  return new Promise(function(resolve, reject) {
-    if (typeof gen === 'function') gen = gen.apply(ctx, args);
-    if (!gen || typeof gen.next !== 'function') return resolve(gen);
-
-    onFulfilled();
-
-    /**
-     * @param {Mixed} res
-     * @return {Promise}
-     * @api private
-     */
-
-    function onFulfilled(res) {
-      var ret;
-      try {
-        ret = gen.next(res);
-      } catch (e) {
-        return reject(e);
-      }
-      next(ret);
-    }
-
-    /**
-     * @param {Error} err
-     * @return {Promise}
-     * @api private
-     */
-
-    function onRejected(err) {
-      var ret;
-      try {
-        ret = gen.throw(err);
-      } catch (e) {
-        return reject(e);
-      }
-      next(ret);
-    }
-
-    /**
-     * Get the next value in the generator,
-     * return a promise.
-     *
-     * @param {Object} ret
-     * @return {Promise}
-     * @api private
-     */
-
-    function next(ret) {
-      if (ret.done) return resolve(ret.value);
-      var value = toPromise.call(ctx, ret.value);
-      if (value && isPromise(value)) return value.then(onFulfilled, onRejected);
-      return onRejected(new TypeError('You may only yield a function, promise, generator, array, or object, '
-        + 'but the following object was passed: "' + String(ret.value) + '"'));
-    }
-  });
-}
-
-/**
- * Convert a `yield`ed value into a promise.
- *
- * @param {Mixed} obj
- * @return {Promise}
- * @api private
- */
-
-function toPromise(obj) {
-  if (!obj) return obj;
-  if (isPromise(obj)) return obj;
-  if (isGeneratorFunction(obj) || isGenerator(obj)) return co.call(this, obj);
-  if ('function' == typeof obj) return thunkToPromise.call(this, obj);
-  if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
-  if (isObject(obj)) return objectToPromise.call(this, obj);
-  return obj;
-}
-
-/**
- * Convert a thunk to a promise.
- *
- * @param {Function}
- * @return {Promise}
- * @api private
- */
-
-function thunkToPromise(fn) {
-  var ctx = this;
-  return new Promise(function (resolve, reject) {
-    fn.call(ctx, function (err, res) {
-      if (err) return reject(err);
-      if (arguments.length > 2) res = slice.call(arguments, 1);
-      resolve(res);
-    });
-  });
-}
-
-/**
- * Convert an array of "yieldables" to a promise.
- * Uses `Promise.all()` internally.
- *
- * @param {Array} obj
- * @return {Promise}
- * @api private
- */
-
-function arrayToPromise(obj) {
-  return Promise.all(obj.map(toPromise, this));
-}
-
-/**
- * Convert an object of "yieldables" to a promise.
- * Uses `Promise.all()` internally.
- *
- * @param {Object} obj
- * @return {Promise}
- * @api private
- */
-
-function objectToPromise(obj){
-  var results = new obj.constructor();
-  var keys = Object.keys(obj);
-  var promises = [];
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    var promise = toPromise.call(this, obj[key]);
-    if (promise && isPromise(promise)) defer(promise, key);
-    else results[key] = obj[key];
-  }
-  return Promise.all(promises).then(function () {
-    return results;
-  });
-
-  function defer(promise, key) {
-    // predefine the key in the result
-    results[key] = undefined;
-    promises.push(promise.then(function (res) {
-      results[key] = res;
-    }));
-  }
-}
-
-/**
- * Check if `obj` is a promise.
- *
- * @param {Object} obj
- * @return {Boolean}
- * @api private
- */
-
-function isPromise(obj) {
-  return 'function' == typeof obj.then;
-}
-
-/**
- * Check if `obj` is a generator.
- *
- * @param {Mixed} obj
- * @return {Boolean}
- * @api private
- */
-
-function isGenerator(obj) {
-  return 'function' == typeof obj.next && 'function' == typeof obj.throw;
-}
-
-/**
- * Check if `obj` is a generator function.
- *
- * @param {Mixed} obj
- * @return {Boolean}
- * @api private
- */
-function isGeneratorFunction(obj) {
-  var constructor = obj.constructor;
-  if (!constructor) return false;
-  if ('GeneratorFunction' === constructor.name || 'GeneratorFunction' === constructor.displayName) return true;
-  return isGenerator(constructor.prototype);
-}
-
-/**
- * Check for plain object.
- *
- * @param {Mixed} val
- * @return {Boolean}
- * @api private
- */
-
-function isObject(val) {
-  return Object == val.constructor;
-}
-
-},{}],30:[function(require,module,exports){
+},{"punycode":27,"querystring":30}],32:[function(require,module,exports){
 function DOMParser(options){
 	this.options = options ||{locator:{}};
 	
@@ -5117,6 +5309,7 @@ DOMParser.prototype.parseFromString = function(source,mimeType){
 		entityMap.copy = '\xa9';
 		defaultNSMap['']= 'http://www.w3.org/1999/xhtml';
 	}
+	defaultNSMap.xml = defaultNSMap.xml || 'http://www.w3.org/XML/1998/namespace';
 	if(source){
 		sax.parse(source,defaultNSMap,entityMap);
 	}else{
@@ -5350,7 +5543,7 @@ if(typeof require == 'function'){
 	exports.DOMParser = DOMParser;
 }
 
-},{"./dom":31,"./sax":32}],31:[function(require,module,exports){
+},{"./dom":33,"./sax":34}],33:[function(require,module,exports){
 /*
  * DOM Level 2
  * Object DOMException
@@ -5620,12 +5813,12 @@ DOMImplementation.prototype = {
 	// Introduced in DOM Level 2:
 	createDocument:function(namespaceURI,  qualifiedName, doctype){// raises:INVALID_CHARACTER_ERR,NAMESPACE_ERR,WRONG_DOCUMENT_ERR
 		var doc = new Document();
+		doc.implementation = this;
+		doc.childNodes = new NodeList();
 		doc.doctype = doctype;
 		if(doctype){
 			doc.appendChild(doctype);
 		}
-		doc.implementation = this;
-		doc.childNodes = new NodeList();
 		if(qualifiedName){
 			var root = doc.createElementNS(namespaceURI,qualifiedName);
 			doc.appendChild(root);
@@ -6112,7 +6305,7 @@ Element.prototype = {
 	},
 	setAttributeNS : function(namespaceURI, qualifiedName, value){
 		var attr = this.ownerDocument.createAttributeNS(namespaceURI, qualifiedName);
-		attr.value = attr.nodeValue = value;
+		attr.value = attr.nodeValue = "" + value;
 		this.setAttributeNode(attr)
 	},
 	getAttributeNodeNS : function(namespaceURI, localName){
@@ -6134,7 +6327,7 @@ Element.prototype = {
 		return new LiveNodeList(this,function(base){
 			var ls = [];
 			_visitNode(base,function(node){
-				if(node !== base && node.nodeType === ELEMENT_NODE && node.namespaceURI === namespaceURI && (localName === '*' || node.localName == localName)){
+				if(node !== base && node.nodeType === ELEMENT_NODE && (namespaceURI === '*' || node.namespaceURI === namespaceURI) && (localName === '*' || node.localName == localName)){
 					ls.push(node);
 				}
 			});
@@ -6255,27 +6448,30 @@ function ProcessingInstruction() {
 ProcessingInstruction.prototype.nodeType = PROCESSING_INSTRUCTION_NODE;
 _extends(ProcessingInstruction,Node);
 function XMLSerializer(){}
-XMLSerializer.prototype.serializeToString = function(node){
+XMLSerializer.prototype.serializeToString = function(node,attributeSorter){
+	return node.toString(attributeSorter);
+}
+Node.prototype.toString =function(attributeSorter){
 	var buf = [];
-	serializeToString(node,buf);
+	serializeToString(this,buf,attributeSorter);
 	return buf.join('');
 }
-Node.prototype.toString =function(){
-	return XMLSerializer.prototype.serializeToString(this);
-}
-function serializeToString(node,buf){
+function serializeToString(node,buf,attributeSorter,isHTML){
 	switch(node.nodeType){
 	case ELEMENT_NODE:
 		var attrs = node.attributes;
 		var len = attrs.length;
 		var child = node.firstChild;
 		var nodeName = node.tagName;
-		var isHTML = htmlns === node.namespaceURI
+		isHTML =  (htmlns === node.namespaceURI) ||isHTML 
 		buf.push('<',nodeName);
-		for(var i=0;i<len;i++){
-			serializeToString(attrs.item(i),buf,isHTML);
+		if(attributeSorter){
+			buf.sort.apply(attrs, attributeSorter);
 		}
-		if(child || isHTML && !/^(?:meta|link|img|br|hr|input)$/i.test(nodeName)){
+		for(var i=0;i<len;i++){
+			serializeToString(attrs.item(i),buf,attributeSorter,isHTML);
+		}
+		if(child || isHTML && !/^(?:meta|link|img|br|hr|input|button)$/i.test(nodeName)){
 			buf.push('>');
 			//if is cdata child node
 			if(isHTML && /^script$/i.test(nodeName)){
@@ -6284,7 +6480,7 @@ function serializeToString(node,buf){
 				}
 			}else{
 				while(child){
-					serializeToString(child,buf);
+					serializeToString(child,buf,attributeSorter,isHTML);
 					child = child.nextSibling;
 				}
 			}
@@ -6297,7 +6493,7 @@ function serializeToString(node,buf){
 	case DOCUMENT_FRAGMENT_NODE:
 		var child = node.firstChild;
 		while(child){
-			serializeToString(child,buf);
+			serializeToString(child,buf,attributeSorter,isHTML);
 			child = child.nextSibling;
 		}
 		return;
@@ -6490,12 +6686,12 @@ if(typeof require == 'function'){
 	exports.XMLSerializer = XMLSerializer;
 }
 
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 //[4]   	NameStartChar	   ::=   	":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
 //[4a]   	NameChar	   ::=   	NameStartChar | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
 //[5]   	Name	   ::=   	NameStartChar (NameChar)*
 var nameStartChar = /[A-Z_a-z\xC0-\xD6\xD8-\xF6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]///\u10000-\uEFFFF
-var nameChar = new RegExp("[\\-\\.0-9"+nameStartChar.source.slice(1,-1)+"\u00B7\u0300-\u036F\\ux203F-\u2040]");
+var nameChar = new RegExp("[\\-\\.0-9"+nameStartChar.source.slice(1,-1)+"\u00B7\u0300-\u036F\\u203F-\u2040]");
 var tagNamePattern = new RegExp('^'+nameStartChar.source+nameChar.source+'*(?:\:'+nameStartChar.source+nameChar.source+'*)?$');
 //var tagNamePattern = /^[a-zA-Z_][\w\-\.]*(?:\:[a-zA-Z_][\w\-\.]*)?$/
 //var handlers = 'resolveEntity,getExternalSubset,characters,endDocument,endElement,endPrefixMapping,ignorableWhitespace,processingInstruction,setDocumentLocator,skippedEntity,startDocument,startElement,startPrefixMapping,notationDecl,unparsedEntityDecl,error,fatalError,warning,attributeDecl,elementDecl,externalEntityDecl,internalEntityDecl,comment,endCDATA,endDTD,endEntity,startCDATA,startDTD,startEntity'.split(',')
@@ -6551,22 +6747,24 @@ function parse(source,defaultNSMapCopy,entityMap,domBuilder,errorHandler){
 		}
 	}
 	function appendText(end){//has some bugs
-		var xt = source.substring(start,end).replace(/&#?\w+;/g,entityReplacer);
-		locator&&position(start);
-		domBuilder.characters(xt,0,end-start);
-		start = end
+		if(end>start){
+			var xt = source.substring(start,end).replace(/&#?\w+;/g,entityReplacer);
+			locator&&position(start);
+			domBuilder.characters(xt,0,end-start);
+			start = end
+		}
 	}
-	function position(start,m){
-		while(start>=endPos && (m = linePattern.exec(source))){
-			startPos = m.index;
-			endPos = startPos + m[0].length;
+	function position(p,m){
+		while(p>=lineEnd && (m = linePattern.exec(source))){
+			lineStart = m.index;
+			lineEnd = lineStart + m[0].length;
 			locator.lineNumber++;
 			//console.log('line++:',locator,startPos,endPos)
 		}
-		locator.columnNumber = start-startPos+1;
+		locator.columnNumber = p-lineStart+1;
 	}
-	var startPos = 0;
-	var endPos = 0;
+	var lineStart = 0;
+	var lineEnd = 0;
 	var linePattern = /.+(?:\r\n?|\n)|.*$/g
 	var locator = domBuilder.locator;
 	
@@ -6574,64 +6772,66 @@ function parse(source,defaultNSMapCopy,entityMap,domBuilder,errorHandler){
 	var closeMap = {};
 	var start = 0;
 	while(true){
-		var i = source.indexOf('<',start);
-		if(i<0){
-			if(!source.substr(start).match(/^\s*$/)){
-				var doc = domBuilder.document;
-    			var text = doc.createTextNode(source.substr(start));
-    			doc.appendChild(text);
-    			domBuilder.currentElement = text;
-			}
-			return;
-		}
-		if(i>start){
-			appendText(i);
-		}
-		switch(source.charAt(i+1)){
-		case '/':
-			var end = source.indexOf('>',i+3);
-			var tagName = source.substring(i+2,end);
-			var config = parseStack.pop();
-			var localNSMap = config.localNSMap;
-			
-	        if(config.tagName != tagName){
-	            errorHandler.fatalError("end tag name: "+tagName+' is not match the current start tagName:'+config.tagName );
-	        }
-			domBuilder.endElement(config.uri,config.localName,tagName);
-			if(localNSMap){
-				for(var prefix in localNSMap){
-					domBuilder.endPrefixMapping(prefix) ;
+		try{
+			var tagStart = source.indexOf('<',start);
+			if(tagStart<0){
+				if(!source.substr(start).match(/^\s*$/)){
+					var doc = domBuilder.document;
+	    			var text = doc.createTextNode(source.substr(start));
+	    			doc.appendChild(text);
+	    			domBuilder.currentElement = text;
 				}
+				return;
 			}
-			end++;
-			break;
-			// end elment
-		case '?':// <?...?>
-			locator&&position(i);
-			end = parseInstruction(source,i,domBuilder);
-			break;
-		case '!':// <!doctype,<![CDATA,<!--
-			locator&&position(i);
-			end = parseDCC(source,i,domBuilder,errorHandler);
-			break;
-		default:
-			try{
-				locator&&position(i);
+			if(tagStart>start){
+				appendText(tagStart);
+			}
+			switch(source.charAt(tagStart+1)){
+			case '/':
+				var end = source.indexOf('>',tagStart+3);
+				var tagName = source.substring(tagStart+2,end);
+				var config = parseStack.pop();
+				var localNSMap = config.localNSMap;
+		        if(config.tagName != tagName){
+		            errorHandler.fatalError("end tag name: "+tagName+' is not match the current start tagName:'+config.tagName );
+		        }
+				domBuilder.endElement(config.uri,config.localName,tagName);
+				if(localNSMap){
+					for(var prefix in localNSMap){
+						domBuilder.endPrefixMapping(prefix) ;
+					}
+				}
+				end++;
+				break;
+				// end elment
+			case '?':// <?...?>
+				locator&&position(tagStart);
+				end = parseInstruction(source,tagStart,domBuilder);
+				break;
+			case '!':// <!doctype,<![CDATA,<!--
+				locator&&position(tagStart);
+				end = parseDCC(source,tagStart,domBuilder,errorHandler);
+				break;
+			default:
+			
+				locator&&position(tagStart);
 				
 				var el = new ElementAttributes();
 				
 				//elStartEnd
-				var end = parseElementStartPart(source,i,el,entityReplacer,errorHandler);
+				var end = parseElementStartPart(source,tagStart,el,entityReplacer,errorHandler);
 				var len = el.length;
-				//position fixed
-				if(len && locator){
-					var backup = copyLocator(locator,{});
-					for(var i = 0;i<len;i++){
-						var a = el[i];
-						position(a.offset);
-						a.offset = copyLocator(locator,{});
+				
+				if(locator){
+					if(len){
+						//attribute position fixed
+						for(var i = 0;i<len;i++){
+							var a = el[i];
+							position(a.offset);
+							a.offset = copyLocator(locator,{});
+						}
 					}
-					copyLocator(backup,locator);
+					position(end);
 				}
 				if(!el.closed && fixSelfClosed(source,end,el.tagName,closeMap)){
 					el.closed = true;
@@ -6647,17 +6847,16 @@ function parse(source,defaultNSMapCopy,entityMap,domBuilder,errorHandler){
 				}else{
 					end++;
 				}
-			}catch(e){
-				errorHandler.error('element parse error: '+e);
-				end = -1;
 			}
-
+		}catch(e){
+			errorHandler.error('element parse error: '+e);
+			end = -1;
 		}
-		if(end<0){
-			//TODO: 这里有可能sax回退，有位置错误风险
-			appendText(i+1);
-		}else{
+		if(end>start){
 			start = end;
+		}else{
+			//TODO: 这里有可能sax回退，有位置错误风险
+			appendText(Math.max(tagStart,start)+1);
 		}
 	}
 }
@@ -6665,7 +6864,6 @@ function copyLocator(f,t){
 	t.lineNumber = f.lineNumber;
 	t.columnNumber = f.columnNumber;
 	return t;
-	
 }
 
 /**
@@ -7076,10 +7274,10 @@ if(typeof require == 'function'){
 }
 
 
-},{}],33:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports={
   "name": "dav",
-  "version": "1.7.7",
+  "version": "1.8.0",
   "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
