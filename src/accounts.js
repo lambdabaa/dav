@@ -1,4 +1,3 @@
-import co from 'co';
 import url from 'url';
 
 import { listCalendars, listCalendarObjects } from './calendars';
@@ -22,7 +21,7 @@ let defaults = {
  *
  * @param {dav.Account} account to find root url for.
  */
-let serviceDiscovery = co.wrap(function *(account, options) {
+let serviceDiscovery = async function(account, options) {
   debug('Attempt service discovery.');
 
   let endpoint = url.parse(account.server);
@@ -36,7 +35,7 @@ let serviceDiscovery = co.wrap(function *(account, options) {
 
   let req = request.basic({ method: 'GET' });
   try {
-    let xhr = yield options.xhr.send(req, uri, { sandbox: options.sandbox });
+    let xhr = await options.xhr.send(req, uri, { sandbox: options.sandbox });
     if (xhr.status >= 300 && xhr.status < 400) {
       // http redirect.
       let location = xhr.getResponseHeader('Location');
@@ -54,14 +53,14 @@ let serviceDiscovery = co.wrap(function *(account, options) {
   }
 
   return endpoint.href;
-});
+};
 
 /**
  * rfc 5397.
  *
  * @param {dav.Account} account to get principal url for.
  */
-let principalUrl = co.wrap(function *(account, options) {
+let principalUrl = async function(account, options) {
   debug(`Fetch principal url from context path ${account.rootUrl}.`);
   let req = request.propfind({
     props: [ { name: 'current-user-principal', namespace: ns.DAV } ],
@@ -69,19 +68,19 @@ let principalUrl = co.wrap(function *(account, options) {
     mergeResponses: true
   });
 
-  let res = yield options.xhr.send(req, account.rootUrl, {
+  let res = await options.xhr.send(req, account.rootUrl, {
     sandbox: options.sandbox
   });
 
   let container = res.props;
   debug(`Received principal: ${container.currentUserPrincipal}`);
   return url.resolve(account.rootUrl, container.currentUserPrincipal);
-});
+};
 
 /**
  * @param {dav.Account} account to get home url for.
  */
-let homeUrl = co.wrap(function *(account, options) {
+let homeUrl = async function(account, options) {
   debug(`Fetch home url from principal url ${account.principalUrl}.`);
   let prop;
   if (options.accountType === 'caldav') {
@@ -92,7 +91,7 @@ let homeUrl = co.wrap(function *(account, options) {
 
   var req = request.propfind({ props: [ prop ] });
 
-  let responses = yield options.xhr.send(req, account.principalUrl, {
+  let responses = await options.xhr.send(req, account.principalUrl, {
     sandbox: options.sandbox
   });
 
@@ -111,7 +110,7 @@ let homeUrl = co.wrap(function *(account, options) {
   }
 
   return url.resolve(account.rootUrl, href);
-});
+};
 
 /**
  * Options:
@@ -127,7 +126,7 @@ let homeUrl = co.wrap(function *(account, options) {
  *
  * @return {Promise} a promise that will resolve with a dav.Account object.
  */
-exports.createAccount = co.wrap(function *(options) {
+export async function createAccount(options) {
   options = Object.assign({}, defaults, options);
   if (typeof options.loadObjects !== 'boolean') {
     options.loadObjects = options.loadCollections;
@@ -138,9 +137,9 @@ exports.createAccount = co.wrap(function *(options) {
     credentials: options.xhr.credentials
   });
 
-  account.rootUrl = yield serviceDiscovery(account, options);
-  account.principalUrl = yield principalUrl(account, options);
-  account.homeUrl = yield homeUrl(account, options);
+  account.rootUrl = await serviceDiscovery(account, options);
+  account.principalUrl = await principalUrl(account, options);
+  account.homeUrl = await homeUrl(account, options);
 
   if (!options.loadCollections) {
     return account;
@@ -157,23 +156,23 @@ exports.createAccount = co.wrap(function *(options) {
     loadObjects = listVCards;
   }
 
-  var collections = yield loadCollections(account, options);
+  var collections = await loadCollections(account, options);
   account[key] = collections;
   if (!options.loadObjects) {
     return account;
   }
 
-  yield collections.map(co.wrap(function *(collection) {
+  await collections.map(async function(collection) {
     try {
-      collection.objects = yield loadObjects(collection, options);
+      collection.objects = await loadObjects(collection, options);
     } catch (error) {
       collection.error = error;
     }
-  }));
+  });
 
   account[key] = account[key].filter(function(collection) {
     return !collection.error;
   });
 
   return account;
-});
+};
