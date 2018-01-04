@@ -1,4 +1,4 @@
-exports.addressBookQuery = require('./address_book_query');
-exports.calendarQuery = require('./calendar_query');
-exports.propfind = require('./propfind');
-exports.syncCollection = require('./sync_collection');
+export { default as addressBookQuery } from './address_book_query';
+export { default as calendarQuery } from './calendar_query';
+export { default as propfind } from './propfind';
+export { default as syncCollection } from './sync_collection';

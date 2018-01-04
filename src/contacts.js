@@ -7,7 +7,8 @@ import * as ns from './namespace';
 import * as request from './request';
 import * as webdav from './webdav';
 
-let debug = require('./debug')('dav:contacts');
+import debugFn from './debug';
+let debug = debugFn('dav:contacts');
 
 /**
  * @param {dav.Account} account to fetch address books for.

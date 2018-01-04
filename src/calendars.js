@@ -7,7 +7,8 @@ import * as ns from './namespace';
 import * as request from './request';
 import * as webdav from './webdav';
 
-let debug = require('./debug')('dav:calendars');
+import debugFn from './debug';
+let debug = debugFn('dav:calendars');
 
 const ICAL_OBJS = new Set([
   'VEVENT',

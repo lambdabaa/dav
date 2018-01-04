@@ -1,6 +1,7 @@
 import camelize from './camelize';
 
-let debug = require('./debug')('dav:parser');
+import debugFn from './debug';
+let debug = debugFn('dav:parser');
 
 let DOMParser;
 if (typeof self !== 'undefined' && 'DOMParser' in self) {

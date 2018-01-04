@@ -8,7 +8,8 @@ import { Account } from './model';
 import * as ns from './namespace';
 import * as request from './request';
 
-let debug = require('./debug')('dav:accounts');
+import debugFn from './debug';
+let debug = debugFn('dav:accounts');
 
 let defaults = {
   accountType: 'caldav',
