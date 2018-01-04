@@ -16,7 +16,7 @@ dist/dav.browser.js dist/dav.browser.js.map: dist/dav.js node_modules
 	./node_modules/.bin/browserify --standalone dav --debug ./dist/dav.js | \
 		./node_modules/.bin/exorcist ./dist/dav.browser.js.map > ./dist/dav.browser.js
 
-dist/dav.js dist/dav.es.js: $(JS) $(HBS) node_modules rollup.config.js
+dist/dav.js dist/dav.es.js dist_test/dav.js: $(JS) $(HBS) node_modules rollup.config.js
 	./node_modules/.bin/rollup -c
 
 node_modules: package.json
@@ -24,17 +24,17 @@ node_modules: package.json
 
 .PHONY: clean
 clean:
-	rm -rf *.zip SabreDAV dist coverage dav.* node_modules test/integration/server/SabreDAV
+	rm -rf *.zip SabreDAV dist dist_test coverage dav.* node_modules test/integration/server/SabreDAV .reify-cache
 
 .PHONY: test
 test: test-unit test-integration
 
 .PHONY: test-unit
-test-unit: node_modules
+test-unit: node_modules dist_test/dav.js
 	./node_modules/.bin/mocha test/unit
 
 .PHONY: test-integration
-test-integration: node_modules test/integration/server/SabreDAV
+test-integration: node_modules test/integration/server/SabreDAV dist_test/dav.js
 	./node_modules/.bin/mocha test/integration
 
 .PHONY: toc

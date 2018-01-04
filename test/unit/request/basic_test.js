@@ -1,8 +1,7 @@
 import { assert } from 'chai';
 import co from 'co';
 
-import { Request, basic } from '../../../lib/request';
-import * as transport from '../../../lib/transport';
+import { Request, basic, transport } from '../../../dist_test/dav';
 import { nockWrapper } from '../nock_wrapper';
 
 suite('put', function() {

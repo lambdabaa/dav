@@ -3,10 +3,8 @@ import co from 'co';
 import nock from 'nock';
 import sinon from 'sinon';
 
-import { Credentials } from '../../lib/model';
-import { createSandbox } from '../../lib/sandbox';
-import { Basic, OAuth2 } from '../../lib/transport';
-import XMLHttpRequest from '../../lib/xmlhttprequest';
+import { Credentials, createSandbox, transport, XMLHttpRequest } from '../../dist_test/dav';
+let { Basic, OAuth2 } = transport;
 
 suite('Basic#send', function() {
   let xhr, req;

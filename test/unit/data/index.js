@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { format } from 'util';
 
-import camelize from '../../../lib/camelize';
+import { camelize } from '../../../dist_test/dav';
 
 let docs = {};
 export default docs;

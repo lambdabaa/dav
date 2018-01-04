@@ -2,9 +2,9 @@ import { assert } from 'chai';
 import co from 'co';
 
 import data from './data';
-import * as dav from '../../lib';
+import * as dav from '../../dist_test/dav';
 
-let debug = require('../../lib/debug')('dav:contacts_test');
+let debug = dav.debug('dav:contacts_test');
 
 suite('contacts', function() {
   let addressBooks, xhr;

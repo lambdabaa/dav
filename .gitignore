@@ -2,5 +2,7 @@ SabreDAV/
 
 /*.zip
 /dist/
+/dist_test/
 /coverage/
 /node_modules/
+/.reify-cache/
