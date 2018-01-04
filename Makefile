@@ -1,5 +1,5 @@
-HBS := $(shell find lib/template/ -name "*.hbs")
-JS := $(shell find lib/ -name "*.js")
+HBS := $(shell find src/template/ -name "*.hbs")
+JS := $(shell find src/ -name "*.js")
 
 SABRE_DAV_VERSION=2.0.1
 SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
@@ -18,11 +18,11 @@ dav.min.js dav.js.map: dav.js node_modules
 dav.js: build node_modules
 	rm -rf dav.js /tmp/dav.js
 	./node_modules/.bin/browserify --standalone dav ./build/index.js > /tmp/dav.js
-	cat lib/polyfill/*.js /tmp/dav.js > dav.js
+	cat src/polyfill/*.js /tmp/dav.js > dav.js
 
 build: $(JS) $(HBS) node_modules
 	rm -rf build/
-	./node_modules/.bin/babel lib \
+	./node_modules/.bin/babel src \
 		--modules common \
 		--out-dir build \
 		--stage 4
