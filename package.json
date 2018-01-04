@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "co": "^4.6.0",
+    "core-js": "^2.5.3",
     "xmldom": "^0.1.19",
     "xmlhttprequest": "^1.7.0"
   },

@@ -1,3 +1,5 @@
+import "./polyfill"
+
 import debug from './debug';
 import * as ns from './namespace';
 import * as request from './request';
