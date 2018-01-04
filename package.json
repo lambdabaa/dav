@@ -6,6 +6,9 @@
   "license": "MPL-2.0",
   "main": "./dist/dav.js",
   "module": "./dist/dav.es.js",
+  "files": [
+    "dist"
+  ],
   "repository": "https://github.com/gaye/dav",
   "keywords": [
     "address book",
@@ -45,6 +48,7 @@
     "uglify-js": "^3.3.4"
   },
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "prepublishOnly": "make clean all"
   }
 }

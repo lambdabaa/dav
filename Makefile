@@ -5,6 +5,9 @@ SABRE_DAV_VERSION=2.0.1
 SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
+.PHONY: all
+all: dist/dav.js dist/dav.es.js dist/dav.browser.js dist/dav.browser.min.js
+
 dist/dav.browser.min.js dist/dav.browser.min.js.map: dist/dav.browser.js dist/dav.browser.js.map node_modules
 	./node_modules/.bin/uglifyjs ./dist/dav.browser.js \
 		--compress \
