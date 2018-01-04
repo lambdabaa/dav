@@ -3,7 +3,7 @@ import * as ns from './namespace';
 import * as request from './request';
 import * as transport from './transport';
 
-export { version } from '../package';
+export { version } from '../package.json';
 export { createAccount } from './accounts';
 export * from './calendars';
 export { Client } from './client';

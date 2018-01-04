@@ -1,5 +1,5 @@
 import { multistatus } from './parser';
-import * as template from './template';
+import * as template from './template/index';
 
 /**
  * Options:

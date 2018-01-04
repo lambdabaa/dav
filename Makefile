@@ -5,34 +5,26 @@ SABRE_DAV_VERSION=2.0.1
 SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
-dav.zip: dav.js dav.min.js dav.js.map
-	zip dav dav.js dav.js.map dav.min.js
+dist/dav.browser.min.js dist/dav.browser.min.js.map: dist/dav.browser.js dist/dav.browser.js.map node_modules
+	./node_modules/.bin/uglifyjs ./dist/dav.browser.js \
+		--compress \
+		--mangle \
+		--source-map \
+		--output ./dist/dav.browser.min.js
 
-dav.min.js dav.js.map: dav.js node_modules
-	./node_modules/.bin/uglifyjs dav.js \
-		--lint \
-		--screw-ie8 \
-		--output ./dav.min.js \
-		--source-map ./dav.js.map
+dist/dav.browser.js dist/dav.browser.js.map: dist/dav.js node_modules
+	./node_modules/.bin/browserify --standalone dav --debug ./dist/dav.js | \
+		./node_modules/.bin/exorcist ./dist/dav.browser.js.map > ./dist/dav.browser.js
 
-dav.js: build node_modules
-	rm -rf dav.js /tmp/dav.js
-	./node_modules/.bin/browserify --standalone dav ./build/index.js > /tmp/dav.js
-	cat src/polyfill/*.js /tmp/dav.js > dav.js
-
-build: $(JS) $(HBS) node_modules
-	rm -rf build/
-	./node_modules/.bin/babel src \
-		--modules common \
-		--out-dir build \
-		--stage 4
+dist/dav.js dist/dav.es.js: $(JS) $(HBS) node_modules rollup.config.js
+	./node_modules/.bin/rollup -c
 
 node_modules: package.json
 	npm install
 
 .PHONY: clean
 clean:
-	rm -rf *.zip SabreDAV build coverage dav.* node_modules test/integration/server/SabreDAV
+	rm -rf *.zip SabreDAV dist coverage dav.* node_modules test/integration/server/SabreDAV
 
 .PHONY: test
 test: test-unit test-integration
