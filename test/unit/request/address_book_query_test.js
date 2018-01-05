@@ -1,9 +1,7 @@
 import { assert } from 'chai';
 import co from 'co';
 
-import * as ns from '../../../lib/namespace';
-import { Request, addressBookQuery } from '../../../lib/request';
-import * as transport from '../../../lib/transport';
+import { ns, Request, addressBookQuery, transport } from '../../../dist_test/dav'
 import data from '../data';
 import { nockWrapper } from '../nock_wrapper';
 

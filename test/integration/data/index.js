@@ -1,4 +1,4 @@
-import camelize from '../../../lib/camelize';
+import { camelize } from '../../../dist_test/dav';
 import { format } from 'util';
 import fs from 'fs';
 

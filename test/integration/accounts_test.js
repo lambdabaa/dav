@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import co from 'co';
 
-import * as dav from '../../lib';
+import * as dav from '../../dist_test/dav';
 
 suite('accounts', function() {
   suite('#create', function() {

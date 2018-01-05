@@ -3,8 +3,7 @@ import co from 'co';
 import nock from 'nock';
 import sinon from 'sinon';
 
-import { createSandbox } from '../../lib/sandbox';
-import XMLHttpRequest from '../../lib/xmlhttprequest';
+import { createSandbox, XMLHttpRequest } from '../../dist_test/dav';
 
 suite('XMLHttpRequest#send', function() {
   let request;

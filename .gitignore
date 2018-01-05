@@ -1,8 +1,8 @@
 SabreDAV/
 
 /*.zip
-/build/
+/dist/
+/dist_test/
 /coverage/
-/dav.js.map
-/dav.min.js
 /node_modules/
+/.reify-cache/

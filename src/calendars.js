@@ -1,4 +1,3 @@
-import co from 'co';
 import url from 'url';
 
 import fuzzyUrlEquals from './fuzzy_url_equals';
@@ -7,7 +6,8 @@ import * as ns from './namespace';
 import * as request from './request';
 import * as webdav from './webdav';
 
-let debug = require('./debug')('dav:calendars');
+import debugFn from './debug';
+let debug = debugFn('dav:calendars');
 
 const ICAL_OBJS = new Set([
   'VEVENT',
@@ -21,7 +21,7 @@ const ICAL_OBJS = new Set([
 /**
  * @param {dav.Account} account to fetch calendars for.
  */
-export let listCalendars = co.wrap(function *(account, options) {
+export let listCalendars = async function(account, options) {
   debug(`Fetch calendars from home url ${account.homeUrl}`);
   var req = request.propfind({
     props: [
@@ -36,7 +36,7 @@ export let listCalendars = co.wrap(function *(account, options) {
     depth: 1
   });
 
-  let responses = yield options.xhr.send(req, account.homeUrl, {
+  let responses = await options.xhr.send(req, account.homeUrl, {
     sandbox: options.sandbox
   });
 
@@ -66,12 +66,12 @@ export let listCalendars = co.wrap(function *(account, options) {
       });
     });
 
-  yield cals.map(co.wrap(function *(cal) {
-    cal.reports = yield webdav.supportedReportSet(cal, options);
-  }));
+  await cals.map(async function(cal) {
+    cal.reports = await webdav.supportedReportSet(cal, options);
+  });
 
   return cals;
-});
+};
 
 /**
  * @param {dav.Calendar} calendar the calendar to put the object on.
@@ -133,7 +133,7 @@ export function deleteCalendarObject(calendarObject, options) {
  *   (dav.Sandbox) sandbox - optional request sandbox.
  *   (dav.Transport) xhr - request sender.
  */
-export let listCalendarObjects = co.wrap(function *(calendar, options) {
+export let listCalendarObjects = async function(calendar, options) {
   debug(`Doing REPORT on calendar ${calendar.url} which belongs to
          ${calendar.account.credentials.username}`);
 
@@ -155,7 +155,7 @@ export let listCalendarObjects = co.wrap(function *(calendar, options) {
     filters: filters
   });
 
-  let responses = yield options.xhr.send(req, calendar.url, {
+  let responses = await options.xhr.send(req, calendar.url, {
     sandbox: options.sandbox
   });
 
@@ -169,7 +169,7 @@ export let listCalendarObjects = co.wrap(function *(calendar, options) {
       calendarData: res.props.calendarData
     });
   });
-});
+};
 
 /**
  * @param {dav.Calendar} calendar the calendar to fetch updates to.
@@ -200,11 +200,11 @@ export function syncCalendar(calendar, options) {
  *   (dav.Sandbox) sandbox - optional request sandbox.
  *   (dav.Transport) xhr - request sender.
  */
-export let syncCaldavAccount = co.wrap(function *(account, options={}) {
+export let syncCaldavAccount = async function(account, options={}) {
   options.loadObjects = false;
   if (!account.calendars) account.calendars = [];
 
-  let cals = yield listCalendars(account, options);
+  let cals = await listCalendars(account, options);
   cals
     .filter(cal => {
       // Filter the calendars not previously seen.
@@ -216,31 +216,31 @@ export let syncCaldavAccount = co.wrap(function *(account, options={}) {
     });
 
   options.loadObjects = true;
-  yield account.calendars.map(co.wrap(function *(cal, index) {
+  await account.calendars.map(async function(cal, index) {
     try {
-      yield syncCalendar(cal, options);
+      await syncCalendar(cal, options);
     } catch (error) {
       debug(`Sync calendar ${cal.displayName} failed with ${error}`);
       account.calendars.splice(index, 1);
     }
-  }));
+  });
 
   return account;
-});
+};
 
-let basicSync = co.wrap(function *(calendar, options) {
-  let sync = yield webdav.isCollectionDirty(calendar, options);
+let basicSync = async function(calendar, options) {
+  let sync = await webdav.isCollectionDirty(calendar, options);
   if (!sync) {
     debug('Local ctag matched remote! No need to sync :).');
     return calendar;
   }
 
   debug('ctag changed so we need to fetch stuffs.');
-  calendar.objects = yield listCalendarObjects(calendar, options);
+  calendar.objects = await listCalendarObjects(calendar, options);
   return calendar;
-});
+};
 
-let webdavSync = co.wrap(function *(calendar, options) {
+let webdavSync = async function(calendar, options) {
   var req = request.syncCollection({
     props: [
       { name: 'getetag', namespace: ns.DAV },
@@ -250,7 +250,7 @@ let webdavSync = co.wrap(function *(calendar, options) {
     syncToken: calendar.syncToken
   });
 
-  let result = yield options.xhr.send(req, calendar.url, {
+  let result = await options.xhr.send(req, calendar.url, {
     sandbox: options.sandbox
   });
 
@@ -271,4 +271,4 @@ let webdavSync = co.wrap(function *(calendar, options) {
 
   calendar.syncToken = result.syncToken;
   return calendar;
-});
+};

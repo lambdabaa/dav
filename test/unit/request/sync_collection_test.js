@@ -1,9 +1,7 @@
 import { assert } from 'chai';
 import co from 'co';
 
-import * as namespace from '../../../lib/namespace';
-import { Request, syncCollection } from '../../../lib/request';
-import * as transport from '../../../lib/transport';
+import { ns as namespace, Request, syncCollection, transport } from '../../../dist_test/dav';
 import { nockWrapper } from '../nock_wrapper';
 
 suite('request.syncCollection', function() {

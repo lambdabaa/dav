@@ -1,7 +1,6 @@
 import { assert } from 'chai';
 
-import prop from '../../lib/template/prop';
-import filter from '../../lib/template/filter';
+import { prop, filter } from '../../dist_test/dav';
 
 suite('template helpers', function() {
   test('comp-filter', function() {

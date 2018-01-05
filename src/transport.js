@@ -1,4 +1,3 @@
-import co from 'co';
 import querystring from 'querystring';
 
 import XMLHttpRequest from './xmlhttprequest';
@@ -32,36 +31,34 @@ export class Basic extends Transport {
     super(credentials);
   }
 
-  send(request, url, options) {
-    return co(function *() {
-      let sandbox = options && options.sandbox;
-      let transformRequest = request.transformRequest;
-      let transformResponse = request.transformResponse;
-      let onerror = request.onerror;
+  async send(request, url, options) {
+    let sandbox = options && options.sandbox;
+    let transformRequest = request.transformRequest;
+    let transformResponse = request.transformResponse;
+    let onerror = request.onerror;
 
-      let xhr = new XMLHttpRequest();
-      if (sandbox) sandbox.add(xhr);
-      xhr.open(
-        request.method,
-        url,
-        true /* async */,
-        this.credentials.username,
-        this.credentials.password
-      );
+    let xhr = new XMLHttpRequest();
+    if (sandbox) sandbox.add(xhr);
+    xhr.open(
+      request.method,
+      url,
+      true /* async */,
+      this.credentials.username,
+      this.credentials.password
+    );
 
-      if (transformRequest) transformRequest(xhr);
+    if (transformRequest) transformRequest(xhr);
 
-      let result;
-      try {
-        yield xhr.send(request.requestData);
-        result = transformResponse ? transformResponse(xhr) : xhr;
-      } catch (error) {
-        if (onerror) onerror(error);
-        throw error;
-      }
+    let result;
+    try {
+      await xhr.send(request.requestData);
+      result = transformResponse ? transformResponse(xhr) : xhr;
+    } catch (error) {
+      if (onerror) onerror(error);
+      throw error;
+    }
 
-      return result;
-    }.bind(this));
+    return result;
   }
 }
 
@@ -73,40 +70,38 @@ export class OAuth2 extends Transport {
     super(credentials);
   }
 
-  send(request, url, options={}) {
-    return co(function *() {
-      let sandbox = options.sandbox;
-      let transformRequest = request.transformRequest;
-      let transformResponse = request.transformResponse;
-      let onerror = request.onerror;
+  async send(request, url, options={}) {
+    let sandbox = options.sandbox;
+    let transformRequest = request.transformRequest;
+    let transformResponse = request.transformResponse;
+    let onerror = request.onerror;
 
-      if (!('retry' in options)) options.retry = true;
+    if (!('retry' in options)) options.retry = true;
 
-      let result, xhr;
-      try {
-        let token = yield access(this.credentials, options);
-        xhr = new XMLHttpRequest();
-        if (sandbox) sandbox.add(xhr);
-        xhr.open(request.method, url, true /* async */);
-        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-        if (transformRequest) transformRequest(xhr);
-        yield xhr.send(request.requestData);
-        result = transformResponse ? transformResponse(xhr) : xhr;
-      } catch (error) {
-        if (options.retry && xhr.status === 401) {
-          // Force expiration.
-          this.credentials.expiration = 0;
-          // Retry once at most.
-          options.retry = false;
-          return this.send(request, url, options);
-        }
-
-        if (onerror) onerror(error);
-        throw error;
+    let result, xhr;
+    try {
+      let token = await access(this.credentials, options);
+      xhr = new XMLHttpRequest();
+      if (sandbox) sandbox.add(xhr);
+      xhr.open(request.method, url, true /* async */);
+      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      if (transformRequest) transformRequest(xhr);
+      await xhr.send(request.requestData);
+      result = transformResponse ? transformResponse(xhr) : xhr;
+    } catch (error) {
+      if (options.retry && xhr.status === 401) {
+        // Force expiration.
+        this.credentials.expiration = 0;
+        // Retry once at most.
+        options.retry = false;
+        return this.send(request, url, options);
       }
 
-      return result;
-    }.bind(this));
+      if (onerror) onerror(error);
+      throw error;
+    }
+
+    return result;
   }
 }
 
@@ -130,7 +125,7 @@ function isExpired(credentials) {
          Date.now() > credentials.expiration;
 }
 
-let getAccessToken = co.wrap(function *(credentials, options) {
+let getAccessToken = async function(credentials, options) {
   let sandbox = options.sandbox;
   let xhr = new XMLHttpRequest();
   if (sandbox) sandbox.add(xhr);
@@ -146,7 +141,7 @@ let getAccessToken = co.wrap(function *(credentials, options) {
   });
 
   let now = Date.now();
-  yield xhr.send(data);
+  await xhr.send(data);
   let response = JSON.parse(xhr.responseText);
   credentials.accessToken = response.access_token;
   credentials.refreshToken = 'refresh_token' in response ?
@@ -157,9 +152,9 @@ let getAccessToken = co.wrap(function *(credentials, options) {
     null;
 
   return response.access_token;
-});
+};
 
-let refreshAccessToken = co.wrap(function *(credentials, options) {
+let refreshAccessToken = async function(credentials, options) {
   let sandbox = options.sandbox;
   let xhr = new XMLHttpRequest();
   if (sandbox) sandbox.add(xhr);
@@ -174,7 +169,7 @@ let refreshAccessToken = co.wrap(function *(credentials, options) {
   });
 
   let now = Date.now();
-  yield xhr.send(data);
+  await xhr.send(data);
   let response = JSON.parse(xhr.responseText);
   credentials.accessToken = response.access_token;
   credentials.expiration = 'expires_in' in response ?
@@ -182,4 +177,4 @@ let refreshAccessToken = co.wrap(function *(credentials, options) {
     null;
 
   return response.access_token;
-});
+};

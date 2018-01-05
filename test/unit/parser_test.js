@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-import { multistatus } from '../../lib/parser';
+import { multistatus } from '../../dist_test/dav';
 import data from './data';
 
 suite('parser.multistatus', function() {

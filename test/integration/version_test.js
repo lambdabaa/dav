@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import * as dav from '../../lib';
+import * as dav from '../../dist_test/dav';
 import { version } from '../../package';
 
 suite('version', function() {

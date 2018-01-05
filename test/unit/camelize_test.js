@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-import camelize from '../../lib/camelize';
+import { camelize } from '../../dist_test/dav';
 
 suite('camelize', function() {
   test('single word', function() {

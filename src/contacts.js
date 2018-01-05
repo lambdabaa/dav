@@ -1,4 +1,3 @@
-import co from 'co';
 import url from 'url';
 
 import fuzzyUrlEquals from './fuzzy_url_equals';
@@ -7,12 +6,13 @@ import * as ns from './namespace';
 import * as request from './request';
 import * as webdav from './webdav';
 
-let debug = require('./debug')('dav:contacts');
+import debugFn from './debug';
+let debug = debugFn('dav:contacts');
 
 /**
  * @param {dav.Account} account to fetch address books for.
  */
-export let listAddressBooks = co.wrap(function *(account, options) {
+export let listAddressBooks = async function(account, options) {
   debug(`Fetch address books from home url ${account.homeUrl}`);
   var req = request.propfind({
     props: [
@@ -24,7 +24,7 @@ export let listAddressBooks = co.wrap(function *(account, options) {
     depth: 1
   });
 
-  let responses = yield options.xhr.send(req, account.homeUrl, {
+  let responses = await options.xhr.send(req, account.homeUrl, {
     sandbox: options.sandbox
   });
 
@@ -46,12 +46,12 @@ export let listAddressBooks = co.wrap(function *(account, options) {
       });
     });
 
-  yield addressBooks.map(co.wrap(function *(addressBook) {
-    addressBook.reports = yield webdav.supportedReportSet(addressBook, options);
-  }));
+  await addressBooks.map(async function(addressBook) {
+    addressBook.reports = await webdav.supportedReportSet(addressBook, options);
+  });
 
   return addressBooks;
-});
+};
 
 /**
  * @param {dav.AddressBook} addressBook the address book to put the object on.
@@ -74,7 +74,7 @@ export function createCard(addressBook, options) {
  *
  *   (dav.Sandbox) sandbox - optional request sandbox.
  */
-export let listVCards = co.wrap(function *(addressBook, options) {
+export let listVCards = async function(addressBook, options) {
   debug(`Doing REPORT on address book ${addressBook.url} which belongs to
         ${addressBook.account.credentials.username}`);
 
@@ -86,7 +86,7 @@ export let listVCards = co.wrap(function *(addressBook, options) {
     ]
   });
 
-  let responses = yield options.xhr.send(req, addressBook.url, {
+  let responses = await options.xhr.send(req, addressBook.url, {
     sandbox: options.sandbox
   });
 
@@ -100,7 +100,7 @@ export let listVCards = co.wrap(function *(addressBook, options) {
       addressData: res.props.addressData
     });
   });
-});
+};
 
 /**
  * @param {dav.VCard} card updated vcard object.
@@ -164,14 +164,14 @@ export function syncAddressBook(addressBook, options) {
  *   (dav.Sandbox) sandbox - optional request sandbox.
  *   (dav.Transport) xhr - request sender.
  */
-export let syncCarddavAccount = co.wrap(function *(account, options={}) {
+export let syncCarddavAccount = async function(account, options={}) {
   options.loadObjects = false;
 
   if (!account.addressBooks) {
     account.addressBooks = [];
   }
 
-  let addressBooks = yield listAddressBooks(account, options);
+  let addressBooks = await listAddressBooks(account, options);
   addressBooks
     .filter(function(addressBook) {
       // Filter the address books not previously seen.
@@ -182,19 +182,19 @@ export let syncCarddavAccount = co.wrap(function *(account, options={}) {
     .forEach(addressBook => account.addressBooks.push(addressBook));
 
   options.loadObjects = true;
-  yield account.addressBooks.map(co.wrap(function *(addressBook, index) {
+  await account.addressBooks.map(async function(addressBook, index) {
     try {
-      yield syncAddressBook(addressBook, options);
+      await syncAddressBook(addressBook, options);
     } catch (error) {
       debug(`Syncing ${addressBook.displayName} failed with ${error}`);
       account.addressBooks.splice(index, 1);
     }
-  }));
+  });
 
   return account;
-});
+};
 
-let basicSync = co.wrap(function *(addressBook, options) {
+let basicSync = async function(addressBook, options) {
   let sync = webdav.isCollectionDirty(addressBook, options)
   if (!sync) {
     debug('Local ctag matched remote! No need to sync :).');
@@ -202,11 +202,11 @@ let basicSync = co.wrap(function *(addressBook, options) {
   }
 
   debug('ctag changed so we need to fetch stuffs.');
-  addressBook.objects = yield listVCards(addressBook, options);
+  addressBook.objects = await listVCards(addressBook, options);
   return addressBook;
-});
+};
 
-let webdavSync = co.wrap(function *(addressBook, options) {
+let webdavSync = async function(addressBook, options) {
   var req = request.syncCollection({
     props: [
       { name: 'getetag', namespace: ns.DAV },
@@ -216,7 +216,7 @@ let webdavSync = co.wrap(function *(addressBook, options) {
     syncToken: addressBook.syncToken
   });
 
-  let result = yield options.xhr.send(req, addressBook.url, {
+  let result = await options.xhr.send(req, addressBook.url, {
     sandbox: options.sandbox
   });
 
@@ -235,4 +235,4 @@ let webdavSync = co.wrap(function *(addressBook, options) {
 
   addressBook.syncToken = result.syncToken;
   return addressBook;
-});
+};

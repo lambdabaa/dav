@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 
-import * as dav from '../../lib';
+import * as dav from '../../dist_test/dav';
 
 suite('Client', function() {
   let client, xhr, send;

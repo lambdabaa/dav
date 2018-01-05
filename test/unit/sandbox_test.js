@@ -1,9 +1,9 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
 
-import * as dav from '../../lib';
-import { Sandbox, createSandbox } from '../../lib/sandbox';
-import XMLHttpRequest from '../../lib/xmlhttprequest';
+import * as dav from '../../dist_test/dav';
+const { Sandbox, createSandbox } = dav;
+import XMLHttpRequest from '../../src/xmlhttprequest';
 
 suite('sandbox', function() {
   let sandbox;

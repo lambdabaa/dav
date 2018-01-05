@@ -1,10 +1,9 @@
-import co from 'co';
-
 import fuzzyUrlEquals from './fuzzy_url_equals';
 import * as ns from './namespace';
 import * as request from './request';
 
-let debug = require('./debug')('dav:webdav');
+import debugFn from './debug';
+let debug = debugFn('dav:webdav');
 
 /**
  * @param {String} objectUrl url for webdav object.
@@ -48,7 +47,7 @@ export function syncCollection(collection, options) {
 /**
  * @param {dav.DAVCollection} collection to fetch report set for.
  */
-export let supportedReportSet = co.wrap(function *(collection, options) {
+export let supportedReportSet = async function(collection, options) {
   debug('Checking supported report set for collection at ' + collection.url);
   var req = request.propfind({
     props: [ { name: 'supported-report-set', namespace: ns.DAV } ],
@@ -56,14 +55,14 @@ export let supportedReportSet = co.wrap(function *(collection, options) {
     mergeResponses: true
   });
 
-  let response = yield options.xhr.send(req, collection.url, {
+  let response = await options.xhr.send(req, collection.url, {
     sandbox: options.sandbox
   });
 
   return response.props.supportedReportSet;
-});
+};
 
-export let isCollectionDirty = co.wrap(function *(collection, options) {
+export let isCollectionDirty = async function(collection, options) {
   if (!collection.ctag) {
     debug('Missing ctag.');
     return false;
@@ -75,7 +74,7 @@ export let isCollectionDirty = co.wrap(function *(collection, options) {
     depth: 0
   });
 
-  let responses = yield options.xhr.send(req, collection.account.homeUrl, {
+  let responses = await options.xhr.send(req, collection.account.homeUrl, {
     sandbox: options.sandbox
   });
 
@@ -90,4 +89,4 @@ export let isCollectionDirty = co.wrap(function *(collection, options) {
 
   debug('Check whether cached ctag matches remote.');
   return collection.ctag !== response.props.getctag;
-});
+};
