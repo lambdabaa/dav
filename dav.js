@@ -1069,6 +1069,7 @@ exports.listCalendars = listCalendars;
 
 function createCalendarObject(calendar, options) {
   var objectUrl = _url2['default'].resolve(calendar.url, options.filename);
+  options.contentType = options.contentType || "text/calendar; charset=utf-8";
   return webdav.createObject(objectUrl, options.data, options);
 }
 
@@ -1085,6 +1086,8 @@ function createCalendarObject(calendar, options) {
  */
 
 function updateCalendarObject(calendarObject, options) {
+  options.contentType = options.contentType || "text/calendar; charset=utf-8";
+
   return webdav.updateObject(calendarObject.url, calendarObject.calendarData, calendarObject.etag, options);
 }
 
@@ -2317,7 +2320,7 @@ function traverseChild(node, childNode, childspec, result) {
     debug('Unexpected node of type ' + localName + ' encountered while ' + 'parsing ' + node.localName + ' node!');
     var value = childNode.textContent;
     if (localName in result) {
-      if (!Array.isArray(result[camelCase])) {
+      if (!Array.isArray(result[localName])) {
         // Since we've already encountered this node type and we haven't yet
         // made an array for it, make an array now.
         result[localName] = [result[localName]];
@@ -2592,13 +2595,13 @@ function getProps(propstats) {
 }
 
 function setRequestHeaders(request, options) {
-  request.setRequestHeader('Content-Type', 'application/xml;charset=utf-8');
+  request.setRequestHeader('Content-Type', options.contentType || 'application/xml;charset=utf-8');
 
   if ('depth' in options) {
     request.setRequestHeader('Depth', options.depth);
   }
 
-  if ('etag' in options) {
+  if ('etag' in options && options.etag) {
     request.setRequestHeader('If-Match', options.etag);
   }
 }
@@ -2908,8 +2911,78 @@ var Transport = (function () {
 
 exports.Transport = Transport;
 
-var Basic = (function (_Transport) {
-  _inherits(Basic, _Transport);
+var Bearer = (function (_Transport) {
+  _inherits(Bearer, _Transport);
+
+  /**
+   * @param {dav.Credentials} credentials user authorization.
+   */
+
+  function Bearer(token) {
+    _classCallCheck(this, Bearer);
+
+    _get(Object.getPrototypeOf(Bearer.prototype), 'constructor', this).call(this, token);
+  }
+
+  _createClass(Bearer, [{
+    key: 'send',
+    value: function send(request, url, options) {
+      return (0, _co2['default'])(regeneratorRuntime.mark(function callee$2$0() {
+        var sandbox, transformRequest, transformResponse, onerror, xhr, result;
+        return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+          while (1) switch (context$3$0.prev = context$3$0.next) {
+            case 0:
+              sandbox = options && options.sandbox;
+              transformRequest = request.transformRequest;
+              transformResponse = request.transformResponse;
+              onerror = request.onerror;
+              xhr = new _xmlhttprequest2['default']();
+
+              if (sandbox) sandbox.add(xhr);
+              xhr.open(request.method, url, true /* async */
+              );
+              if (this.credentials.accessToken) {
+                xhr.setRequestHeader("Authorization", "Bearer " + this.credentials.accessToken);
+              }
+
+              if (transformRequest) transformRequest(xhr);
+
+              result = undefined;
+              context$3$0.prev = 10;
+              context$3$0.next = 13;
+              return xhr.send(request.requestData);
+
+            case 13:
+              result = transformResponse ? transformResponse(xhr) : xhr;
+              context$3$0.next = 20;
+              break;
+
+            case 16:
+              context$3$0.prev = 16;
+              context$3$0.t0 = context$3$0['catch'](10);
+
+              if (onerror) onerror(context$3$0.t0);
+              throw context$3$0.t0;
+
+            case 20:
+              return context$3$0.abrupt('return', result);
+
+            case 21:
+            case 'end':
+              return context$3$0.stop();
+          }
+        }, callee$2$0, this, [[10, 16]]);
+      }).bind(this));
+    }
+  }]);
+
+  return Bearer;
+})(Transport);
+
+exports.Bearer = Bearer;
+
+var Basic = (function (_Transport2) {
+  _inherits(Basic, _Transport2);
 
   /**
    * @param {dav.Credentials} credentials user authorization.
@@ -2979,8 +3052,8 @@ var Basic = (function (_Transport) {
 
 exports.Basic = Basic;
 
-var OAuth2 = (function (_Transport2) {
-  _inherits(OAuth2, _Transport2);
+var OAuth2 = (function (_Transport3) {
+  _inherits(OAuth2, _Transport3);
 
   function OAuth2(credentials) {
     _classCallCheck(this, OAuth2);
@@ -3196,12 +3269,12 @@ var debug = require('./debug')('dav:webdav');
  */
 
 function createObject(objectUrl, objectData, options) {
-  var req = request.basic({ method: 'PUT', data: objectData });
+  var req = request.basic({ method: 'PUT', data: objectData, contentType: options.contentType });
   return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
 }
 
 function updateObject(objectUrl, objectData, etag, options) {
-  var req = request.basic({ method: 'PUT', data: objectData, etag: etag });
+  var req = request.basic({ method: 'PUT', data: objectData, etag: etag, contentType: options.contentType });
   return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
 }
 
@@ -7236,8 +7309,8 @@ exports.XMLReader = XMLReader;
 },{}],33:[function(require,module,exports){
 module.exports={
   "name": "dav",
-  "version": "1.7.8",
-  "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
+  "version": "1.7.9",
+  "author": "Ali Arshad <email@aliarshad.info>",
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
   "main": "./dav.js",
