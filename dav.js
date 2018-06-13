@@ -1006,6 +1006,8 @@ var listCalendars = _co2['default'].wrap(regeneratorRuntime.mark(function callee
 
         debug('Found ' + responses.length + ' calendars.');
         cals = responses.filter(function (res) {
+          return res.props.resourcetype.includes('calendar');
+        }).filter(function (res) {
           // We only want the calendar if it contains iCalendar objects.
           var components = res.props.supportedCalendarComponentSet || [];
           return components.reduce(function (hasObjs, component) {
@@ -1069,6 +1071,7 @@ exports.listCalendars = listCalendars;
 
 function createCalendarObject(calendar, options) {
   var objectUrl = _url2['default'].resolve(calendar.url, options.filename);
+  options.contentType = options.contentType || "text/calendar; charset=utf-8";
   return webdav.createObject(objectUrl, options.data, options);
 }
 
@@ -1085,6 +1088,8 @@ function createCalendarObject(calendar, options) {
  */
 
 function updateCalendarObject(calendarObject, options) {
+  options.contentType = options.contentType || "text/calendar; charset=utf-8";
+
   return webdav.updateObject(calendarObject.url, calendarObject.calendarData, calendarObject.etag, options);
 }
 
@@ -2317,7 +2322,7 @@ function traverseChild(node, childNode, childspec, result) {
     debug('Unexpected node of type ' + localName + ' encountered while ' + 'parsing ' + node.localName + ' node!');
     var value = childNode.textContent;
     if (localName in result) {
-      if (!Array.isArray(result[camelCase])) {
+      if (!Array.isArray(result[localName])) {
         // Since we've already encountered this node type and we haven't yet
         // made an array for it, make an array now.
         result[localName] = [result[localName]];
@@ -2592,13 +2597,13 @@ function getProps(propstats) {
 }
 
 function setRequestHeaders(request, options) {
-  request.setRequestHeader('Content-Type', 'application/xml;charset=utf-8');
+  request.setRequestHeader('Content-Type', options.contentType || 'application/xml;charset=utf-8');
 
   if ('depth' in options) {
     request.setRequestHeader('Depth', options.depth);
   }
 
-  if ('etag' in options) {
+  if ('etag' in options && options.etag) {
     request.setRequestHeader('If-Match', options.etag);
   }
 }
@@ -3196,12 +3201,12 @@ var debug = require('./debug')('dav:webdav');
  */
 
 function createObject(objectUrl, objectData, options) {
-  var req = request.basic({ method: 'PUT', data: objectData });
+  var req = request.basic({ method: 'PUT', data: objectData, contentType: options.contentType });
   return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
 }
 
 function updateObject(objectUrl, objectData, etag, options) {
-  var req = request.basic({ method: 'PUT', data: objectData, etag: etag });
+  var req = request.basic({ method: 'PUT', data: objectData, etag: etag, contentType: options.contentType });
   return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
 }
 
