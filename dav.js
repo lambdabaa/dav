@@ -1006,6 +1006,8 @@ var listCalendars = _co2['default'].wrap(regeneratorRuntime.mark(function callee
 
         debug('Found ' + responses.length + ' calendars.');
         cals = responses.filter(function (res) {
+          return res.props.resourcetype.includes('calendar');
+        }).filter(function (res) {
           // We only want the calendar if it contains iCalendar objects.
           var components = res.props.supportedCalendarComponentSet || [];
           return components.reduce(function (hasObjs, component) {
