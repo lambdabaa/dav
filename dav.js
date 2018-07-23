@@ -1069,6 +1069,7 @@ exports.listCalendars = listCalendars;
 
 function createCalendarObject(calendar, options) {
   var objectUrl = _url2['default'].resolve(calendar.url, options.filename);
+  options.contentType = options.contentType || "text/calendar; charset=utf-8";
   return webdav.createObject(objectUrl, options.data, options);
 }
 
@@ -1085,6 +1086,8 @@ function createCalendarObject(calendar, options) {
  */
 
 function updateCalendarObject(calendarObject, options) {
+  options.contentType = options.contentType || "text/calendar; charset=utf-8";
+
   return webdav.updateObject(calendarObject.url, calendarObject.calendarData, calendarObject.etag, options);
 }
 
@@ -2178,6 +2181,8 @@ Object.defineProperty(exports, '__esModule', {
 });
 var CALENDAR_SERVER = 'http://calendarserver.org/ns/';
 exports.CALENDAR_SERVER = CALENDAR_SERVER;
+var CALDAV_APPLE = 'http://apple.com/ns/ical/';
+exports.CALDAV_APPLE = CALDAV_APPLE;
 var CALDAV = 'urn:ietf:params:xml:ns:caldav';
 exports.CALDAV = CALDAV;
 var CARDDAV = 'urn:ietf:params:xml:ns:carddav';
@@ -2317,7 +2322,7 @@ function traverseChild(node, childNode, childspec, result) {
     debug('Unexpected node of type ' + localName + ' encountered while ' + 'parsing ' + node.localName + ' node!');
     var value = childNode.textContent;
     if (localName in result) {
-      if (!Array.isArray(result[camelCase])) {
+      if (!Array.isArray(result[localName])) {
         // Since we've already encountered this node type and we haven't yet
         // made an array for it, make an array now.
         result[localName] = [result[localName]];
@@ -2592,13 +2597,13 @@ function getProps(propstats) {
 }
 
 function setRequestHeaders(request, options) {
-  request.setRequestHeader('Content-Type', 'application/xml;charset=utf-8');
+  request.setRequestHeader('Content-Type', options.contentType || 'application/xml;charset=utf-8');
 
   if ('depth' in options) {
     request.setRequestHeader('Depth', options.depth);
   }
 
-  if ('etag' in options) {
+  if ('etag' in options && options.etag) {
     request.setRequestHeader('If-Match', options.etag);
   }
 }
@@ -2699,7 +2704,7 @@ var _prop = require('./prop');
 var _prop2 = _interopRequireDefault(_prop);
 
 function calendarQuery(object) {
-  return '<c:calendar-query xmlns:c="urn:ietf:params:xml:ns:caldav"\n                    xmlns:cs="http://calendarserver.org/ns/"\n                    xmlns:d="DAV:">\n    <d:prop>\n      ' + object.props.map(_prop2['default']) + '\n    </d:prop>\n    <c:filter>\n      ' + object.filters.map(_filter2['default']) + '\n    </c:filter>\n    ' + (object.timezone ? '<c:timezone>' + object.timezone + '</c:timezone>' : '') + '\n  </c:calendar-query>';
+  return '<c:calendar-query xmlns:c="urn:ietf:params:xml:ns:caldav"\n                    xmlns:cs="http://calendarserver.org/ns/"\n                    xmlns:ca="http://apple.com/ns/ical/"\n                    xmlns:d="DAV:">\n    <d:prop>\n      ' + object.props.map(_prop2['default']) + '\n    </d:prop>\n    <c:filter>\n      ' + object.filters.map(_filter2['default']) + '\n    </c:filter>\n    ' + (object.timezone ? '<c:timezone>' + object.timezone + '</c:timezone>' : '') + '\n  </c:calendar-query>';
 }
 
 module.exports = exports['default'];
@@ -2800,6 +2805,8 @@ function xmlnsPrefix(namespace) {
       return 'd';
     case ns.CALENDAR_SERVER:
       return 'cs';
+    case ns.CALDAV_APPLE:
+      return 'ca';
     case ns.CALDAV:
       return 'c';
     case ns.CARDDAV:
@@ -2824,7 +2831,7 @@ var _prop = require('./prop');
 var _prop2 = _interopRequireDefault(_prop);
 
 function propfind(object) {
-  return '<d:propfind xmlns:c="urn:ietf:params:xml:ns:caldav"\n              xmlns:card="urn:ietf:params:xml:ns:carddav"\n              xmlns:cs="http://calendarserver.org/ns/"\n              xmlns:d="DAV:">\n    <d:prop>\n      ' + object.props.map(_prop2['default']) + '\n    </d:prop>\n  </d:propfind>';
+  return '<d:propfind xmlns:c="urn:ietf:params:xml:ns:caldav"\n              xmlns:card="urn:ietf:params:xml:ns:carddav"\n              xmlns:cs="http://calendarserver.org/ns/"\n              xmlns:ca="http://apple.com/ns/ical/"\n              xmlns:d="DAV:">\n    <d:prop>\n      ' + object.props.map(_prop2['default']) + '\n    </d:prop>\n  </d:propfind>';
 }
 
 module.exports = exports['default'];
@@ -3196,12 +3203,12 @@ var debug = require('./debug')('dav:webdav');
  */
 
 function createObject(objectUrl, objectData, options) {
-  var req = request.basic({ method: 'PUT', data: objectData });
+  var req = request.basic({ method: 'PUT', data: objectData, contentType: options.contentType });
   return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
 }
 
 function updateObject(objectUrl, objectData, etag, options) {
-  var req = request.basic({ method: 'PUT', data: objectData, etag: etag });
+  var req = request.basic({ method: 'PUT', data: objectData, etag: etag, contentType: options.contentType });
   return options.xhr.send(req, objectUrl, { sandbox: options.sandbox });
 }
 
