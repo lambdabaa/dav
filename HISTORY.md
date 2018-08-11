@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
 
+- [1.8.0](#180)
 - [1.7.9](#179)
 - [1.7.8](#178)
 - [1.7.7](#177)
@@ -54,6 +55,10 @@
 - [0.1.0](#010)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+### 1.8.0
+
++ Issue 101 - create/updateCalendarObject uses wrong content type
 
 ### 1.7.9
 
