@@ -4,7 +4,7 @@ import co from 'co';
 import data from './data';
 import * as dav from '../../lib';
 
-let debug = require('../../lib/debug')('dav:contacts_test');
+let debug = dav.debug('dav:contacts_test');
 
 suite('contacts', function() {
   let addressBooks, xhr;
