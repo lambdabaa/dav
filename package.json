@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "co": "^4.6.0",
-    "xmldom": "^0.1.19",
+    "xmldom": "^0.1.27",
     "xmlhttprequest": "^1.7.0"
   },
   "devDependencies": {
