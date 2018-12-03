@@ -9,11 +9,8 @@ dav.zip: dav.js dav.min.js dav.js.map
 	zip dav dav.js dav.js.map dav.min.js
 
 dav.min.js dav.js.map: dav.js node_modules
-	./node_modules/.bin/uglifyjs dav.js \
-		--lint \
-		--screw-ie8 \
-		--output ./dav.min.js \
-		--source-map ./dav.js.map
+	./node_modules/.bin/minify dav.js \
+		--out-file ./dav.min.js
 
 dav.js: build node_modules
 	rm -rf dav.js /tmp/dav.js

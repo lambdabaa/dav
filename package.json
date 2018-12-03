@@ -32,14 +32,14 @@
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@babel/register": "^7.0.0",
+    "babel-minify": "^0.5.0",
     "browserify": "^11.0.1",
     "chai": "^4.2.0",
     "doctoc": "^0.15.0",
     "mocha": "^5.2.0",
     "nock": "^10.0.2",
     "sinon": "^7.1.1",
-    "tcp-port-used": "^1.0.1",
-    "uglify-js": "^2.4.24"
+    "tcp-port-used": "^1.0.1"
   },
   "scripts": {
     "test": "make test"
