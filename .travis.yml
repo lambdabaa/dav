@@ -8,11 +8,19 @@ sudo: required
 env:
   - php_version: 7.2
 node_js:
-  - "8.11.1"
+  - "6.14"
+  - "8.12"
+matrix:
+  include:
+    - node_js: "10"
+      env: "NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist"
+    - node_js: "11"
+      env: "NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist"
+  allow_failures:
+    - env: "NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist"
 before_install:
   - sudo add-apt-repository "deb [arch=amd64] http://ppa.launchpad.net/ondrej/php/ubuntu $(lsb_release -cs) main"
   - sudo apt-get update
   - 'sudo apt-get -y --allow-unauthenticated install php${php_version}-cli php${php_version}-sqlite3'
-  - "nvm install 8.14.0"
 install: npm install
 script: npm test
