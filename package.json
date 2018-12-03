@@ -27,7 +27,7 @@
     "xmlhttprequest": "^1.7.0"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel": "^5.8.38",
     "browserify": "^11.0.1",
     "chai": "^4.2.0",
     "doctoc": "^0.15.0",
