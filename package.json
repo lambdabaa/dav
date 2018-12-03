@@ -29,7 +29,7 @@
   "devDependencies": {
     "babel": "^5.8.23",
     "browserify": "^11.0.1",
-    "chai": "^3.2.0",
+    "chai": "^4.2.0",
     "doctoc": "^0.15.0",
     "mocha": "^2.3.2",
     "nock": "^2.10.0",
