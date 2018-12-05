@@ -1,7 +1,7 @@
 HBS := $(shell find lib/template/ -name "*.hbs")
 JS := $(shell find lib/ -name "*.js")
 
-SABRE_DAV_VERSION=2.0.1
+SABRE_DAV_VERSION=2.1.11
 SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
