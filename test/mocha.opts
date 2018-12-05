@@ -1,4 +1,5 @@
---compilers babel:babel/register
+--require @babel/register
+--require @babel/polyfill
 --recursive
 --reporter spec
 --timeout 20s

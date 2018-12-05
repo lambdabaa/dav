@@ -2,7 +2,8 @@ import { format } from 'util';
 import { exec, spawn } from 'child_process';
 import tcpPortUsed from 'tcp-port-used';
 
-let debug = require('../../../lib/debug')('dav:test:bootstrap');
+import debugFn from '../../../lib/debug';
+let debug = debugFn('dav:test:bootstrap');
 
 let calendarData = {
   table: 'calendars',
