@@ -58,7 +58,10 @@ let inserts = [calendarData, contactsData].map(tableData => {
 ].concat(inserts).forEach(command => {
   debug(`exec: ${command}`);
   setup(function(done) {
-    exec(command, { cwd: __dirname + '/SabreDAV' }, () => done());
+    exec(command, { cwd: __dirname + '/SabreDAV' }, (error) => {
+      if (error) done(error);
+      else done();
+    });
   });
 });
 
