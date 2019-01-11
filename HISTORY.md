@@ -59,6 +59,8 @@
 ### 1.8.0
 
 + Issue 101 - create/updateCalendarObject uses wrong content type
++ Add 'debug' dependency for more comfortable debug logging.
++ Removed debug.enable variable. Instead of, use DEBUG environment variable.
 
 ### 1.7.9
 

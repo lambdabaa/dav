@@ -4,7 +4,7 @@ import co from 'co';
 import data from './data';
 import * as dav from '../../lib';
 
-let debug = dav.debug('dav:calendars_test');
+let debug = require('debug')('dav:test:calendars');
 
 suite('calendars', function() {
   let calendars, xhr;

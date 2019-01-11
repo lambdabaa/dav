@@ -464,4 +464,6 @@ For more example usages, check out the [suite of integration tests](https://gith
 
 ## Debugging
 
-dav can tell you a lot of potentially useful things if you set `dav.debug.enabled = true`.
+As of version 1.8.0, dav can tell you a lot of potentially useful things if you set the `DEBUG` environment variable to `dav:*`.
+You might filter them by setting `DEBUG=dav:contacts`, `DEBUG=dav:xmlhttprequest`, etc.
+
