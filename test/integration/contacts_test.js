@@ -7,7 +7,7 @@ import * as dav from '../../lib';
 let debug = dav.debug('dav:contacts_test');
 
 suite('contacts', function() {
-  let addressBooks, xhr;
+  let account, addressBooks, xhr;
 
   setup(co.wrap(function *() {
     debug('Create account.');
@@ -19,7 +19,7 @@ suite('contacts', function() {
       })
     );
 
-    let account = yield dav.createAccount({
+    account = yield dav.createAccount({
       server: 'http://127.0.0.1:8888/',
       xhr: xhr,
       accountType: 'carddav',
@@ -179,6 +179,51 @@ suite('contacts', function() {
     assert.typeOf(addressBook.syncToken, 'string');
     assert.operator(addressBook.syncToken.length, '>', 0);
     assert.notStrictEqual(addressBook.syncToken, prevSyncToken, 'new token');
+  }));
+
+  test('#add 2nd vcard, #list specific Card', co.wrap(function *() {
+    let addressBook = addressBooks[0];
+    yield dav.createCard(addressBook, {
+      filename: 'test2.vcf',
+      data: data.johnDoe,
+      xhr: xhr
+    });
+
+    let updated = yield dav.syncCarddavAccount(account, {
+      syncMethod: 'basic',
+      xhr: xhr
+    });
+
+    addressBooks = updated.addressBooks;
+    addressBook = account.addressBooks[0];
+    let objects = addressBook.objects;
+    debug('%i addressBook(s) with %i vcard(s)', addressBooks.length, objects.length);
+    assert.isArray(objects);
+    assert.lengthOf(objects, 2, '2 vcards expected');
+
+    objects = yield dav.listVCards(addressBook, {
+      xhr: xhr,
+      /* AH20190113 - Content filter seem not to be supported < sabre-io 3.2
+      contents: [{ name: 'prop', attrs: {name: 'FN'}, namespace: dav.ns.CARDDAV},
+        { name: 'prop', attrs: {name: 'N'}, namespace: dav.ns.CARDDAV}],*/
+      filters: [{
+        name: 'prop-filter',
+        attrs: { name: 'FN' },
+        namespace: dav.ns.CARDDAV,
+        value: [{
+          name: 'text-match',
+          attrs: { collation: 'i;unicode-casemap', 'match-type': 'contains' },
+          value: 'John',
+          namespace: dav.ns.CARDDAV
+        }]
+      }]
+    });
+
+    assert.isArray(objects);
+    assert.lengthOf(objects, 1);
+    let object = objects[0];
+    assert.instanceOf(object, dav.VCard);
+    assert.include(object.addressData, 'john.doe@example.com', 'specific vcard look wrong one');
   }));
 
   test('#deleteCard', co.wrap(function *() {

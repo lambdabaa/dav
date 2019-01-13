@@ -7,7 +7,8 @@ export default docs;
 
 [
   { name: 'bastille_day_party', fmt: 'ics' },
-  { name: 'forrest_gump', fmt: 'vcf' }
+  { name: 'forrest_gump', fmt: 'vcf' },
+  { name: 'john_doe', fmt: 'vcf' }
 ].forEach(function(file) {
   let camelCase = camelize(file.name);
   docs[camelCase] = fs.readFileSync(
