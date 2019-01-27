@@ -57,3 +57,4 @@ test/integration/server/SabreDAV: SabreDAV
 SabreDAV:
 	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/sabre-io/dav/archive/$(SABRE_DAV_ZIPBALL)
 	unzip -q dav-$(SABRE_DAV_ZIPBALL)
+	mv dav-$(SABRE_DAV_VERSION) SabreDAV
