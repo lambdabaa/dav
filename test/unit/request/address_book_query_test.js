@@ -101,6 +101,23 @@ suite('request.addressBookQuery', function() {
     yield mock.verify(send);
   }));
 
+  test('should add specified limit to report body', co.wrap(function *() {
+    let mock = nockWrapper('http://127.0.0.1:1337')
+      .matchRequestBody('/principals/admin/', 'REPORT', body => {
+        return body.match(/<card:limit>\s*<card:nresults>12<\/card:nresults>\s*<\/card:limit>/) !== null;
+      });
+
+    let req = addressBookQuery({
+      limits: [{
+          name: 'limit', namespace: ns.CARDDAV,
+          value: [{name: 'nresults', value: 12, namespace: ns.CARDDAV }] }
+      ]
+    });
+
+    let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/');
+    yield mock.verify(send);
+  }));
+
   test('should resolve with appropriate data structure', co.wrap(function *() {
     nockWrapper('http://127.0.0.1:1337')
       .intercept('/', 'REPORT')

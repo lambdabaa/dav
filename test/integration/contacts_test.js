@@ -181,7 +181,7 @@ suite('contacts', function() {
     assert.notStrictEqual(addressBook.syncToken, prevSyncToken, 'new token');
   }));
 
-  test('#add 2nd vcard, #list specific Card', co.wrap(function *() {
+  test('#add 2nd vcard, #list specific Card, #limit result', co.wrap(function *() {
     let addressBook = addressBooks[0];
     yield dav.createCard(addressBook, {
       filename: 'test2.vcf',
@@ -224,6 +224,17 @@ suite('contacts', function() {
     let object = objects[0];
     assert.instanceOf(object, dav.VCard);
     assert.include(object.addressData, 'john.doe@example.com', 'specific vcard look wrong one');
+
+    objects = yield dav.listVCards(addressBook, {
+      xhr: xhr,
+      limits: [{
+          name: 'limit', namespace: dav.ns.CARDDAV,
+          value: [{name: 'nresults', value: 1, namespace: dav.ns.CARDDAV }] }
+      ]
+    });
+
+    assert.isArray(objects);
+    assert.lengthOf(objects, 1, 'wrong num of limit(ed) result');
   }));
 
   test('#deleteCard', co.wrap(function *() {
