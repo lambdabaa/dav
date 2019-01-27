@@ -1,8 +1,8 @@
 HBS := $(shell find lib/template/ -name "*.hbs")
 JS := $(shell find lib/ -name "*.js")
 
-SABRE_DAV_VERSION=2.1.11
-SABRE_DAV_RELEASE=sabredav-$(SABRE_DAV_VERSION)
+SABRE_DAV_VERSION=3.0.9
+SABRE_DAV_RELEASE=$(SABRE_DAV_VERSION)
 SABRE_DAV_ZIPBALL=$(SABRE_DAV_RELEASE).zip
 
 dav.zip: dav.js dav.min.js dav.js.map
@@ -55,5 +55,5 @@ test/integration/server/SabreDAV: SabreDAV
 	cd test/integration/server/SabreDAV && cp ../calendarserver.php calendarserver.php
 
 SabreDAV:
-	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/sabre-io/dav/releases/download/$(SABRE_DAV_VERSION)/$(SABRE_DAV_ZIPBALL)
+	wget -O $(SABRE_DAV_ZIPBALL) https://github.com/sabre-io/dav/archive/$(SABRE_DAV_ZIPBALL)
 	unzip -q $(SABRE_DAV_ZIPBALL)
