@@ -1,12 +1,20 @@
-# This is a bit weird since this is really a js project,
-# but since we're using sabredav for integration testing
-# and since travis doesn't support multiple languages
-# and since travis additionally always installs a base node.js,
-# the easiest thing to do is pretend to be php.
-language: php
-php:
-  - "7.2"
+# WebDAV, CalDAV, and CardDAV client for nodejs and the browser. - https://github.com/lambdabaa/dav
+#
+# Author: Georgy Berdyshev
+#
+
+language: node_js
+sudo: required
+env:
+  - php_version: 7.3
+node_js:
+  - "11"
+  - "10"
+  - "8"
+  - "6"
 before_install:
-  - "nvm install 6.15.0"
+  - sudo add-apt-repository "deb [arch=amd64] http://ppa.launchpad.net/ondrej/php/ubuntu $(lsb_release -cs) main"
+  - sudo apt-get update
+  - 'sudo apt-get -y --allow-unauthenticated install php${php_version}-cli php${php_version}-sqlite3 php${php_version}-xml php${php_version}-mbstring'
 install: npm install
 script: npm test
