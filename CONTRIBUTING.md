@@ -33,7 +33,7 @@ Things to note:
 
 + As of 1.1.1, all of the tests run dav via nodejs. There are no browser tests (yet).
 + You can add helpful debug logs to test output with the `DEBUG` environment variable.
-  + Filter logs by setting `DEBUG=dav:*`, `DEBUG=dav:request:*`, etc.
+  + Filter logs by setting `DEBUG=dav:*`, `DEBUG=dav:test:*`, etc.
 + Integration tests run against [sabredav](http://sabre.io/)
   + The server code lives [here](https://github.com/gaye/dav/blob/master/test/integration/server/calendarserver.php)
   + There is a make task which downloads a sabredav release from GitHub that `make test-integration` depends on
