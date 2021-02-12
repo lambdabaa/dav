@@ -6,6 +6,9 @@
   "license": "MPL-2.0",
   "main": "./dav.js",
   "repository": "https://github.com/gaye/dav",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "keywords": [
     "address book",
     "calendar",
