@@ -1,11 +1,14 @@
 {
-  "name": "dav",
+  "name": "@appklusiv/dav",
   "version": "1.8.0",
-  "author": "Gareth Aye [:gaye] <gaye@mozilla.com>",
+  "author": "appklusiv",
   "description": "WebDAV, CalDAV, and CardDAV client for nodejs and the browser",
   "license": "MPL-2.0",
   "main": "./dav.js",
-  "repository": "https://github.com/gaye/dav",
+  "repository": "https://github.com/appklusiv/dav",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "keywords": [
     "address book",
     "calendar",
