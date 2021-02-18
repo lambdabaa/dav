@@ -5462,14 +5462,14 @@ NodeList.prototype = {
 	 * The number of nodes in the list. The range of valid child node indices is 0 to length-1 inclusive.
 	 * @standard level1
 	 */
-	length:0,
+	length:0, 
 	/**
 	 * Returns the indexth item in the collection. If index is greater than or equal to the number of nodes in the list, this returns null.
 	 * @standard level1
-	 * @param index  unsigned long
+	 * @param index  unsigned long 
 	 *   Index into the collection.
 	 * @return Node
-	 * 	The node at the indexth position in the NodeList, or null if that is not a valid index.
+	 * 	The node at the indexth position in the NodeList, or null if that is not a valid index. 
 	 */
 	item: function(index) {
 		return this[index] || null;
@@ -5503,10 +5503,10 @@ LiveNodeList.prototype.item = function(i){
 
 _extends(LiveNodeList,NodeList);
 /**
- *
+ * 
  * Objects implementing the NamedNodeMap interface are used to represent collections of nodes that can be accessed by name. Note that NamedNodeMap does not inherit from NodeList; NamedNodeMaps are not maintained in any particular order. Objects contained in an object implementing NamedNodeMap may also be accessed by an ordinal index, but this is simply to allow convenient enumeration of the contents of a NamedNodeMap, and does not imply that the DOM specifies an order to these Nodes.
  * NamedNodeMap objects in the DOM are live.
- * used for attributes or DocumentType entities
+ * used for attributes or DocumentType entities 
  */
 function NamedNodeMap() {
 };
@@ -5595,10 +5595,10 @@ NamedNodeMap.prototype = {
 		var attr = this.getNamedItem(key);
 		_removeNamedNode(this._ownerElement,this,attr);
 		return attr;
-
-
+		
+		
 	},// raises: NOT_FOUND_ERR,NO_MODIFICATION_ALLOWED_ERR
-
+	
 	//for level2
 	removeNamedItemNS:function(namespaceURI,localName){
 		var attr = this.getNamedItemNS(namespaceURI,localName);
@@ -5661,7 +5661,7 @@ DOMImplementation.prototype = {
 		node.systemId = systemId;
 		// Introduced in DOM Level 2:
 		//readonly attribute DOMString        internalSubset;
-
+		
 		//TODO:..
 		//  readonly attribute NamedNodeMap     entities;
 		//  readonly attribute NamedNodeMap     notations;
@@ -5691,10 +5691,10 @@ Node.prototype = {
 	prefix : null,
 	localName : null,
 	// Modified in DOM Level 2:
-	insertBefore:function(newChild, refChild){//raises
+	insertBefore:function(newChild, refChild){//raises 
 		return _insertBefore(this,newChild,refChild);
 	},
-	replaceChild:function(newChild, oldChild){//raises
+	replaceChild:function(newChild, oldChild){//raises 
 		this.insertBefore(newChild,oldChild);
 		if(oldChild){
 			this.removeChild(oldChild);
@@ -5843,7 +5843,7 @@ function _onUpdateChild(doc,el,newChild){
 /**
  * attributes;
  * children;
- *
+ * 
  * writeable properties:
  * nodeValue,Attr:value,CharacterData:data
  * prefix
@@ -5885,8 +5885,8 @@ function _insertBefore(parentNode,newChild,nextChild){
 
 	newFirst.previousSibling = pre;
 	newLast.nextSibling = nextChild;
-
-
+	
+	
 	if(pre){
 		pre.nextSibling = newFirst;
 	}else{
@@ -5935,8 +5935,8 @@ Document.prototype = {
 	doctype :  null,
 	documentElement :  null,
 	_inc : 1,
-
-	insertBefore :  function(newChild, refChild){//raises
+	
+	insertBefore :  function(newChild, refChild){//raises 
 		if(newChild.nodeType == DOCUMENT_FRAGMENT_NODE){
 			var child = newChild.firstChild;
 			while(child){
@@ -5949,7 +5949,7 @@ Document.prototype = {
 		if(this.documentElement == null && newChild.nodeType == ELEMENT_NODE){
 			this.documentElement = newChild;
 		}
-
+		
 		return _insertBefore(this,newChild,refChild),(newChild.ownerDocument = this),newChild;
 	},
 	removeChild :  function(oldChild){
@@ -5975,7 +5975,7 @@ Document.prototype = {
 		})
 		return rtv;
 	},
-
+	
 	//document factory method:
 	createElement :	function(tagName){
 		var node = new Element();
@@ -6099,7 +6099,7 @@ Element.prototype = {
 		var attr = this.getAttributeNode(name)
 		attr && this.removeAttributeNode(attr);
 	},
-
+	
 	//four real opeartion method
 	appendChild:function(newChild){
 		if(newChild.nodeType === DOCUMENT_FRAGMENT_NODE){
@@ -6123,7 +6123,7 @@ Element.prototype = {
 		var old = this.getAttributeNodeNS(namespaceURI, localName);
 		old && this.removeAttributeNode(old);
 	},
-
+	
 	hasAttributeNS : function(namespaceURI, localName){
 		return this.getAttributeNodeNS(namespaceURI, localName)!=null;
 	},
@@ -6139,7 +6139,7 @@ Element.prototype = {
 	getAttributeNodeNS : function(namespaceURI, localName){
 		return this.attributes.getNamedItemNS(namespaceURI, localName);
 	},
-
+	
 	getElementsByTagName : function(tagName){
 		return new LiveNodeList(this,function(base){
 			var ls = [];
@@ -6160,7 +6160,7 @@ Element.prototype = {
 				}
 			});
 			return ls;
-
+			
 		});
 	}
 };
@@ -6189,7 +6189,7 @@ CharacterData.prototype = {
 	},
 	insertData: function(offset,text) {
 		this.replaceData(offset,0,text);
-
+	
 	},
 	appendChild:function(newChild){
 		throw new Error(ExceptionMessage[HIERARCHY_REQUEST_ERR])
@@ -6283,7 +6283,7 @@ function nodeSerializeToString(isHtml,nodeFilter){
 	var refNode = this.nodeType == 9?this.documentElement:this;
 	var prefix = refNode.prefix;
 	var uri = refNode.namespaceURI;
-
+	
 	if(uri && prefix == null){
 		//console.log(prefix)
 		var prefix = refNode.lookupPrefix(uri);
@@ -6305,12 +6305,12 @@ function needNamespaceDefine(node,isHTML, visibleNamespaces) {
 	if (!prefix && !uri){
 		return false;
 	}
-	if (prefix === "xml" && uri === "http://www.w3.org/XML/1998/namespace"
+	if (prefix === "xml" && uri === "http://www.w3.org/XML/1998/namespace" 
 		|| uri == 'http://www.w3.org/2000/xmlns/'){
 		return false;
 	}
-
-	var i = visibleNamespaces.length
+	
+	var i = visibleNamespaces.length 
 	//console.log('@@@@',node.tagName,prefix,uri,visibleNamespaces)
 	while (i--) {
 		var ns = visibleNamespaces[i];
@@ -6349,12 +6349,12 @@ function serializeToString(node,buf,isHTML,nodeFilter,visibleNamespaces){
 		var len = attrs.length;
 		var child = node.firstChild;
 		var nodeName = node.tagName;
-
-		isHTML =  (htmlns === node.namespaceURI) ||isHTML
+		
+		isHTML =  (htmlns === node.namespaceURI) ||isHTML 
 		buf.push('<',nodeName);
-
-
-
+		
+		
+		
 		for(var i=0;i<len;i++){
 			// add namespaces for attributes
 			var attr = attrs.item(i);
@@ -6375,7 +6375,7 @@ function serializeToString(node,buf,isHTML,nodeFilter,visibleNamespaces){
 			}
 			serializeToString(attr,buf,isHTML,nodeFilter,visibleNamespaces);
 		}
-		// add namespace for current node
+		// add namespace for current node		
 		if (needNamespaceDefine(node,isHTML, visibleNamespaces)) {
 			var prefix = node.prefix||'';
 			var uri = node.namespaceURI;
@@ -6383,7 +6383,7 @@ function serializeToString(node,buf,isHTML,nodeFilter,visibleNamespaces){
 			buf.push(ns, '="' , uri , '"');
 			visibleNamespaces.push({ prefix: prefix, namespace:uri });
 		}
-
+		
 		if(child || isHTML && !/^(?:meta|link|img|br|hr|input)$/i.test(nodeName)){
 			buf.push('>');
 			//if is cdata child node
@@ -6576,7 +6576,7 @@ try{
 				}
 			}
 		})
-
+		
 		function getTextContent(node){
 			switch(node.nodeType){
 			case ELEMENT_NODE:
