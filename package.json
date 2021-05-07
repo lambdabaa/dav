@@ -25,6 +25,7 @@
     "@babel/polyfill": "^7.0.0",
     "co": "^4.6.0",
     "debug": "^4.1.1",
+    "httpauth": "github:himselfv/httpauth",
     "xmldom": "^0.1.27",
     "xmlhttprequest": "^1.8.0"
   },
