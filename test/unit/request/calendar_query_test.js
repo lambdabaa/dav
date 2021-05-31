@@ -31,7 +31,7 @@ suite('request.calendarQuery', function() {
     yield mock.verify(send);
   }));
 
-  test('should add specified props to report body', co.wrap(function *() {
+  test('should add single prop to report body', co.wrap(function *() {
     let mock = nockWrapper('http://127.0.0.1:1337')
       .matchRequestBody('/principals/admin/', 'REPORT', body => {
         return body.indexOf('<d:catdog />') !== -1;
@@ -39,6 +39,23 @@ suite('request.calendarQuery', function() {
 
     let req = calendarQuery({
       props: [ { name: 'catdog', namespace: ns.DAV } ]
+    });
+
+    let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/');
+    yield mock.verify(send);
+  }));
+
+  test('should add multiple props to report body', co.wrap(function *() {
+    let mock = nockWrapper('http://127.0.0.1:1337')
+      .matchRequestBody('/principals/admin/', 'REPORT', body => {
+        return body.indexOf('<d:catdog /><d:winslow />') === -1;
+      });
+
+    let req = calendarQuery({
+      props: [
+        { name: 'catdog', namespace: ns.DAV },
+        { name: 'winslow', namespace: ns.DAV },
+      ]
     });
 
     let send = xhr.send(req, 'http://127.0.0.1:1337/principals/admin/');
